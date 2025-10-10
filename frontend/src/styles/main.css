@@ -289,3 +289,121 @@ footer .footer-info {
     main { grid-template-columns: 1fr; }
     .sidebar-left, .sidebar-right { order: -1; }
 }
+
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px 25px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    animation: scaleIn 0.25s ease;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--primary-dark);
+}
+
+.modal h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-dark);
+}
+
+.modal-form input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.modal-form input:focus {
+    border-color: var(--primary);
+}
+
+.modal-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.1s;
+    border: none;
+}
+
+.modal-btn.primary {
+    background: var(--primary);
+    color: white;
+}
+
+.modal-btn.primary:hover {
+    background: var(--primary-dark);
+}
+
+.modal-btn.secondary {
+    background: #f1f3f5;
+    color: var(--primary-dark);
+    margin-top: 10px;
+}
+
+.modal-btn.secondary:hover {
+    background: #e9ecef;
+}
+
+.forgot-btn {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    margin: 12px auto 0;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.forgot-btn:hover {
+    color: var(--primary-dark);
+}
+
+.modal-alt {
+    text-align: center;
+}
