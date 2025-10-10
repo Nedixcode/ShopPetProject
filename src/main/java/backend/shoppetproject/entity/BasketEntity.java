@@ -13,7 +13,7 @@ public class BasketEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @ManyToMany
     @JoinTable(
@@ -21,13 +21,13 @@ public class BasketEntity {
             joinColumns = @JoinColumn(name = "basket_id"),
             inverseJoinColumns = @JoinColumn(name = "good_id")
     )
-    private List<ProductEntity> productEntityList;
+    private List<ProductEntity> productList;
 
 
     public BasketEntity(Long id, UserEntity userEntity, List<ProductEntity> productEntityList) {
         this.id = id;
-        this.userEntity = userEntity;
-        this.productEntityList = productEntityList;
+        this.user = userEntity;
+        this.productList = productEntityList;
     }
 
     public BasketEntity() {
@@ -42,19 +42,19 @@ public class BasketEntity {
     }
 
     public UserEntity getUserEntity() {
-        return userEntity;
+        return user;
     }
 
     public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+        this.user = userEntity;
     }
 
     public List<ProductEntity> getProductEntityList() {
-        return productEntityList;
+        return productList;
     }
 
     public void setProductEntityList(List<ProductEntity> productEntityList) {
-        this.productEntityList = productEntityList;
+        this.productList = productEntityList;
     }
 }
 

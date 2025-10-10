@@ -29,8 +29,8 @@ public class ProductEntity {
     @Column(name = "number_of_sales")
     private Integer numberOfSales;
 
-    @ManyToMany(mappedBy = "goodsList")
-    private List<BasketEntity> basketEntityList;
+    @ManyToMany(mappedBy = "productList")
+    private List<BasketEntity> basketList;
 
 
     public ProductEntity() {
@@ -51,7 +51,7 @@ public class ProductEntity {
         this.price = price;
         this.isInStock = isInStock;
         this.numberOfSales = numberOfSales;
-        this.basketEntityList = basketEntityList;
+        this.basketList = basketEntityList;
     }
 
     public Long getId() {
@@ -111,11 +111,11 @@ public class ProductEntity {
     }
 
     public List<BasketEntity> getBasketEntityList() {
-        return basketEntityList;
+        return basketList;
     }
 
     public void setBasketEntityList(List<BasketEntity> basketEntityList) {
-        this.basketEntityList = basketEntityList;
+        this.basketList = basketEntityList;
     }
 }
 

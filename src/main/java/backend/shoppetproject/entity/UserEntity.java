@@ -22,8 +22,8 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private BasketEntity basketEntity;
+    @OneToOne(mappedBy = "user")
+    private BasketEntity basket;
 
 
     public UserEntity() {
@@ -40,7 +40,7 @@ public class UserEntity {
         this.lastName = lastName;
         this.passwordHash = passwordHash;
         this.email = email;
-        this.basketEntity = basketEntity;
+        this.basket = basketEntity;
     }
 
     public Long getId() {
@@ -84,11 +84,11 @@ public class UserEntity {
     }
 
     public BasketEntity getBasketEntity() {
-        return basketEntity;
+        return basket;
     }
 
     public void setBasketEntity(BasketEntity basketEntity) {
-        this.basketEntity = basketEntity;
+        this.basket = basketEntity;
     }
 }
 
