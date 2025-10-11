@@ -4,27 +4,31 @@ export default function LoginModal({ open, onClose }) {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = async () =>{
-        try{
-            const url = `http://localhost:8080/login?username=${encodeURIComponent(login)}&password=${encodeURIComponent(password)}`;
-
-            const response = await fetch(url, {
-               method: 'GET',
+    const handleLogin = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    firstName: login,
+                    password: password
+                }),
             });
 
             const result = await response.text();
-            console.log("Ответ от сервера: ", result);
+            console.log("Ответ от сервера:", result);
 
-            if(result === "true"){
-                alert("Успешный вход!");
+            if (result.status === "OK") {
+                alert("✅ Успешный вход!");
                 onClose();
+            } else {
+                alert("❌ Неверный логин или пароль");
             }
-            else{
-                alert("Неверный логин или пароль");
-            }
-        }
-        catch(error){
-            console.log("Ошибка при авторизации: ", error);
+        } catch (error) {
+            console.error("Ошибка при авторизации:", error);
+            alert("Произошла ошибка при входе");
         }
     };
 
