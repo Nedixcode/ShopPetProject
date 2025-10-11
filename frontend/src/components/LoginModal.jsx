@@ -20,7 +20,7 @@ export default function LoginModal({ open, onClose }) {
             const result = await response.text();
             console.log("Ответ от сервера:", result);
 
-            if (result.status === "OK") {
+            if (result) {
                 alert("✅ Успешный вход!");
                 onClose();
             } else {
@@ -54,7 +54,7 @@ export default function LoginModal({ open, onClose }) {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <button className="modal-btn primary">Войти</button>
+                    <button className="modal-btn primary" onClick={handleLogin}>Войти</button>
 
                     <div className="modal-alt">
                         <button className="modal-btn secondary">📱 Войти по номеру телефона</button>
