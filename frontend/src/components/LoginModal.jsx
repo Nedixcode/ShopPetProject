@@ -4,6 +4,30 @@ export default function LoginModal({ open, onClose }) {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
+    const handleLogin = async () =>{
+        try{
+            const url = `http://localhost:8080/login?username=${encodeURIComponent(login)}&password=${encodeURIComponent(password)}`;
+
+            const response = await fetch(url, {
+               method: 'GET',
+            });
+
+            const result = await response.text();
+            console.log("Ответ от сервера: ", result);
+
+            if(result === "true"){
+                alert("Успешный вход!");
+                onClose();
+            }
+            else{
+                alert("Неверный логин или пароль");
+            }
+        }
+        catch(error){
+            console.log("Ошибка при авторизации: ", error);
+        }
+    };
+
     if (!open) return null;
 
     return (
