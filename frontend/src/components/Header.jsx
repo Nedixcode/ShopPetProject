@@ -14,7 +14,6 @@ export default function Header() {
                     <input type="text" placeholder="Поиск товаров..." />
                     <button>🔍</button>
                 </div>
-
                 <div className="header-actions">
                     <CustomSelect
                         options={["Минск", "Могилев", "Гродно", "Брест", "Витебск", "Гомель"]}
