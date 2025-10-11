@@ -25,22 +25,36 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     private BasketEntity basket;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id,
-                      String firstName,
-                      String lastName,
-                      String passwordHash,
-                      String email,
-                      BasketEntity basketEntity) {
+    public BasketEntity getBasket() {
+        return basket;
+    }
+
+    public void setBasket(BasketEntity basket) {
+        this.basket = basket;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public UserEntity(Long id, String firstName, String password, String lastName, String email, BasketEntity basket, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
+        this.password = password;
         this.lastName = lastName;
-        this.password = passwordHash;
         this.email = email;
-        this.basket = basketEntity;
+        this.basket = basket;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {

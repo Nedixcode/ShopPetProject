@@ -1,4 +1,7 @@
 package backend.shoppetproject.repository;
 
-public class ProductRepository {
+import backend.shoppetproject.entity.ProductEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 }
