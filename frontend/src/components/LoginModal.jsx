@@ -18,9 +18,11 @@ export default function LoginModal({ open, onClose }) {
             });
 
             const result = await response.text();
+            const isSuccess = result.trim().toLowerCase() === 'true';
+
             console.log("Ответ от сервера:", result);
 
-            if (result) {
+            if (isSuccess) {
                 alert("✅ Успешный вход!");
                 onClose();
             } else {
@@ -65,3 +67,6 @@ export default function LoginModal({ open, onClose }) {
         </div>
     );
 }
+
+
+

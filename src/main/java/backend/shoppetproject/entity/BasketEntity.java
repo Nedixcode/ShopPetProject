@@ -23,14 +23,12 @@ public class BasketEntity {
     )
     private List<ProductEntity> productList;
 
-
-    public BasketEntity(Long id, UserEntity userEntity, List<ProductEntity> productEntityList) {
-        this.id = id;
-        this.user = userEntity;
-        this.productList = productEntityList;
+    public BasketEntity() {
     }
 
-    public BasketEntity() {
+    public BasketEntity(UserEntity user, List<ProductEntity> productList) {
+        this.user = user;
+        this.productList = productList;
     }
 
     public Long getId() {

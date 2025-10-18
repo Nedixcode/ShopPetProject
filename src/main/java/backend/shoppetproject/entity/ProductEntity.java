@@ -32,26 +32,23 @@ public class ProductEntity {
     @ManyToMany(mappedBy = "productList")
     private List<BasketEntity> basketList;
 
-
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id,
-                         String name,
-                         String description,
-                         String type,
-                         Integer price,
-                         Boolean isInStock,
+    public ProductEntity(String name,
+                         List<BasketEntity> basketList,
                          Integer numberOfSales,
-                         List<BasketEntity> basketEntityList) {
-        this.id = id;
+                         Boolean isInStock,
+                         Integer price,
+                         String type,
+                         String description) {
         this.name = name;
-        this.description = description;
-        this.type = type;
-        this.price = price;
-        this.isInStock = isInStock;
+        this.basketList = basketList;
         this.numberOfSales = numberOfSales;
-        this.basketList = basketEntityList;
+        this.isInStock = isInStock;
+        this.price = price;
+        this.type = type;
+        this.description = description;
     }
 
     public Long getId() {
