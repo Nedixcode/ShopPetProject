@@ -24,8 +24,8 @@ export default function App() {
                             </>
                         }
                     />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/registration" element={<RegistrationPage />} />
+                    <Route path="auth/login" element={<LoginPage />} />
+                    <Route path="auth/registration" element={<RegistrationPage />} />
                 </Routes>
             </main>
             <Footer />
