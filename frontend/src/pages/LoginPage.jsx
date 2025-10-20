@@ -10,7 +10,7 @@ export default function LoginPage() {
     const handleLogin = async () => {
         setLoading(true);
         try {
-            const response = await fetch("/login", {
+            const response = await fetch("/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -62,7 +62,7 @@ export default function LoginPage() {
                     </button>
                     <div className="register-link">
                         Впервые на сайте?{" "}
-                        <span onClick={() => navigate("/registration")}>Регистрация</span>
+                        <span onClick={() => navigate("/auth/registration")}>Регистрация</span>
                     </div>
                     <button className="forgot-btn">Забыли пароль?</button>
                 </div>
