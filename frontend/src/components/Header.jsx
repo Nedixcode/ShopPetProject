@@ -21,7 +21,7 @@ export default function Header() {
                         value={city}
                         onChange={setCity}
                     />
-                    <Link to="/login" className="auth-btn">Войти</Link>
+                    <Link to="auth/login" className="auth-btn">Войти</Link>
                     <button className="cart-btn">🛒 Корзина</button>
                 </div>
             </div>

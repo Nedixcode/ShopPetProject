@@ -18,7 +18,7 @@ export default function RegistrationPage() {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const response = await fetch("/register", {
+            const response = await fetch("/auth/registration", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -28,7 +28,8 @@ export default function RegistrationPage() {
                     phoneNumber : form.phone
                 }),
             });
-
+//auth/registration
+//auth/login
             if (response.ok) {
                 alert("✅ Регистрация успешна!");
                 navigate("/login");
@@ -91,7 +92,7 @@ export default function RegistrationPage() {
 
                     <div className="register-link">
                         Уже есть аккаунт?{" "}
-                        <span onClick={() => navigate("/login")}>Войти</span>
+                        <span onClick={() => navigate("/auth/login")}>Войти</span>
                     </div>
                 </div>
             </div>
