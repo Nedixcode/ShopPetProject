@@ -36,12 +36,13 @@ public class ProductEntity {
     }
 
     public ProductEntity(String name,
-                         List<BasketEntity> basketList,
-                         Integer numberOfSales,
-                         Boolean isInStock,
-                         Integer price,
+                         String description,
                          String type,
-                         String description) {
+                         Integer price,
+                         Boolean isInStock,
+                         Integer numberOfSales,
+                         List<BasketEntity> basketList
+                         ) {
         this.name = name;
         this.basketList = basketList;
         this.numberOfSales = numberOfSales;
