@@ -19,7 +19,8 @@ export default function LoginPage() {
                 }),
             });
 
-            const result = await response.text();
+            const result = await response.ok;
+
             if (result) {
                 alert("✅ Успешный вход!");
                 navigate("/");
