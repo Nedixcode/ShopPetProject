@@ -1,5 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useLocation,
+    Navigate,
+} from "react-router-dom";
+
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import Ads from "./components/Ads";
@@ -9,15 +16,32 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import AdminPanel from "./pages/adminPage";
 
+// 👇 Импортируем функции из utils
+import { isTokenValid, isAdmin } from "./utils/auth";
+
+// ====== Защищённый маршрут ======
+function ProtectedRoute({ children, adminOnly = false }) {
+    const token = localStorage.getItem("token");
+
+    if (!isTokenValid(token)) {
+        localStorage.removeItem("token");
+        return <Navigate to="/auth/login" replace />;
+    }
+
+    if (adminOnly && !isAdmin(token)) {
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
+}
+
 function AppContent() {
     const location = useLocation();
-
-    // Прячем Header и Footer в админке
-    const isAdmin = location.pathname.startsWith("/admin");
+    const isAdminPage = location.pathname.startsWith("/admin");
 
     return (
         <>
-            {!isAdmin && <Header />}
+            {!isAdminPage && <Header />}
             <main>
                 <Routes>
                     <Route
@@ -32,10 +56,19 @@ function AppContent() {
                     />
                     <Route path="/auth/login" element={<LoginPage />} />
                     <Route path="/auth/registration" element={<RegistrationPage />} />
-                    <Route path="/admin" element={<AdminPanel />} />
+
+                    {/* === Защищённый роут /admin === */}
+                    <Route
+                        path="/admin"
+                        element={
+                            <ProtectedRoute adminOnly>
+                                <AdminPanel />
+                            </ProtectedRoute>
+                        }
+                    />
                 </Routes>
             </main>
-            {!isAdmin && <Footer />}
+            {!isAdminPage && <Footer />}
         </>
     );
 }
