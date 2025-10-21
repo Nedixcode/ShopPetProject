@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { parseJwt, isTokenValid, isAdmin } from "../utils/auth"; // 🔹 импортируем функции проверки токена
 
 export default function LoginPage() {
     const [login, setLogin] = useState("");
@@ -19,17 +20,48 @@ export default function LoginPage() {
                 }),
             });
 
-            const result = await response.ok;
-
-            if (result) {
-                alert("✅ Успешный вход!");
-                navigate("/");
-            } else {
+            if (response.status === 401) {
                 alert("❌ Неверный логин или пароль");
+                return;
             }
+
+            if (!response.ok) {
+                alert("⚠️ Ошибка сервера. Попробуйте позже.");
+                return;
+            }
+
+            const data = await response.json(); // сервер должен вернуть { token: "..." }
+
+            if (!data.token) {
+                alert("🚨 Сервер не вернул токен!");
+                return;
+            }
+
+            localStorage.setItem("token", data.token);
+
+            // 🔹 Проверяем токен и определяем роль пользователя
+            if (!isTokenValid(data.token)) {
+                alert("⚠️ Токен недействителен. Войдите снова.");
+                localStorage.removeItem("token");
+                return;
+            }
+
+            const payload = parseJwt(data.token);
+            const username = payload?.sub;
+            const admin = isAdmin(data.token);
+
+            alert(`✅ Успешный вход! Добро пожаловать, ${username}!`);
+
+            // 🔹 Перенаправление по роли
+            if (admin) {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
+
         } catch (error) {
             console.error("Ошибка при авторизации:", error);
-            alert("Произошла ошибка при входе");
+            alert("🚨 Ошибка соединения с сервером");
         } finally {
             setLoading(false);
         }
@@ -47,12 +79,14 @@ export default function LoginPage() {
                         placeholder="Логин"
                         value={login}
                         onChange={(e) => setLogin(e.target.value)}
+                        required
                     />
                     <input
                         type="password"
                         placeholder="Пароль"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                     <button
                         className="modal-btn primary"
