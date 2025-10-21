@@ -31,7 +31,7 @@ export default function RegistrationPage() {
 
             if (response.ok) {
                 alert("✅ Регистрация успешна!");
-                navigate("/login");
+                navigate("/auth/login");
             } else {
                 alert("❌ Ошибка регистрации");
             }

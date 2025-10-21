@@ -18,7 +18,6 @@ export default function AdminPanel() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!isTokenValid(token) || !isAdmin(token)) {
-            alert("⛔ Доступ запрещён. Войдите заново.");
             localStorage.removeItem("token");
             window.location.href = "/auth/login";
             return;
