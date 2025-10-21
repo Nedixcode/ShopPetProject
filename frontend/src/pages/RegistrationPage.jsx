@@ -28,8 +28,7 @@ export default function RegistrationPage() {
                     phoneNumber : form.phone
                 }),
             });
-//auth/registration
-//auth/login
+
             if (response.ok) {
                 alert("✅ Регистрация успешна!");
                 navigate("/login");
