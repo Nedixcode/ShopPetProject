@@ -27,22 +27,26 @@ import java.util.Set;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    private AuthenticationManager authManager;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final AuthenticationManager authManager;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private AuthService authService;
+    private final RoleRepository roleRepository;
+
+    private final AuthService authService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    public AuthController(AuthenticationManager authManager, JwtUtil jwtUtil, UserRepository userRepository, RoleRepository roleRepository, AuthService authService) {
+        this.authManager = authManager;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {

@@ -23,6 +23,7 @@ public class BasketEntity {
     )
     private List<ProductEntity> productList;
 
+
     public BasketEntity() {
     }
 

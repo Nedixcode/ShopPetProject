@@ -17,16 +17,28 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final JwtUtil jwtUtil;
+
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        /// /////////////////////////////
+        String path = request.getRequestURI();
+        if (path.equals("/") || path.startsWith("/auth") || path.startsWith("/admin")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        /// //////////////////////////////
+
         final String authHeader = request.getHeader("Authorization");
 
         String username = null;

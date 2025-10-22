@@ -14,11 +14,14 @@ import java.util.Set;
 @Service
 public class AuthService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
 
     public void getData(RegisterRequest request, RoleEntity adminRole) {
         UserEntity user = new UserEntity();

@@ -12,6 +12,7 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
+
     @Value("${jwt.secret}")
     private String secret;
 
@@ -19,8 +20,10 @@ public class JwtUtil {
     private long expirationMs;
 
     public String generateToken(UserDetails userDetails) {
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", userDetails.getAuthorities());
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

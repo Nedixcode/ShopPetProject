@@ -32,6 +32,7 @@ public class ProductEntity {
     @ManyToMany(mappedBy = "productList")
     private List<BasketEntity> basketList;
 
+
     public ProductEntity() {
     }
 

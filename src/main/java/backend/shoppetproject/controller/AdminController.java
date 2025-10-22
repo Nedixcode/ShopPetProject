@@ -2,11 +2,14 @@ package backend.shoppetproject.controller;
 
 import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.service.AdminService;
+import backend.shoppetproject.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -14,8 +17,11 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    public AdminController(AdminService adminService) {
+    private final ProductService productService;
+
+    public AdminController(AdminService adminService, ProductService productService) {
         this.adminService = adminService;
+        this.productService = productService;
     }
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -34,5 +40,12 @@ public class AdminController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(adminService.deleteProduct(productEntity));
+    }
+
+    @GetMapping("/product/search")
+    public ResponseEntity<List<ProductEntity>> searchProduct(@RequestParam String query) {
+        logger.info("вызвался метод searchProduct, строка поиска = {}", query);
+
+        return ResponseEntity.ok(productService.searchProduct(query));
     }
 }

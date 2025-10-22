@@ -12,6 +12,10 @@ public class RoleEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+
+    public RoleEntity() {
+    }
+
     public Long getId() {
         return id;
     }
