@@ -89,32 +89,16 @@ public class ProductEntity {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Boolean getInStock() {
+    public Boolean getIsInStock() {
         return isInStock;
-    }
-
-    public void setInStock(Boolean inStock) {
-        isInStock = inStock;
     }
 
     public Integer getNumberOfSales() {
         return numberOfSales;
     }
 
-    public void setNumberOfSales(Integer numberOfSales) {
-        this.numberOfSales = numberOfSales;
-    }
-
     public List<BasketEntity> getBasketEntityList() {
         return basketList;
-    }
-
-    public void setBasketEntityList(List<BasketEntity> basketEntityList) {
-        this.basketList = basketEntityList;
     }
 }
 

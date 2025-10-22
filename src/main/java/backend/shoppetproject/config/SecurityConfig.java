@@ -2,7 +2,6 @@ package backend.shoppetproject.config;
 
 import backend.shoppetproject.security.JwtAuthenticationFilter;
 import backend.shoppetproject.service.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,11 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtFilter;
+    private final JwtAuthenticationFilter jwtFilter;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter, UserDetailsServiceImpl userDetailsService) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,8 +35,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/error", "/").permitAll()
-                        .requestMatchers("/admin/**").permitAll()
-                        .requestMatchers("/account").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/account", "/basket/**").hasRole("USER")
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -54,12 +53,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public UserDetailsServiceImpl getUserDetailsService() {
-        return userDetailsService;
-    }
-
-    public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 }
 

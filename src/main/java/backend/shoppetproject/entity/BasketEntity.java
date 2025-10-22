@@ -27,11 +27,6 @@ public class BasketEntity {
     public BasketEntity() {
     }
 
-    public BasketEntity(UserEntity user, List<ProductEntity> productList) {
-        this.user = user;
-        this.productList = productList;
-    }
-
     public Long getId() {
         return id;
     }
@@ -40,20 +35,9 @@ public class BasketEntity {
         this.id = id;
     }
 
-    public UserEntity getUserEntity() {
-        return user;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.user = userEntity;
-    }
-
-    public List<ProductEntity> getProductEntityList() {
+    public List<ProductEntity> getProductList() {
         return productList;
     }
 
-    public void setProductEntityList(List<ProductEntity> productEntityList) {
-        this.productList = productEntityList;
-    }
 }
 
