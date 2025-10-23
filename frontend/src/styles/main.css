@@ -1,13 +1,13 @@
 :root {
-    --primary: #0ea5e9; /* Голубой */
-    --primary-dark: #0369a1;
-    --background: #f8fafc; /* Очень светлый фон */
-    --text: #1e293b; /* Глубокий серо-синий */
-    --footer-bg: #0f172a; /* Тёмно-синий */
-    --footer-text: #cbd5e1;
+    --primary: #f97316; /* Апельсиново-оранжевый */
+    --primary-dark: #c2410c;
+    --background: #fff7ed; /* Тёплый кремовый */
+    --text: #3f3f46; /* Нейтрально-тёмный */
+    --footer-bg: #1c1917;
+    --footer-text: #d6d3d1;
     --card-bg: #ffffff;
-    --border-radius: 14px;
-    --shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    --border-radius: 16px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 
@@ -141,13 +141,14 @@ header {
     cursor: pointer;
     font-weight: 600;
     transition: background 0.3s, transform 0.1s;
+    text-decoration: none;
 }
 
-.auth-btn:hover, .cart-btn:hover { background: #e9ecef; }
-.auth-btn:active, .cart-btn:active { transform: scale(0.97); }
+.auth-btn:hover, .cart-btn:hover { background: #e9ecef; transform: scale(1.03);}
+.auth-btn:active, .cart-btn:active {  }
 
 /* CONTENT(MAIN+SIDEBARS)*/
-main {
+.main-layout {
     flex: 1;
     max-width: 1400px;
     margin: 50px auto;
@@ -235,7 +236,7 @@ main {
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    padding: 50px;
+    padding: 40px;
     text-align: center;
     transition: box-shadow 0.3s;
 }
@@ -652,14 +653,14 @@ footer .footer-info {
 }
 
 .register-link span {
-    color: #0ea5e9;
+    color: var(--primary);
     cursor: pointer;
     font-weight: 500;
     text-decoration: underline;
 }
 
 .register-link span:hover {
-    color: #0284c7;
+    color: var(--primary-dark);
 }
 
 .registration-page {
@@ -752,13 +753,12 @@ footer .footer-info {
     flex: 1;
     padding: 35px 25px;
     gap: 25px;
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 100%;
 }
 
 /* === Сайдбар === */
 .admin-sidebar {
-    width: 240px;
+    width: 300px;
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -1006,42 +1006,33 @@ footer .footer-info {
 .profile-card {
     position: relative;
     background: var(--card-bg);
-    padding: 40px 50px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 12px 36px rgba(0,0,0,0.12);
-    max-width: 450px;
+    padding: 60px 70px; /* Было 40px 50px */
+    border-radius: 20px; /* Было var(--border-radius) (14px) */
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    max-width: 600px; /* Было 450px */
     width: 100%;
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .profile-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
 }
 
 .profile-avatar {
     margin-bottom: 20px;
 }
 
-.profile-avatar img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary);
-}
-
 .profile-card h1 {
     color: var(--primary-dark);
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+    margin-bottom: 30px;
+    font-size: 2rem; /* Чуть больше */
 }
 
 .profile-info p {
-    margin: 8px 0;
-    font-size: 1rem;
-    color: #475569;
+    margin: 10px 0;
+    font-size: 1.05rem;
+    color: #334155;
 }
 
 .profile-actions {
@@ -1067,6 +1058,7 @@ footer .footer-info {
     font-size: 1rem;
     color: #475569;
 }
+
 
 
 
