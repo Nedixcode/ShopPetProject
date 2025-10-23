@@ -30,7 +30,7 @@ public class AdminService {
                 productEntity.getDescription(),
                 productEntity.getType(),
                 productEntity.getPrice(),
-                productEntity.getInStock(),
+                productEntity.getIsInStock(),
                 productEntity.getNumberOfSales(),
                 productEntity.getBasketEntityList()
         );

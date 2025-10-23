@@ -1,5 +1,6 @@
 package backend.shoppetproject.controller;
 
+import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.service.AdminService;
 import backend.shoppetproject.service.ProductService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
@@ -42,10 +44,15 @@ public class AdminController {
                 .body(adminService.deleteProduct(productEntity));
     }
 
-    @GetMapping("/product/search")
-    public ResponseEntity<List<ProductEntity>> searchProduct(@RequestParam String query) {
-        logger.info("вызвался метод searchProduct, строка поиска = {}", query);
+    @GetMapping("/products/search")
+    public ResponseEntity<List<ProductDto>> searchProduct(@RequestParam String query) {
+        logger.info("вызвался метод searchProduct cо строкой = {}", query);
 
-        return ResponseEntity.ok(productService.searchProduct(query));
+        List<ProductEntity> entities = productService.searchProduct(query);
+        List<ProductDto> dtoList = entities.stream()
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtoList);
     }
 }

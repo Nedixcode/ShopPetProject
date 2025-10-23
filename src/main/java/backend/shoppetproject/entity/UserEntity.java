@@ -39,20 +39,6 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(String userName,
-                      String password,
-                      String email,
-                      BasketEntity basket,
-                      String phoneNumber,
-                      Set<RoleEntity> roles) {
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.basket = basket;
-        this.phoneNumber = phoneNumber;
-        this.roles = roles;
-    }
-
     public Long getId() {
         return id;
     }
@@ -77,24 +63,8 @@ public class UserEntity {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public BasketEntity getBasket() {
-        return basket;
-    }
-
-    public void setBasket(BasketEntity basket) {
-        this.basket = basket;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {

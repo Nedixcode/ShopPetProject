@@ -1,5 +1,5 @@
 package backend.shoppetproject.dto;
 
-public class ExceptionDTO {
+public class ExceptionDto {
 
 }

@@ -24,6 +24,7 @@ public class AuthService {
     }
 
     public void getData(RegisterRequest request, RoleEntity adminRole) {
+
         UserEntity user = new UserEntity();
         user.setUserName(request.getUserName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
