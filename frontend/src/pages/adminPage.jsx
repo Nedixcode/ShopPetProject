@@ -37,7 +37,7 @@ export default function AdminPanel() {
     const handleLogout = () => {
         localStorage.removeItem("token");
         alert("👋 Вы вышли из аккаунта");
-        window.location.href = "/auth/login";
+        window.location.href = "/";
     };
 
     const handleSubmit = async (e) => {
@@ -45,7 +45,7 @@ export default function AdminPanel() {
         setLoading(true);
 
         const token = localStorage.getItem("token");
-        if (!token) {
+        if (token) {
             alert("⛔ Нет доступа. Пожалуйста, войдите заново.");
             setLoading(false);
             return;
@@ -82,7 +82,6 @@ export default function AdminPanel() {
 
     return (
         <div className="admin-layout">
-            {/* ===== Верхняя шапка ===== */}
             <header className="admin-header">
                 <div className="admin-header-left">
                     <h1>Панель администратора</h1>

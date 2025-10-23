@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Profiler} from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -15,9 +15,11 @@ import ProductArea from "./components/ProductArea";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import AdminPanel from "./pages/adminPage";
+import AdminRegistrationPage from "./pages/AdminRegistrationPage";
 
 // 👇 Импортируем функции из utils
 import { isTokenValid, isAdmin } from "./utils/auth";
+import ProfilePage from "./pages/ProfilePage";
 
 // ====== Защищённый маршрут ======
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -56,8 +58,8 @@ function AppContent() {
                     />
                     <Route path="/auth/login" element={<LoginPage />} />
                     <Route path="/auth/registration" element={<RegistrationPage />} />
-
-                    {/* === Защищённый роут /admin === */}
+                    <Route path="/auth/registration/admin" element={<AdminRegistrationPage />} />
+                    <Route path="/profile" element={<ProfilePage/>} />
                     <Route
                         path="/admin"
                         element={

@@ -958,3 +958,115 @@ footer .footer-info {
     }
 }
 
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #ccc;
+    border-top-color: #0ea5e9;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #ef4444;
+}
+
+.login-card {
+    position: relative;
+}
+
+.profile-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f0f7ff, #ffffff);
+    padding: 20px;
+}
+
+.profile-card {
+    position: relative;
+    background: var(--card-bg);
+    padding: 40px 50px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profile-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+}
+
+.profile-avatar {
+    margin-bottom: 20px;
+}
+
+.profile-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+}
+
+.profile-card h1 {
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.profile-info p {
+    margin: 8px 0;
+    font-size: 1rem;
+    color: #475569;
+}
+
+.profile-actions {
+    margin-top: 25px;
+}
+
+.profile-card .modal-btn.primary {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.1s;
+}
+
+.profile-card .modal-btn.primary:hover {
+    background: var(--primary-dark);
+}
+
+.profile-card.loading,
+.profile-card.error {
+    text-align: center;
+    font-size: 1rem;
+    color: #475569;
+}
+
+
+

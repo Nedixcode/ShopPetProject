@@ -18,7 +18,7 @@ export default function RegistrationPage() {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const response = await fetch("/auth/registration", {
+            const response = await fetch("/auth/registration/admin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -46,14 +46,6 @@ export default function RegistrationPage() {
     return (
         <div className="registration-page">
             <div className="registration-card">
-                <button
-                    className="close-btn"
-                    onClick={() => navigate("/")}
-                    title="На главную"
-                >
-                    ✖
-                </button>
-
                 <h1>Регистрация</h1>
                 <br/>
                 <p className="login-subtitle">

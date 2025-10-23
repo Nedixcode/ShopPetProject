@@ -8,6 +8,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
+
     const handleLogin = async () => {
         setLoading(true);
         try {
@@ -39,7 +40,6 @@ export default function LoginPage() {
 
             localStorage.setItem("token", data.token);
 
-            // 🔹 Проверяем токен и определяем роль пользователя
             if (!isTokenValid(data.token)) {
                 alert("⚠️ Токен недействителен. Войдите снова.");
                 localStorage.removeItem("token");
@@ -51,12 +51,11 @@ export default function LoginPage() {
             const admin = isAdmin(data.token);
 
             alert(`✅ Успешный вход! Добро пожаловать, ${username}!`);
-
-            // 🔹 Перенаправление по роли
             if (admin) {
                 navigate("/admin");
             } else {
                 navigate("/");
+                location.reload();
             }
 
         } catch (error) {
@@ -70,6 +69,13 @@ export default function LoginPage() {
     return (
         <div className="login-page">
             <div className="login-card">
+                <button
+                    className="close-btn"
+                    onClick={() => navigate("/")}
+                    title="На главную"
+                >
+                    ✖
+                </button>
                 <h1>Вход в аккаунт</h1>
                 <p className="login-subtitle">Добро пожаловать 👋 Введите свои данные для входа</p>
 
