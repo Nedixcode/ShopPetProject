@@ -27,27 +27,14 @@ export default function ProfilePage() {
     const handleLogout = () => {
         localStorage.removeItem("token");
         alert("👋 Вы вышли из аккаунта");
-        navigate("/auth/login");
+        window.location.reload();
     };
 
-    if (loading) {
+    if (loading || !user) {
         return (
             <div className="profile-page">
                 <div className="profile-card loading">
-                    <p>⏳ Загрузка данных пользователя...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (!user) {
-        return (
-            <div className="profile-page">
-                <div className="profile-card error">
-                    <p>⚠️ Не удалось загрузить данные пользователя.</p>
-                    <button onClick={() => navigate("/auth/login")} className="modal-btn primary">
-                        Войти снова
-                    </button>
+                    <p>Загрузка...</p>
                 </div>
             </div>
         );
@@ -56,23 +43,13 @@ export default function ProfilePage() {
     return (
         <div className="profile-page">
             <div className="profile-card">
-                {/* Дефолтное фото */}
-                <div className="profile-avatar">
-                    <img
-                        src={user.avatar || "/default-avatar.png"}
-                        alt="Avatar"
-                    />
-                </div>
-
                 <h1>👤 Профиль пользователя</h1>
-
                 <div className="profile-info">
                     <p><strong>Логин:</strong> {user.username}</p>
                     <p><strong>Роли:</strong> {user.roles}</p>
                     <p><strong>Вход выполнен:</strong> {user.issuedAt}</p>
                     <p><strong>Токен истекает:</strong> {user.expiresAt}</p>
                 </div>
-
                 <div className="profile-actions">
                     <button className="modal-btn primary" onClick={handleLogout}>
                         🚪 Выйти из аккаунта

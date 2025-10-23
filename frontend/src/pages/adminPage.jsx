@@ -14,7 +14,6 @@ export default function AdminPanel() {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
 
-    // 🔒 Проверка токена при загрузке страницы
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!isTokenValid(token) || !isAdmin(token)) {
@@ -37,7 +36,7 @@ export default function AdminPanel() {
     const handleLogout = () => {
         localStorage.removeItem("token");
         alert("👋 Вы вышли из аккаунта");
-        window.location.href = "/";
+        window.location.href = "/auth/login";
     };
 
     const handleSubmit = async (e) => {
@@ -45,7 +44,7 @@ export default function AdminPanel() {
         setLoading(true);
 
         const token = localStorage.getItem("token");
-        if (token) {
+        if (!token) {
             alert("⛔ Нет доступа. Пожалуйста, войдите заново.");
             setLoading(false);
             return;
@@ -97,10 +96,7 @@ export default function AdminPanel() {
                     </button>
                 </div>
             </header>
-
-            {/* ===== Основной контент ===== */}
             <div className="admin-main">
-                {/* Sidebar */}
                 <aside className="admin-sidebar">
                     <h2>Меню</h2>
                     <button
@@ -112,15 +108,11 @@ export default function AdminPanel() {
                     <button className="sidebar-btn">📦 Все товары</button>
                     <button className="sidebar-btn">🧾 Заказы</button>
                 </aside>
-
-                {/* Контент */}
                 <section className="admin-content">
                     <h2>Добро пожаловать 👋</h2>
                     <p>Выберите действие в меню слева.</p>
                 </section>
             </div>
-
-            {/* ===== Модалка добавления товара ===== */}
             {isModalOpen && (
                 <div
                     className="admin-modal-overlay"

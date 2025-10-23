@@ -1,12 +1,5 @@
 import React, {Profiler} from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    useLocation,
-    Navigate,
-} from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import Ads from "./components/Ads";
@@ -16,12 +9,9 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import AdminPanel from "./pages/adminPage";
 import AdminRegistrationPage from "./pages/AdminRegistrationPage";
-
-// 👇 Импортируем функции из utils
 import { isTokenValid, isAdmin } from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage";
 
-// ====== Защищённый маршрут ======
 function ProtectedRoute({ children, adminOnly = false }) {
     const token = localStorage.getItem("token");
 
@@ -49,11 +39,11 @@ function AppContent() {
                     <Route
                         path="/"
                         element={
-                            <>
+                            <div className={"main-layout"}>
                                 <Filters />
                                 <ProductArea />
                                 <Ads />
-                            </>
+                            </div>
                         }
                     />
                     <Route path="/auth/login" element={<LoginPage />} />
