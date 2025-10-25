@@ -20,4 +20,8 @@ public class ProductService {
                 query, query, query
         );
     }
+
+    public List<ProductEntity> getAllProduct() {
+        return productRepository.findAll();
+    }
 }
