@@ -8,7 +8,6 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-
     const handleLogin = async () => {
         setLoading(true);
         try {
@@ -66,6 +65,13 @@ export default function LoginPage() {
         }
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleLogin();
+        }
+    };
+
     return (
         <div className="login-page">
             <div className="login-card">
@@ -84,6 +90,7 @@ export default function LoginPage() {
                         type="text"
                         placeholder="Логин"
                         value={login}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => setLogin(e.target.value)}
                         required
                     />
@@ -91,12 +98,14 @@ export default function LoginPage() {
                         type="password"
                         placeholder="Пароль"
                         value={password}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                     <button
                         className="modal-btn primary"
                         onClick={handleLogin}
+                        onKeyDown={handleKeyDown}
                         disabled={loading}
                     >
                         {loading ? "⏳ Вход..." : "Войти"}
