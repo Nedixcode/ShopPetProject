@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CustomSelect from "./CustomSelect";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { parseJwt, isTokenValid } from "../utils/auth";
 
 export default function Header() {
     const [city, setCity] = useState("Минск");
     const [username, setUsername] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [query, setQuery] = useState("");
+    const navigate = useNavigate();
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
-        // имитируем быструю проверку, чтобы успел показаться спиннер
         setTimeout(() => {
             if (token && isTokenValid(token)) {
                 const payload = parseJwt(token);
@@ -23,15 +24,26 @@ export default function Header() {
         }, 100);
     }, []);
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (!query.trim()) return;
+        navigate(`/search?query=${encodeURIComponent(query.trim())}`);
+    };
+
     return (
         <header>
             <div className="header-container">
                 <div className="logo">🛍 Ctrl+Alt+Buy</div>
 
-                <div className="search-box">
-                    <input type="text" placeholder="Поиск товаров..." />
-                    <button>🔍</button>
-                </div>
+                <form className="search-box" onSubmit={handleSearch}>
+                    <input
+                        type="text"
+                        placeholder="Поиск товаров..."
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <button type="submit">🔍</button>
+                </form>
 
                 <div className="header-actions">
                     <CustomSelect
@@ -43,11 +55,9 @@ export default function Header() {
                     {loading ? (
                         <div className="spinner" title="Проверка входа..." />
                     ) : username ? (
-                        <>
-                            <Link to="/profile" className="auth-btn">
-                                {username}
-                            </Link>
-                        </>
+                        <Link to="/profile" className="auth-btn">
+                            {username}
+                        </Link>
                     ) : (
                         <Link to="/auth/login" className="auth-btn">
                             Войти

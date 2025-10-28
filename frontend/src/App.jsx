@@ -11,6 +11,7 @@ import AdminPanel from "./pages/adminPage";
 import AdminRegistrationPage from "./pages/AdminRegistrationPage";
 import { isTokenValid, isAdmin } from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage";
+import SearchPage from "./pages/SearchPage";
 
 function ProtectedRoute({ children, adminOnly = false }) {
     const token = localStorage.getItem("token");
@@ -50,6 +51,7 @@ function AppContent() {
                     <Route path="/auth/registration" element={<RegistrationPage />} />
                     <Route path="/auth/registration/admin" element={<AdminRegistrationPage />} />
                     <Route path="/profile" element={<ProfilePage/>} />
+                    <Route path="/search" element={<SearchPage />} />
                     <Route
                         path="/admin"
                         element={

@@ -4,13 +4,6 @@
     min-height: 100vh;
 }
 
-.title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 24px;
-    color: #333;
-}
-
 .product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
