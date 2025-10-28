@@ -10,7 +10,6 @@
     gap: 20px;
 }
 
-/* Карточка товара */
 .product-card {
     background: #fff;
     border: 1px solid #ddd;
@@ -74,7 +73,7 @@
 .product-footer {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* кнопка и цена визуально на нижней линии */
+    align-items: flex-end;
     margin-top: 8px;
 }
 
@@ -82,6 +81,28 @@
     font-size: 15px;
     font-weight: bold;
     color: #333;
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-button {
+    border: none;
+    background: #f5f5f5;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.icon-button.edit:hover {
+    background: #e0f0ff;
+}
+
+.icon-button.delete:hover {
+    background: #ffe5e5;
 }
 
 .product-button {
