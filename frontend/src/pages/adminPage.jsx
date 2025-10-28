@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/main.css";
+import "../styles/ProductArea.css"
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 
 export default function AdminPanel() {
@@ -13,6 +14,8 @@ export default function AdminPanel() {
     });
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
+    const [products, setProducts] = useState([]); // <-- товары
+    const [showProducts, setShowProducts] = useState(false); // <-- переключатель отображения
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -79,6 +82,19 @@ export default function AdminPanel() {
         }
     };
 
+    const loadProducts = async () => {
+        setShowProducts(true);
+        try {
+            const res = await fetch("/products");
+            if (!res.ok) throw new Error(`Ошибка ${res.status}`);
+            const data = await res.json();
+            setProducts(data);
+        } catch (err) {
+            console.error("Ошибка при загрузке товаров:", err);
+            alert("❌ Не удалось загрузить товары");
+        }
+    };
+
     return (
         <div className="admin-layout">
             <header className="admin-header">
@@ -96,6 +112,7 @@ export default function AdminPanel() {
                     </button>
                 </div>
             </header>
+
             <div className="admin-main">
                 <aside className="admin-sidebar">
                     <h2>Меню</h2>
@@ -105,14 +122,48 @@ export default function AdminPanel() {
                     >
                         ➕ Добавить товар
                     </button>
-                    <button className="sidebar-btn">📦 Все товары</button>
+                    <button className="sidebar-btn" onClick={loadProducts}>
+                        📦 Все товары
+                    </button>
                     <button className="sidebar-btn">🧾 Заказы</button>
                 </aside>
+
                 <section className="admin-content">
-                    <h2>Добро пожаловать 👋</h2>
-                    <p>Выберите действие в меню слева.</p>
+                    {showProducts ? (
+                        <>
+                            <h2 className="title">Все товары</h2>
+                            <div className="product-grid">
+                                {products.length === 0 ? (
+                                    <p>Товары не найдены</p>
+                                ) : (
+                                    products.map((product) => (
+                                        <div key={product.id} className="product-card">
+                                            <img
+                                                src={ product.imageUrl }
+                                                alt={product.name}
+                                                className="product-image"
+                                            />
+                                            <div className="product-info">
+                                                <h2 className="product-name">{product.name}</h2>
+                                                <p className="product-description">{product.description}</p>
+                                                <div className="product-footer">
+                                                    <span className="product-price">{product.price} BYN</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <h2>Добро пожаловать 👋</h2>
+                            <p>Выберите действие в меню слева.</p>
+                        </>
+                    )}
                 </section>
             </div>
+
             {isModalOpen && (
                 <div
                     className="admin-modal-overlay"
