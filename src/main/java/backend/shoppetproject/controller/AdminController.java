@@ -1,5 +1,6 @@
 package backend.shoppetproject.controller;
 
+import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.service.AdminService;
 import org.slf4j.Logger;
@@ -21,18 +22,27 @@ public class AdminController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<ProductEntity> addProduct (@RequestBody ProductEntity productEntity) {
-        logger.info("Вызвался метод addProduct");
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductEntity productEntity) {
+        logger.info("Вызвался метод addProduct, id = {}, name = {}",
+                productEntity.getId(), productEntity.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(adminService.addProduct(productEntity));
+                .body(adminService.createProduct(productEntity));
     }
 
-    @DeleteMapping("/product")
-    public ResponseEntity<ProductEntity> deleteProduct(@RequestBody ProductEntity productEntity) {
-        logger.info("вызвался метод deleteProduct");
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long id) {
+        logger.info("вызвался метод deleteProduct, id = {}", id);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(adminService.deleteProduct(productEntity));
+        return ResponseEntity.ok(adminService.deleteProduct(id));
+    }
+
+    @PutMapping("/product/{id}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id,
+                                                    @RequestBody ProductEntity productEntity) {
+        logger.info("Вызвался метод updateProduct, id = {}, name = {}",
+                productEntity.getId(), productEntity.getName());
+
+        return ResponseEntity.ok(adminService.updateProduct(id, productEntity));
     }
 }

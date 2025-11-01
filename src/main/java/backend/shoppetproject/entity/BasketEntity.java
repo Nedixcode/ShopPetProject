@@ -35,9 +35,19 @@ public class BasketEntity {
         this.id = id;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public List<ProductEntity> getProductList() {
         return productList;
     }
 
+    public void setProductList(List<ProductEntity> productList) {
+        this.productList = productList;
+    }
 }
-

@@ -1,10 +1,11 @@
 package backend.shoppetproject.service;
 
+import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -15,13 +16,21 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductEntity> searchProduct(String query) {
-        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrTypeContainingIgnoreCase(
-                query, query, query
-        );
+    public List<ProductDto> searchProduct(String query) {
+        List<ProductEntity> entities = productRepository
+                .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrTypeContainingIgnoreCase(
+                        query, query, query);
+
+        return entities.stream()
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
     }
 
-    public List<ProductEntity> getAllProduct() {
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts() {
+        List<ProductEntity> entities = productRepository.findAll();
+
+        return entities.stream()
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
     }
 }

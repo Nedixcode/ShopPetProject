@@ -100,5 +100,21 @@ public class ProductEntity {
     public List<BasketEntity> getBasketEntityList() {
         return basketList;
     }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setIsInStock(Boolean isInStock) {
+        this.isInStock = isInStock;
+    }
+
+    public void setNumberOfSales(Integer numberOfSales) {
+        this.numberOfSales = numberOfSales;
+    }
+
+    public void setBasketList(List<BasketEntity> basketList) {
+        this.basketList = basketList;
+    }
 }
 

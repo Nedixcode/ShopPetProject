@@ -4,17 +4,16 @@ import backend.shoppetproject.entity.PasswordResetToken;
 import backend.shoppetproject.entity.UserEntity;
 import backend.shoppetproject.repository.PasswordResetTokenRepository;
 import backend.shoppetproject.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Random;
 
 @Service
 public class PasswordResetService {
 
     private final PasswordResetTokenRepository tokenRepo;
-
     private final UserRepository userRepo;
 
     public PasswordResetService(PasswordResetTokenRepository tokenRepo, UserRepository userRepo) {
@@ -23,26 +22,34 @@ public class PasswordResetService {
     }
 
     public String createToken(String email) {
-        UserEntity user = userRepo.findByEmail(email).orElseThrow();
-        String token = UUID.randomUUID().toString();
+        UserEntity user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с таким email не найден"));
+
+        String token = String.format("%06d", new Random().nextInt(1000000));
+
         PasswordResetToken resetToken = new PasswordResetToken();
         resetToken.setToken(token);
         resetToken.setUser(user);
         resetToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+
         tokenRepo.save(resetToken);
         return token;
     }
 
-    public boolean verifyToken(String token) {
-        PasswordResetToken t = tokenRepo.findByToken(token).orElse(null);
-        return t != null && t.getExpiresAt().isAfter(LocalDateTime.now());
+    public void verifyToken(String token) {
+        PasswordResetToken tokenToCheck = tokenRepo.findByToken(token).orElse(null);
+
+        if (tokenToCheck == null || tokenToCheck.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Невалидный токен");
+        }
     }
 
     public void resetPassword(String token, String newPassword) {
-        PasswordResetToken t = tokenRepo.findByToken(token).orElseThrow();
-        UserEntity user = t.getUser();
+        PasswordResetToken tokenToGetUser = tokenRepo.findByToken(token).orElseThrow();
+        UserEntity user = tokenToGetUser.getUser();
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+
         userRepo.save(user);
-        tokenRepo.delete(t);
+        tokenRepo.delete(tokenToGetUser);
     }
 }

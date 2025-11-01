@@ -1,9 +1,10 @@
 package backend.shoppetproject.service;
 
+import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -14,46 +15,40 @@ public class AdminService {
         this.productRepository = productRepository;
     }
 
-    public ProductEntity addProduct(ProductEntity productEntity) {
-
-        Optional<ProductEntity> productToCreate = productRepository.findByNameAndDescription(
-                productEntity.getName(),
-                productEntity.getDescription()
+    public ProductDto createProduct(ProductEntity product) {
+        ProductEntity productToCreate = new ProductEntity(
+                product.getName(),
+                product.getDescription(),
+                product.getType(),
+                product.getPrice(),
+                product.getIsInStock(),
+                product.getNumberOfSales(),
+                product.getBasketEntityList()
         );
 
-        if (productToCreate.isPresent()) {
-            throw new IllegalArgumentException("Такой товар уже существует");
-        }
-
-        ProductEntity productEntityToCreate = new ProductEntity(
-                productEntity.getName(),
-                productEntity.getDescription(),
-                productEntity.getType(),
-                productEntity.getPrice(),
-                productEntity.getIsInStock(),
-                productEntity.getNumberOfSales(),
-                productEntity.getBasketEntityList()
-        );
-
-        productRepository.save(productEntityToCreate);
-
-        return productEntityToCreate;
+        productRepository.save(productToCreate);
+        return new ProductDto(productToCreate);
     }
 
-    public ProductEntity deleteProduct(ProductEntity productEntity) {
+    public ProductDto deleteProduct(Long id) {
+        ProductEntity productToDelete = productRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
 
-        Optional<ProductEntity> productToDelete = productRepository.findByNameAndDescription(
-                productEntity.getName(),
-                productEntity.getDescription()
-        );
+        productRepository.delete(productToDelete);
+        return new ProductDto(productToDelete);
+    }
 
-        if (productToDelete.isEmpty()) {
-            throw new IllegalArgumentException("Такой товар не найден");
-        }
+    public ProductDto updateProduct(Long id, ProductEntity product) {
+        ProductEntity productToUpdate = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
 
-        ProductEntity existingProductToDelete = productToDelete.get();
-        productRepository.delete(existingProductToDelete);
+        productToUpdate.setName(product.getName());
+        productToUpdate.setDescription(product.getDescription());
+        productToUpdate.setType(product.getType());
+        productToUpdate.setPrice(product.getPrice());
+        productToUpdate.setIsInStock(product.getIsInStock());
 
-        return existingProductToDelete;
+        productRepository.save(productToUpdate);
+        return new ProductDto(productToUpdate);
     }
 }

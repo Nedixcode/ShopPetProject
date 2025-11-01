@@ -1,6 +1,7 @@
 package backend.shoppetproject.entity;
 
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,8 +64,24 @@ public class UserEntity {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public BasketEntity getBasket() {
+        return basket;
+    }
+
+    public void setBasket(BasketEntity basket) {
+        this.basket = basket;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -78,6 +95,5 @@ public class UserEntity {
     public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
-
 }
 

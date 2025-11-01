@@ -1,9 +1,6 @@
 package backend.shoppetproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -13,12 +10,15 @@ public class PasswordResetToken {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "token")
     private String token;
 
+    @Column(name = "expiresAt")
     private LocalDateTime expiresAt;
 
     @ManyToOne
     private UserEntity user;
+
 
     public PasswordResetToken() {
     }
