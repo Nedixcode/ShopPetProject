@@ -40,17 +40,12 @@ public class ProductEntity {
                          String description,
                          String type,
                          Integer price,
-                         Boolean isInStock,
-                         Integer numberOfSales,
-                         List<BasketEntity> basketList
-                         ) {
+                         Boolean isInStock) {
         this.name = name;
-        this.basketList = basketList;
-        this.numberOfSales = numberOfSales;
-        this.isInStock = isInStock;
-        this.price = price;
-        this.type = type;
         this.description = description;
+        this.type = type;
+        this.price = price;
+        this.isInStock = isInStock;
     }
 
     public Long getId() {
@@ -117,4 +112,3 @@ public class ProductEntity {
         this.basketList = basketList;
     }
 }
-

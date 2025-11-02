@@ -22,12 +22,11 @@ public class AdminController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductEntity productEntity) {
-        logger.info("Вызвался метод addProduct, id = {}, name = {}",
-                productEntity.getId(), productEntity.getName());
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+        logger.info("Вызвался метод addProduct, name = {}", productDto.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(adminService.createProduct(productEntity));
+                .body(adminService.createProduct(productDto));
     }
 
     @DeleteMapping("/product/{id}")
@@ -39,10 +38,9 @@ public class AdminController {
 
     @PutMapping("/product/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id,
-                                                    @RequestBody ProductEntity productEntity) {
-        logger.info("Вызвался метод updateProduct, id = {}, name = {}",
-                productEntity.getId(), productEntity.getName());
+                                                    @RequestBody ProductDto productDto) {
+        logger.info("Вызвался метод updateProduct, name = {}", productDto.getName());
 
-        return ResponseEntity.ok(adminService.updateProduct(id, productEntity));
+        return ResponseEntity.ok(adminService.updateProduct(id, productDto));
     }
 }

@@ -2,8 +2,9 @@ package backend.shoppetproject.repository;
 
 import backend.shoppetproject.entity.BasketEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
 public interface BasketRepository extends JpaRepository<BasketEntity, Long> {
 
-    BasketEntity findByUserId(Long userId);
+    Optional<BasketEntity> findByUserId(Long userId);
 }

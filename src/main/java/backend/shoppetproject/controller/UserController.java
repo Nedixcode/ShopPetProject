@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -24,15 +25,24 @@ public class UserController {
 
     @GetMapping("/basket/products")
     public ResponseEntity<List<ProductDto>> getProductsInBasket(Principal principal) {
-        logger.info("вызвался метод getProductsInBasket, имя пользователя = {}", principal.getName());
+        logger.info("вызвался метод getProductsInBasket, userName = {}", principal.getName());
 
         return ResponseEntity.ok(userService.getProductInBasket(principal));
     }
 
     @PostMapping("/basket/{id}")
     public ResponseEntity<ProductDto> addProductToBasket(@PathVariable Long id, Principal principal) {
-        logger.info("вызвался метод addProductToBasket, id товара = {}, имя пользователя = {}", id, principal.getName());
+        logger.info("вызвался метод addProductToBasket, id товара = {}, userName = {}",
+                id, principal.getName());
 
         return ResponseEntity.ok(userService.addProductToBasket(id, principal));
+    }
+
+    @DeleteMapping("/basket/{id}")
+    public ResponseEntity<ProductDto> deleteProductFromBasket(@PathVariable Long id, Principal principal) {
+        logger.info("вызвался метод deleteProductFromBasket, id товара = {}, userName = {}",
+                id, principal.getName());
+
+        return ResponseEntity.ok(userService.deleteProductFromBasket(id, principal));
     }
 }

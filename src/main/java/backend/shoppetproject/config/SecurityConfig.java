@@ -1,7 +1,6 @@
 package backend.shoppetproject.config;
 
 import backend.shoppetproject.security.JwtAuthenticationFilter;
-import backend.shoppetproject.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +22,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtFilter, UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
 
@@ -37,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/error", "/products/**", "/").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/account", "/user/**").hasRole("USER")
-                        .anyRequest().denyAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -54,4 +53,3 @@ public class SecurityConfig {
     }
 
 }
-

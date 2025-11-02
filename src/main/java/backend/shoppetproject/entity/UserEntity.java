@@ -22,11 +22,11 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
-    @OneToOne(mappedBy = "user")
-    private BasketEntity basket;
-
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @OneToOne(mappedBy = "user")
+    private BasketEntity basket;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -96,4 +96,3 @@ public class UserEntity {
         this.roles = roles;
     }
 }
-

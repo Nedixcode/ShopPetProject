@@ -33,7 +33,8 @@ public class UserService {
         UserEntity user = userRepository.findByUserName(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("пользователь не найден"));
 
-        BasketEntity basket = basketRepository.findByUserId(user.getId());
+        BasketEntity basket = basketRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(("Корзина у пользователя не найдена")));
 
         return basket.getProductList().stream()
                 .map(ProductDto::new)
@@ -46,14 +47,33 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
 
         UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь"));
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
 
-        BasketEntity basket = basketRepository.findByUserId(user.getId());
+        BasketEntity basket = basketRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(("Корзина у пользователя не найдена")));
+
         if (!basket.getProductList().contains(productToAdd)) {
             basket.getProductList().add(productToAdd);
         }
         basketRepository.save(basket);
 
         return new ProductDto(productToAdd);
+    }
+
+    @Transactional
+    public ProductDto deleteProductFromBasket(Long id, Principal principal) {
+        ProductEntity productToDelete = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
+
+        UserEntity user = userRepository.findByUserName(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+
+        BasketEntity basket = basketRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(("Корзина у пользователя не найдена")));
+
+        basket.getProductList().remove(productToDelete);
+        basketRepository.save(basket);
+
+        return new ProductDto(productToDelete);
     }
 }

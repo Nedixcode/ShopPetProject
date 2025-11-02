@@ -3,18 +3,26 @@ package backend.shoppetproject.dto;
 import backend.shoppetproject.entity.ProductEntity;
 
 public class ProductDto {
-    private Long id;
     private String name;
-    private Integer price;
     private String description;
     private String type;
+    private Integer price;
+    private Boolean isInStock;
 
     public ProductDto(ProductEntity entity) {
-        this.price = entity.getPrice();
-        this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.type = entity.getType();
+        this.price = entity.getPrice();
+        this.isInStock = entity.getIsInStock();
+    }
+
+    public Boolean getIsInStock() {
+        return isInStock;
+    }
+
+    public void setIsInStock(Boolean isInStock) {
+        this.isInStock = isInStock;
     }
 
     public Integer getPrice() {
@@ -23,14 +31,6 @@ public class ProductDto {
 
     public void setPrice(Integer price) {
         this.price = price;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -56,8 +56,4 @@ public class ProductDto {
     public void setType(String type) {
         this.type = type;
     }
-
 }
-
-
-
