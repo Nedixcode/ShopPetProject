@@ -27,10 +27,10 @@ public class ProductEntity {
     private Boolean isInStock;
 
     @Column(name = "number_of_sales")
-    private Integer numberOfSales;
+    private int numberOfSales;
 
-    @ManyToMany(mappedBy = "productList")
-    private List<BasketEntity> basketList;
+    @OneToMany(mappedBy = "product")
+    private List<BasketItemEntity> basketItems;
 
 
     public ProductEntity() {
@@ -84,31 +84,31 @@ public class ProductEntity {
         return price;
     }
 
-    public Boolean getIsInStock() {
-        return isInStock;
-    }
-
-    public Integer getNumberOfSales() {
-        return numberOfSales;
-    }
-
-    public List<BasketEntity> getBasketEntityList() {
-        return basketList;
-    }
-
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Boolean getIsInStock() {
+        return isInStock;
     }
 
     public void setIsInStock(Boolean isInStock) {
         this.isInStock = isInStock;
     }
 
-    public void setNumberOfSales(Integer numberOfSales) {
+    public int getNumberOfSales() {
+        return numberOfSales;
+    }
+
+    public void setNumberOfSales(int numberOfSales) {
         this.numberOfSales = numberOfSales;
     }
 
-    public void setBasketList(List<BasketEntity> basketList) {
-        this.basketList = basketList;
+    public List<BasketItemEntity> getBasketItems() {
+        return basketItems;
+    }
+
+    public void setBasketItems(List<BasketItemEntity> basketItems) {
+        this.basketItems = basketItems;
     }
 }

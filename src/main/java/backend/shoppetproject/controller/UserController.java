@@ -1,7 +1,7 @@
 package backend.shoppetproject.controller;
 
-import backend.shoppetproject.dto.ProductDto;
-import backend.shoppetproject.entity.ProductEntity;
+import backend.shoppetproject.dto.BasketItemDto;
+import backend.shoppetproject.entity.BasketItemEntity;
 import backend.shoppetproject.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,25 +24,20 @@ public class UserController {
     }
 
     @GetMapping("/basket/products")
-    public ResponseEntity<List<ProductDto>> getProductsInBasket(Principal principal) {
+    public ResponseEntity<List<BasketItemDto>> getProductsInBasket(Principal principal) {
         logger.info("вызвался метод getProductsInBasket, userName = {}", principal.getName());
-
         return ResponseEntity.ok(userService.getProductInBasket(principal));
     }
 
     @PostMapping("/basket/{id}")
-    public ResponseEntity<ProductDto> addProductToBasket(@PathVariable Long id, Principal principal) {
-        logger.info("вызвался метод addProductToBasket, id товара = {}, userName = {}",
-                id, principal.getName());
-
+    public ResponseEntity<BasketItemDto> addProductToBasket(@PathVariable Long id, Principal principal) {
+        logger.info("вызвался метод addProductToBasket, id товара = {}, userName = {}", id, principal.getName());
         return ResponseEntity.ok(userService.addProductToBasket(id, principal));
     }
 
     @DeleteMapping("/basket/{id}")
-    public ResponseEntity<ProductDto> deleteProductFromBasket(@PathVariable Long id, Principal principal) {
-        logger.info("вызвался метод deleteProductFromBasket, id товара = {}, userName = {}",
-                id, principal.getName());
-
+    public ResponseEntity<BasketItemDto> deleteProductFromBasket(@PathVariable Long id, Principal principal) {
+        logger.info("вызвался метод deleteProductFromBasket, id товара = {}, userName = {}", id, principal.getName());
         return ResponseEntity.ok(userService.deleteProductFromBasket(id, principal));
     }
 }

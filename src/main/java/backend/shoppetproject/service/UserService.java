@@ -1,12 +1,8 @@
 package backend.shoppetproject.service;
 
-import backend.shoppetproject.dto.ProductDto;
-import backend.shoppetproject.entity.BasketEntity;
-import backend.shoppetproject.entity.ProductEntity;
-import backend.shoppetproject.entity.UserEntity;
-import backend.shoppetproject.repository.BasketRepository;
-import backend.shoppetproject.repository.ProductRepository;
-import backend.shoppetproject.repository.UserRepository;
+import backend.shoppetproject.dto.BasketItemDto;
+import backend.shoppetproject.entity.*;
+import backend.shoppetproject.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -22,58 +17,82 @@ public class UserService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final BasketRepository basketRepository;
+    private final BasketItemRepository basketItemRepository;
 
-    public UserService(ProductRepository productRepository, UserRepository userRepository, BasketRepository basketRepository) {
+    public UserService(ProductRepository productRepository,
+                       UserRepository userRepository,
+                       BasketRepository basketRepository,
+                       BasketItemRepository basketItemRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.basketRepository = basketRepository;
+        this.basketItemRepository = basketItemRepository;
     }
 
-    public List<ProductDto> getProductInBasket(Principal principal) {
+    public List<BasketItemDto> getProductInBasket(Principal principal) {
         UserEntity user = userRepository.findByUserName(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("пользователь не найден"));
 
         BasketEntity basket = basketRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException(("Корзина у пользователя не найдена")));
+                .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
-        return basket.getProductList().stream()
-                .map(ProductDto::new)
-                .collect(Collectors.toList());
-    }
+        List<BasketItemEntity> basketItemList = basketItemRepository.findByBasket(basket);
 
-    @Transactional
-    public ProductDto addProductToBasket(Long id, Principal principal) {
-        ProductEntity productToAdd = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
-
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-
-        BasketEntity basket = basketRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException(("Корзина у пользователя не найдена")));
-
-        if (!basket.getProductList().contains(productToAdd)) {
-            basket.getProductList().add(productToAdd);
+        if (basketItemList.isEmpty()) {
+            return List.of();
         }
-        basketRepository.save(basket);
 
-        return new ProductDto(productToAdd);
+        return basketItemList.stream().map(BasketItemDto::new).toList();
     }
 
     @Transactional
-    public ProductDto deleteProductFromBasket(Long id, Principal principal) {
-        ProductEntity productToDelete = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
+    public BasketItemDto addProductToBasket(Long productId, Principal principal) {
+        ProductEntity product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
         UserEntity user = userRepository.findByUserName(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
 
         BasketEntity basket = basketRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException(("Корзина у пользователя не найдена")));
+                .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
-        basket.getProductList().remove(productToDelete);
-        basketRepository.save(basket);
+        BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
+                .orElseGet(() -> {
+                    BasketItemEntity newBasketItem = new BasketItemEntity();
+                    newBasketItem.setBasket(basket);
+                    newBasketItem.setProduct(product);
+                    newBasketItem.setQuantity(1);
+                    basket.getBasketItems().add(newBasketItem);
+                    return newBasketItem;
+                });
 
-        return new ProductDto(productToDelete);
+        basketItem.setQuantity(basketItem.getQuantity() + 1);
+        basketItemRepository.save(basketItem);
+
+        return new BasketItemDto(basketItem);
+    }
+
+    @Transactional
+    public BasketItemDto deleteProductFromBasket(Long productId, Principal principal) {
+        ProductEntity product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
+
+        UserEntity user = userRepository.findByUserName(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+
+        BasketEntity basket = basketRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
+
+        BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден в корзине"));
+
+        if (basketItem.getQuantity() > 1) {
+            basketItem.setQuantity(basketItem.getQuantity() - 1);
+            basketItemRepository.save(basketItem);
+        } else {
+            basketItemRepository.delete(basketItem);
+        }
+
+        return new BasketItemDto(basketItem);
     }
 }
