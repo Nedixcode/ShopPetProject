@@ -1,6 +1,7 @@
 package backend.shoppetproject.service;
 
 import backend.shoppetproject.dto.BasketItemDto;
+import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.*;
 import backend.shoppetproject.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -29,7 +31,7 @@ public class UserService {
         this.basketItemRepository = basketItemRepository;
     }
 
-    public List<BasketItemDto> getProductInBasket(Principal principal) {
+    public List<BasketItemDto> getProductsInBasket(Principal principal) {
         UserEntity user = userRepository.findByUserName(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("пользователь не найден"));
 
@@ -94,5 +96,42 @@ public class UserService {
         }
 
         return new BasketItemDto(basketItem);
+    }
+
+    public List<ProductDto> getProductsInFavorites(Principal principal) {
+        UserEntity user = userRepository.findByUserName(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("пользователь не найден"));
+
+        Set<ProductEntity> productSet = user.getFavoriteProducts();
+
+        return productSet.stream().map(ProductDto::new).toList();
+    }
+
+    @Transactional
+    public ProductDto addProductToFavorites(Long productId, Principal principal) {
+        ProductEntity product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
+
+        UserEntity user = userRepository.findByUserName(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+
+        user.getFavoriteProducts().add(product);
+        userRepository.save(user);
+
+        return new ProductDto(product);
+    }
+
+    @Transactional
+    public ProductDto deleteProductFromFavorites(Long productId, Principal principal) {
+        ProductEntity product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
+
+        UserEntity user = userRepository.findByUserName(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+
+        user.getFavoriteProducts().remove(product);
+        userRepository.save(user);
+
+        return new ProductDto(product);
     }
 }
