@@ -3,6 +3,7 @@ import "../styles/main.css";
 import "../styles/ProductArea.css";
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import ProductCard from "../components/ProductCard";
+import ProfileButton from "../components/ProfileButton";
 
 export default function AdminPanel() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -153,9 +154,9 @@ export default function AdminPanel() {
                     {/*{user && <p className="admin-user">Администратор: {user}</p>}*/}
                 </div>
                 <div className="admin-header-right">
-                    <button className="admin-top-btn" onClick={() => (window.location.href = "/")}>
-                        Главная
-                    </button>
+                    <ProfileButton
+
+                    />
                     <button className="admin-top-btn">Настройки</button>
                     <button className="admin-top-btn logout" onClick={handleLogout}>
                         Выйти

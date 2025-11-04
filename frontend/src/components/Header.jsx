@@ -1,30 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import CustomSelect from "./CustomSelect";
-import { Link, useNavigate } from "react-router-dom";
-import { parseJwt, isTokenValid } from "../utils/auth";
+import ProfileButton from "./ProfileButton";
+import { useNavigate } from "react-router-dom";
 import "../styles/SearchDropdown.css";
 
 export default function Header() {
     const [city, setCity] = useState("Минск");
-    const [username, setUsername] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
-
     const navigate = useNavigate();
     const timeoutRef = useRef(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token && isTokenValid(token)) {
-            const payload = parseJwt(token);
-            setUsername(payload?.sub || null);
-        }
-        setLoading(false);
-    }, []);
-
-    // 🔹 Динамический поиск
     useEffect(() => {
         if (!query.trim()) {
             setSuggestions([]);
@@ -39,7 +26,7 @@ export default function Header() {
                 if (!res.ok) throw new Error("Ошибка при поиске");
                 const data = await res.json();
 
-                setSuggestions(data.slice(0, 5)); // максимум 5 подсказок
+                setSuggestions(data.slice(0, 5));
                 setShowDropdown(true);
             } catch (err) {
                 console.error(err);
@@ -77,6 +64,7 @@ export default function Header() {
                         <ul className="search-dropdown">
                             {suggestions.map((p) => (
                                 <li key={p.id} onClick={() => navigate(`/product/${p.id}`)}>
+                                    {p.name}
                                 </li>
                             ))}
                         </ul>
@@ -89,19 +77,7 @@ export default function Header() {
                         value={city}
                         onChange={setCity}
                     />
-
-                    {loading ? (
-                        <div className="spinner" title="Проверка входа..." />
-                    ) : username ? (
-                        <Link to="/profile" className="auth-btn">
-                            {username}
-                        </Link>
-                    ) : (
-                        <Link to="/auth/login" className="auth-btn">
-                            Войти
-                        </Link>
-                    )}
-
+                    <ProfileButton />
                     <button className="cart-btn">🛒 Корзина</button>
                 </div>
             </div>
