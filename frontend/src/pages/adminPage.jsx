@@ -91,7 +91,6 @@ export default function AdminPanel() {
         }
     };
 
-    // 🔹 Вывод продуктов
     const loadProducts = async () => {
         try {
             const res = await fetch("/products");
@@ -190,7 +189,9 @@ export default function AdminPanel() {
                             }, 150);
                         }}
                     />
-
+                    {loading ? (
+                        <Spinner text="Загрузка товаров..." />
+                    ) : (
                     <div className="product-grid">
                         {products.length === 0 ? (
                             <p>Товары не найдены</p>
@@ -206,6 +207,7 @@ export default function AdminPanel() {
                             ))
                         )}
                     </div>
+                    )}
                 </section>
             </div>
         </div>

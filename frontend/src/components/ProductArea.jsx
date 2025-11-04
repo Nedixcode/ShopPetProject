@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/ProductArea.css";
 import ProductCard from "../components/ProductCard";
+import Spinner from "./Spinner";
 
 export default function ProductArea() {
     const [products, setProducts] = useState([]);
@@ -8,6 +9,8 @@ export default function ProductArea() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        const timer = setTimeout(() => setLoading(true), 0);
+
         fetch("/products")
             .then((response) => {
                 if (!response.ok) throw new Error(`Ошибка загрузки: ${response.status}`);
@@ -18,10 +21,17 @@ export default function ProductArea() {
                 console.error("Ошибка при загрузке товаров:", err);
                 setError(err.message);
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                setTimeout(() => setLoading(false), 400);
+            });
+
+        return () => clearTimeout(timer);
     }, []);
 
-    if (loading) return <div className="loading">Загрузка товаров...</div>;
+    if (loading) {
+        return <Spinner text="Загрузка товаров..." />;
+    }
+
     if (error) return <div className="error">Ошибка: {error}</div>;
 
     return (
