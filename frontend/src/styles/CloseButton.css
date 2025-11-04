@@ -1,0 +1,38 @@
+.close-btn {
+    all: unset; /* Сбрасывает ВСЁ — и width, и фон, и border */
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px !important;
+    height: 32px !important;
+
+    background: #fff !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    font-size: 18px !important;
+    color: #6b7280 !important;
+    cursor: pointer !important;
+    transition: background 0.2s ease, color 0.2s ease !important;
+    z-index: 10 !important;
+
+    transform: none !important;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+.close-btn:hover {
+    color: #ef4444 !important;
+    background: #fef2f2 !important;
+}
+
+.close-btn.small {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 14px !important;
+}

@@ -1,0 +1,19 @@
+footer {
+    background: var(--footer-bg);
+    color: var(--footer-text);
+    text-align: center;
+    padding: 25px 10px;
+    margin-top: auto;
+}
+
+footer .footer-info {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+    main { grid-template-columns: 1fr; }
+    .sidebar-left, .sidebar-right { order: -1; }
+}

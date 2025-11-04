@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth"; // 🔹 импортируем функции проверки токена
+import CloseButton from "../components/CloseButton";
 
 export default function LoginPage() {
     const [login, setLogin] = useState("");
@@ -75,13 +76,7 @@ export default function LoginPage() {
     return (
         <div className="login-page">
             <div className="login-card">
-                <button
-                    className="close-btn"
-                    onClick={() => navigate("/")}
-                    title="На главную"
-                >
-                    ✖
-                </button>
+                <CloseButton to={"/"}/>
                 <h1>Вход в аккаунт</h1>
                 <p className="login-subtitle">Добро пожаловать 👋 Введите свои данные для входа</p>
 
@@ -114,7 +109,12 @@ export default function LoginPage() {
                         Впервые на сайте?{" "}
                         <span onClick={() => navigate("/auth/registration")}>Регистрация</span>
                     </div>
-                    <button className="forgot-btn">Забыли пароль?</button>
+                    <button
+                        className="forgot-btn"
+                        onClick={() => navigate("/auth/reset-password")}
+                    >
+                        Забыли пароль?
+                    </button>
                 </div>
             </div>
         </div>

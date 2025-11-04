@@ -1,0 +1,59 @@
+.custom-select {
+    position: relative;
+    width: 130px;
+    background: white;
+    color: var(--primary-dark);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: box-shadow 0.2s;
+}
+
+.custom-select:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.custom-select::after {
+    content: "▾";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.select-dropdown {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+    z-index: 10;
+}
+
+.select-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.select-option:hover {
+    background: #f1f3f5;
+}
+
+.auth-btn, .cart-btn {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.1s;
+    text-decoration: none;
+}
