@@ -1,7 +1,6 @@
 package backend.shoppetproject.entity;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,11 +21,19 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @OneToOne(mappedBy = "user")
     private BasketEntity basket;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<ProductEntity> favoriteProducts = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -95,5 +102,12 @@ public class UserEntity {
     public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
-}
 
+    public Set<ProductEntity> getFavoriteProducts() {
+        return favoriteProducts;
+    }
+
+    public void setFavoriteProducts(Set<ProductEntity> favoriteProducts) {
+        this.favoriteProducts = favoriteProducts;
+    }
+}

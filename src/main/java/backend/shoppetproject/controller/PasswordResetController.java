@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/reset")
 public class PasswordResetController {
 
     private static final Logger logger = LoggerFactory.getLogger(PasswordResetController.class);
@@ -23,7 +23,7 @@ public class PasswordResetController {
         this.emailService = emailService;
     }
 
-    @PostMapping("/reset-password-request")
+    @PostMapping("/request")
     public ResponseEntity<Void> requestReset(@RequestParam String email) {
         logger.info("вызвался метод requestReset, email = {}", email);
 
@@ -31,7 +31,7 @@ public class PasswordResetController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/verify-reset-code")
+    @PostMapping("/verify")
     public ResponseEntity<String> verify(@RequestParam String token) {
         logger.info("вызвался метод verify, token = {}", token);
 
@@ -39,7 +39,7 @@ public class PasswordResetController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/password")
     public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetRequest request) {
         logger.info("вызвался метод resetPassword, token = {}", request.getToken());
 

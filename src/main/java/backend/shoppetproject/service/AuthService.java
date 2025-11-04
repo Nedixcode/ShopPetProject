@@ -36,7 +36,8 @@ public class AuthService {
                        UserRepository userRepository,
                        RoleRepository roleRepository,
                        AuthenticationManager authenticationManager,
-                       JwtUtil jwtUtil, BasketRepository basketRepository) {
+                       JwtUtil jwtUtil,
+                       BasketRepository basketRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -87,8 +88,7 @@ public class AuthService {
 
         BasketEntity basket = new BasketEntity();
         basket.setUser(user);
-        basket.setProductList(new ArrayList<>());
-
+        basket.setBasketItems(new ArrayList<>());
         basketRepository.save(basket);
     }
 }

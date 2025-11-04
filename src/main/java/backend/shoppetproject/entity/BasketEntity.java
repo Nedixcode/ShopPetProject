@@ -1,31 +1,25 @@
 package backend.shoppetproject.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "basket")
+@Table(name = "baskets")
 public class BasketEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "basket_goods",
-            joinColumns = @JoinColumn(name = "basket_id"),
-            inverseJoinColumns = @JoinColumn(name = "good_id")
-    )
-    private List<ProductEntity> productList;
+    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BasketItemEntity> basketItems = new ArrayList<>();
 
 
-    public BasketEntity() {
-    }
+    public BasketEntity() {}
 
     public Long getId() {
         return id;
@@ -43,11 +37,11 @@ public class BasketEntity {
         this.user = user;
     }
 
-    public List<ProductEntity> getProductList() {
-        return productList;
+    public List<BasketItemEntity> getBasketItems() {
+        return basketItems;
     }
 
-    public void setProductList(List<ProductEntity> productList) {
-        this.productList = productList;
+    public void setBasketItems(List<BasketItemEntity> basketItems) {
+        this.basketItems = basketItems;
     }
 }

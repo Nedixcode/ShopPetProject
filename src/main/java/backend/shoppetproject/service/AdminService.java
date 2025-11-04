@@ -15,19 +15,17 @@ public class AdminService {
         this.productRepository = productRepository;
     }
 
-    public ProductDto createProduct(ProductEntity product) {
+    public ProductDto createProduct(ProductDto productDto) {
         ProductEntity productToCreate = new ProductEntity(
-                product.getName(),
-                product.getDescription(),
-                product.getType(),
-                product.getPrice(),
-                product.getIsInStock(),
-                product.getNumberOfSales(),
-                product.getBasketEntityList()
+                productDto.getName(),
+                productDto.getDescription(),
+                productDto.getType(),
+                productDto.getPrice(),
+                productDto.getIsInStock()
         );
 
         productRepository.save(productToCreate);
-        return new ProductDto(productToCreate);
+        return productDto;
     }
 
     public ProductDto deleteProduct(Long id) {
@@ -38,17 +36,17 @@ public class AdminService {
         return new ProductDto(productToDelete);
     }
 
-    public ProductDto updateProduct(Long id, ProductEntity product) {
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
         ProductEntity productToUpdate = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
 
-        productToUpdate.setName(product.getName());
-        productToUpdate.setDescription(product.getDescription());
-        productToUpdate.setType(product.getType());
-        productToUpdate.setPrice(product.getPrice());
-        productToUpdate.setIsInStock(product.getIsInStock());
+        productToUpdate.setName(productDto.getName());
+        productToUpdate.setDescription(productDto.getDescription());
+        productToUpdate.setType(productDto.getType());
+        productToUpdate.setPrice(productDto.getPrice());
+        productToUpdate.setIsInStock(productDto.getIsInStock());
 
         productRepository.save(productToUpdate);
-        return new ProductDto(productToUpdate);
+        return productDto;
     }
 }
