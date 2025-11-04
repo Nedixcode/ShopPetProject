@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { parseJwt, isTokenValid, isAdmin } from "../utils/auth"; // 🔹 импортируем функции проверки токена
+import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import CloseButton from "../components/CloseButton";
 
 export default function LoginPage() {
@@ -31,7 +31,7 @@ export default function LoginPage() {
                 return;
             }
 
-            const data = await response.json(); // сервер должен вернуть { token: "..." }
+            const data = await response.json();
 
             if (!data.token) {
                 alert("🚨 Сервер не вернул токен!");

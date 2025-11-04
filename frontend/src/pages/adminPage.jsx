@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/main.css";
-import "../styles/ProductArea.css"
+import "../styles/ProductArea.css";
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import ProductCard from "../components/ProductCard";
 
@@ -9,7 +9,6 @@ export default function AdminPanel() {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
     const [products, setProducts] = useState([]);
-    const [showProducts, setShowProducts] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const searchTimeoutRef = useRef(null);
     const [confirmDeleteModal, setConfirmDeleteModal] = useState({
@@ -24,8 +23,6 @@ export default function AdminPanel() {
         isInStock: true,
     });
 
-
-
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!isTokenValid(token) || !isAdmin(token)) {
@@ -35,6 +32,7 @@ export default function AdminPanel() {
         }
         const payload = parseJwt(token);
         setUser(payload.sub);
+        loadProducts();
     }, []);
 
     const handleChange = (e) => {
@@ -67,7 +65,7 @@ export default function AdminPanel() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(form),
             });
@@ -76,6 +74,7 @@ export default function AdminPanel() {
                 alert("✅ Товар добавлен!");
                 setForm({ name: "", description: "", type: "", price: "", isInStock: true });
                 setIsModalOpen(false);
+                loadProducts(); // 🔄 сразу обновляем список
             } else if (res.status === 401) {
                 alert("🚫 Сессия истекла. Войдите снова.");
                 localStorage.removeItem("token");
@@ -91,8 +90,8 @@ export default function AdminPanel() {
         }
     };
 
+    // 🔹 Вывод продуктов
     const loadProducts = async () => {
-        setShowProducts(true);
         try {
             const res = await fetch("/products");
             if (!res.ok) throw new Error(`Ошибка ${res.status}`);
@@ -132,7 +131,6 @@ export default function AdminPanel() {
     const performSearch = async (query) => {
         try {
             if (!query.trim()) {
-                // Если пустой запрос — загрузить все товары
                 loadProducts();
                 return;
             }
@@ -147,13 +145,12 @@ export default function AdminPanel() {
         }
     };
 
-
     return (
         <div className="admin-layout">
             <header className="admin-header">
                 <div className="admin-header-left">
                     <h1>Панель администратора</h1>
-                    {user && <p className="admin-user">Администратор: {user}</p>}
+                    {/*{user && <p className="admin-user">Администратор: {user}</p>}*/}
                 </div>
                 <div className="admin-header-right">
                     <button className="admin-top-btn" onClick={() => (window.location.href = "/")}>
@@ -175,151 +172,41 @@ export default function AdminPanel() {
                     >
                         ➕ Добавить товар
                     </button>
-                    <button className="sidebar-btn" onClick={loadProducts}>
-                        📦 Все товары
-                    </button>
                     <button className="sidebar-btn">🧾 Заказы</button>
                 </aside>
 
                 <section className="admin-content">
-                    {showProducts ? (
-                        <>
-                            <input
-                                type="text"
-                                className="admin-search-input"
-                                placeholder="Поиск товаров..."
-                                value={searchQuery}
-                                onChange={(e) => {
-                                    setSearchQuery(e.target.value);
-                                    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-                                    searchTimeoutRef.current = setTimeout(() => {
-                                        performSearch(e.target.value);
-                                    }, 300);
-                                }}
-                            />
+                    <input
+                        type="text"
+                        className="admin-search-input"
+                        placeholder="Поиск товаров..."
+                        value={searchQuery}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+                            searchTimeoutRef.current = setTimeout(() => {
+                                performSearch(e.target.value);
+                            }, 150);
+                        }}
+                    />
 
-                            <div className="product-grid">
-                                {products.length === 0 ? (
-                                    <p>Товары не найдены</p>
-                                ) : (
-                                    products.map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                            isAdmin={true}
-                                            onEdit={() => handleEdit(product)}
-                                            onDelete={() => confirmDelete(product)}
-                                        />
-                                    ))
-                                )}
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <h2>Добро пожаловать 👋</h2>
-                            <p>Выберите действие в меню слева.</p>
-                        </>
-                    )}
+                    <div className="product-grid">
+                        {products.length === 0 ? (
+                            <p>Товары не найдены</p>
+                        ) : (
+                            products.map((product) => (
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                    isAdmin={true}
+                                    onEdit={() => handleEdit(product)}
+                                    onDelete={() => confirmDelete(product)}
+                                />
+                            ))
+                        )}
+                    </div>
                 </section>
             </div>
-
-            {confirmDeleteModal.isOpen && confirmDeleteModal.product && (
-                <div
-                    className="admin-modal-overlay"
-                    onClick={() => setConfirmDeleteModal({ isOpen: false, product: null })}
-                >
-                    <div
-                        className="admin-modal"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <h2>Подтверждение удаления</h2>
-                        <p>Вы действительно хотите удалить товар "<strong>{confirmDeleteModal.product.name}</strong>"?</p>
-                        <div className="admin-modal-buttons">
-                            <button
-                                className="admin-delete-btn"
-                                onClick={() => handleDelete(confirmDeleteModal.product.id)}
-                            >
-                                ✅ Да, удалить
-                            </button>
-                            <button
-                                className="admin-cancel-btn"
-                                onClick={() => setConfirmDeleteModal({ isOpen: false, product: null })}
-                            >
-                                ❌ Отмена
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isModalOpen && (
-                <div
-                    className="admin-modal-overlay"
-                    onClick={() => setIsModalOpen(false)}
-                >
-                    <div
-                        className="admin-modal"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button
-                            className="admin-close-btn"
-                            onClick={() => setIsModalOpen(false)}
-                        >
-                            ✖
-                        </button>
-                        <h2 className="admin-modal-title">Добавить товар</h2>
-                        <form className="admin-form" onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Название"
-                                value={form.name}
-                                onChange={handleChange}
-                                required
-                            />
-                            <textarea
-                                name="description"
-                                placeholder="Описание"
-                                value={form.description}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="type"
-                                placeholder="Тип"
-                                value={form.type}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="price"
-                                placeholder="Цена (BYN)"
-                                value={form.price}
-                                onChange={handleChange}
-                                required
-                            />
-                            <label className="checkbox-label">
-                                <input
-                                    type="checkbox"
-                                    name="isInStock"
-                                    checked={form.isInStock}
-                                    onChange={handleChange}
-                                />
-                                Есть в наличии
-                            </label>
-                            <button
-                                type="submit"
-                                className={`admin-save-btn ${loading ? "loading" : ""}`}
-                                disabled={loading}
-                            >
-                                {loading ? "⏳ Сохраняем..." : "✅ Сохранить"}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

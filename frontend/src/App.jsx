@@ -30,8 +30,15 @@ function ProtectedRoute({ children, adminOnly = false }) {
 }
 
 function AppContent() {
+
     const location = useLocation();
     const isAdminPage = location.pathname.startsWith("/admin");
+    const token = localStorage.getItem("token");
+    const adminLoggedIn = token && isTokenValid(token) && isAdmin(token);
+
+    if (adminLoggedIn && location.pathname === "/") {
+        return <Navigate to="/admin" replace />;
+    }
 
     return (
         <>
@@ -76,3 +83,4 @@ export default function App() {
         </Router>
     );
 }
+
