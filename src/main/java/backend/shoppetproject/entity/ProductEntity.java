@@ -27,7 +27,7 @@ public class ProductEntity {
     private Boolean isInStock;
 
     @Column(name = "number_of_sales")
-    private int numberOfSales;
+    private Integer numberOfSales = 0;
 
     @OneToMany(mappedBy = "product")
     private List<BasketItemEntity> basketItems;

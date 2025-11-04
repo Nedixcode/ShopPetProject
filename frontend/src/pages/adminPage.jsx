@@ -150,12 +150,9 @@ export default function AdminPanel() {
             <header className="admin-header">
                 <div className="admin-header-left">
                     <h1>Панель администратора</h1>
-                    {/*{user && <p className="admin-user">Администратор: {user}</p>}*/}
                 </div>
                 <div className="admin-header-right">
-                    <ProfileButton
-
-                    />
+                    <ProfileButton/>
                     <button className="admin-top-btn">Настройки</button>
                     <button className="admin-top-btn logout" onClick={handleLogout}>
                         Выйти
