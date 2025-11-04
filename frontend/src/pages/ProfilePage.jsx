@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseJwt, isTokenValid } from "../utils/auth";
+import CloseButton from "../components/CloseButton";
 
 export default function ProfilePage() {
     const [user, setUser] = useState(null);
@@ -43,6 +44,7 @@ export default function ProfilePage() {
     return (
         <div className="profile-page">
             <div className="profile-card">
+                <CloseButton to={"/"}/>
                 <h1>👤 Профиль пользователя</h1>
                 <div className="profile-info">
                     <p><strong>Логин:</strong> {user.username}</p>
