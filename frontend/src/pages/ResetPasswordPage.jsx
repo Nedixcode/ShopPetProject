@@ -14,7 +14,7 @@ export default function ResetPasswordPage() {
         if (!email.trim()) return alert("Введите email");
         setLoading(true);
         try {
-            const res = await fetch(`/auth/reset-password-request?email=${encodeURIComponent(email)}`, {
+            const res = await fetch(`/reset/request?email=${encodeURIComponent(email)}`, {
                 method: "POST",
             });
             if (res.ok) {
@@ -35,7 +35,7 @@ export default function ResetPasswordPage() {
         if (!token.trim()) return alert("Введите код из письма");
         setLoading(true);
         try {
-            const res = await fetch(`/auth/verify-reset-code?token=${encodeURIComponent(token)}`, {
+            const res = await fetch(`/reset/verify?token=${encodeURIComponent(token)}`, {
                 method: "POST",
             });
             if (res.ok) {
@@ -57,7 +57,7 @@ export default function ResetPasswordPage() {
             return alert("Пароль должен быть не короче 6 символов");
         setLoading(true);
         try {
-            const res = await fetch("/auth/reset-password", {
+            const res = await fetch("/reset/password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token, newPassword }),

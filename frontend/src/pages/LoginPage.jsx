@@ -111,7 +111,7 @@ export default function LoginPage() {
                     </div>
                     <button
                         className="forgot-btn"
-                        onClick={() => navigate("/auth/reset-password")}
+                        onClick={() => navigate("/reset/request")}
                     >
                         Забыли пароль?
                     </button>
