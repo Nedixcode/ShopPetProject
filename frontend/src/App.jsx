@@ -35,6 +35,8 @@ function AppContent() {
     const isAdminPage = location.pathname.startsWith("/admin");
     const token = localStorage.getItem("token");
     const adminLoggedIn = token && isTokenValid(token) && isAdmin(token);
+    const isAuthPage = location.pathname.startsWith("/auth");
+    const hideHeader = isAdminPage || isAuthPage;
 
     if (adminLoggedIn && location.pathname === "/") {
         return <Navigate to="/admin" replace />;
@@ -42,7 +44,7 @@ function AppContent() {
 
     return (
         <>
-            {!isAdminPage && <Header />}
+            {!hideHeader && <Header />}
             <main>
                 <Routes>
                     <Route
@@ -71,7 +73,7 @@ function AppContent() {
                     <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
                 </Routes>
             </main>
-            {!isAdminPage && <Footer />}
+            {!hideHeader && <Footer />}
         </>
     );
 }

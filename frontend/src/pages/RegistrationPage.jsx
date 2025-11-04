@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CloseButton from "../components/CloseButton";
 
 export default function RegistrationPage() {
     const [form, setForm] = useState({
@@ -46,14 +47,7 @@ export default function RegistrationPage() {
     return (
         <div className="registration-page">
             <div className="registration-card">
-                <button
-                    className="close-btn"
-                    onClick={() => navigate("/")}
-                    title="На главную"
-                >
-                    ✖
-                </button>
-
+                <CloseButton to={"/auth/login"}/>
                 <h1>Регистрация</h1>
                 <br/>
                 <p className="login-subtitle">

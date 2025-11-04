@@ -45,15 +45,3 @@
 .select-option:hover {
     background: #f1f3f5;
 }
-
-.auth-btn, .cart-btn {
-    background: white;
-    color: var(--primary);
-    border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s, transform 0.1s;
-    text-decoration: none;
-}

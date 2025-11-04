@@ -397,17 +397,17 @@ body {
 
 .login-card {
     background: var(--card-bg);
+    position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     border-radius: var(--border-radius);
     padding: 50px 60px;
-    width: 100%;
+    width: 40%;
     text-align: center;
     animation: scaleIn 0.3s ease;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .login-card:hover {
-    transform: translateY(-4px);
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
 }
 
@@ -507,6 +507,7 @@ body {
 
 .registration-card {
     background: #fff;
+    position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     border-radius: 16px;
     padding: 50px 60px;
@@ -802,10 +803,6 @@ body {
     to {
         transform: rotate(360deg);
     }
-}
-
-.login-card {
-    position: relative;
 }
 
 .profile-page {
