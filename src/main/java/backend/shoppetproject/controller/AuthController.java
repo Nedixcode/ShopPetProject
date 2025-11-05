@@ -1,8 +1,8 @@
 package backend.shoppetproject.controller;
 
-import backend.shoppetproject.dto.AuthRequest;
-import backend.shoppetproject.dto.AuthResponse;
-import backend.shoppetproject.dto.RegisterRequest;
+import backend.shoppetproject.dto.AuthRequestDto;
+import backend.shoppetproject.dto.AuthResponseDto;
+import backend.shoppetproject.dto.RegisterDto;
 import backend.shoppetproject.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,22 +25,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto request) {
         logger.info("Вызвался метод login, userName = {}", request.getUserName());
 
         return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<Void> registration(@RequestBody RegisterRequest request) {
-        logger.info("вызвался метод registration = {}, userName", request.getUserName());
+    public ResponseEntity<Void> registration(@RequestBody RegisterDto request) {
+        logger.info("вызвался метод registration, userName = {}", request.getUserName());
 
         authService.registerUser(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/registration/admin")
-    public ResponseEntity<Void> registrationAdmin(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Void> registrationAdmin(@RequestBody RegisterDto request) {
         logger.info("вызвался метод registrationAdmin, userName = {}", request.getUserName());
 
         authService.registerAdmin(request);

@@ -1,6 +1,6 @@
 package backend.shoppetproject.controller;
 
-import backend.shoppetproject.dto.PasswordResetRequest;
+import backend.shoppetproject.dto.PasswordResetDto;
 import backend.shoppetproject.service.EmailService;
 import backend.shoppetproject.service.PasswordResetService;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class PasswordResetController {
     }
 
     @PostMapping("/password")
-    public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetRequest request) {
+    public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetDto request) {
         logger.info("вызвался метод resetPassword, token = {}", request.getToken());
 
         passwordResetService.resetPassword(request.getToken(), request.getNewPassword());

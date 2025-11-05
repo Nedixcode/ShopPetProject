@@ -29,6 +29,9 @@ public class ProductEntity {
     @Column(name = "number_of_sales")
     private Integer numberOfSales = 0;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "product")
     private List<BasketItemEntity> basketItems;
 
@@ -110,5 +113,13 @@ public class ProductEntity {
 
     public void setBasketItems(List<BasketItemEntity> basketItems) {
         this.basketItems = basketItems;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

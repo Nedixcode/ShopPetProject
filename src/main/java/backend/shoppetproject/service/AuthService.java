@@ -1,8 +1,8 @@
 package backend.shoppetproject.service;
 
-import backend.shoppetproject.dto.AuthRequest;
-import backend.shoppetproject.dto.AuthResponse;
-import backend.shoppetproject.dto.RegisterRequest;
+import backend.shoppetproject.dto.AuthRequestDto;
+import backend.shoppetproject.dto.AuthResponseDto;
+import backend.shoppetproject.dto.RegisterDto;
 import backend.shoppetproject.entity.BasketEntity;
 import backend.shoppetproject.entity.RoleEntity;
 import backend.shoppetproject.entity.UserEntity;
@@ -46,7 +46,7 @@ public class AuthService {
         this.basketRepository = basketRepository;
     }
 
-    public AuthResponse login(AuthRequest request) {
+    public AuthResponseDto login(AuthRequestDto request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword())
         );
@@ -54,18 +54,18 @@ public class AuthService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String token = jwtUtil.generateToken(userDetails);
 
-        return new AuthResponse(token);
+        return new AuthResponseDto(token);
     }
 
-    public void registerUser(RegisterRequest request) {
+    public void registerUser(RegisterDto request) {
         register(request, "USER");
     }
 
-    public void registerAdmin(RegisterRequest request) {
+    public void registerAdmin(RegisterDto request) {
         register(request, "ADMIN");
     }
 
-    private void register(RegisterRequest request, String roleName) {
+    private void register(RegisterDto request, String roleName) {
         if (userRepository.findByUserName(request.getUserName()).isPresent()) {
             throw new EntityExistsException("Пользователь уже существует");
         }
@@ -76,7 +76,7 @@ public class AuthService {
         createUserToRegister(request, role);
     }
 
-    public void createUserToRegister(RegisterRequest request, RoleEntity role) {
+    public void createUserToRegister(RegisterDto request, RoleEntity role) {
         UserEntity user = new UserEntity();
         user.setUserName(request.getUserName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));

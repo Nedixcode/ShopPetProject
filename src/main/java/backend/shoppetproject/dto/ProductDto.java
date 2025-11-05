@@ -8,6 +8,10 @@ public class ProductDto {
     private String type;
     private Integer price;
     private Boolean isInStock;
+    private String imageUrl;
+
+    public ProductDto() {
+    }
 
     public ProductDto(ProductEntity entity) {
         this.name = entity.getName();
@@ -15,6 +19,7 @@ public class ProductDto {
         this.type = entity.getType();
         this.price = entity.getPrice();
         this.isInStock = entity.getIsInStock();
+        this.imageUrl = entity.getImageUrl();
     }
 
     public Boolean getIsInStock() {
@@ -55,5 +60,13 @@ public class ProductDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

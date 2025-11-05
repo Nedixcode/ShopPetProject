@@ -5,7 +5,6 @@ import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +46,7 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteProductFromBasket(id, principal));
     }
 
-    @GetMapping("/favorite/products")
+    @GetMapping("/favorites")
     public ResponseEntity<List<ProductDto>> getProductsInFavorites(Principal principal){
         logger.info("вызвался метод getProductsInFavorites, userName = {}", principal.getName());
 

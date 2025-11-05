@@ -1,13 +1,15 @@
 package backend.shoppetproject.controller;
 
 import backend.shoppetproject.dto.ProductDto;
-import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.service.AdminService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/admin")
@@ -21,12 +23,19 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PostMapping("/product")
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        logger.info("Вызвался метод addProduct, name = {}", productDto.getName());
+    @PostMapping(value = "/product", consumes = {"multipart/form-data"})
+    public ResponseEntity<ProductDto> createProduct(
+            @RequestPart("product") String productJson,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(adminService.createProduct(productDto));
+    ) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProductDto productDto = objectMapper.readValue(productJson, ProductDto.class);
+
+        logger.info("Добавление товара: {}", productDto.getName());
+
+        ProductDto saved = adminService.createProduct(productDto, imageFile);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @DeleteMapping("/product/{id}")
@@ -36,11 +45,15 @@ public class AdminController {
         return ResponseEntity.ok(adminService.deleteProduct(id));
     }
 
-    @PutMapping("/product/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id,
-                                                    @RequestBody ProductDto productDto) {
-        logger.info("Вызвался метод updateProduct, name = {}", productDto.getName());
+    @PutMapping(value = "/product/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<ProductDto> updateProduct(
+            @PathVariable Long id,
+            @RequestPart("product") ProductDto productDto,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile
 
-        return ResponseEntity.ok(adminService.updateProduct(id, productDto));
+    ) throws IOException {
+        logger.info("Обновление товара: {}", productDto.getName());
+
+        return ResponseEntity.ok(adminService.updateProduct(id, productDto, imageFile));
     }
 }
