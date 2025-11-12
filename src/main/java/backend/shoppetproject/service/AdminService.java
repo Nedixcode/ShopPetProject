@@ -7,22 +7,20 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 @Service
 public class AdminService {
 
     private final ProductRepository productRepository;
+    private final ImageService imageService;
 
-    public AdminService(ProductRepository productRepository) {
+    public AdminService(ProductRepository productRepository, ImageService imageService) {
         this.productRepository = productRepository;
+        this.imageService = imageService;
     }
 
     public ProductDto createProduct(ProductDto productDto, MultipartFile imageFile) throws IOException {
-        String imageUrl = saveImageFile(imageFile);
+        String imageUrl = imageService.saveImage(imageFile);
 
         ProductEntity productToCreate = new ProductEntity(
                 productDto.getName(),
@@ -42,14 +40,7 @@ public class AdminService {
         ProductEntity productToDelete = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
 
-        if (productToDelete.getImageUrl() != null) {
-            Path imagePath = Paths.get("." + productToDelete.getImageUrl());
-            try {
-                Files.deleteIfExists(imagePath);
-            } catch (IOException e) {
-                System.err.println("Не удалось удалить файл: " + imagePath);
-            }
-        }
+        imageService.deleteImage(productToDelete);
 
         productRepository.delete(productToDelete);
         return new ProductDto(productToDelete);
@@ -66,25 +57,11 @@ public class AdminService {
         productToUpdate.setIsInStock(productDto.getIsInStock());
 
         if (imageFile != null && !imageFile.isEmpty()) {
-            String imageUrl = saveImageFile(imageFile);
+            String imageUrl = imageService.saveImage(imageFile);
             productToUpdate.setImageUrl(imageUrl);
         }
 
         productRepository.save(productToUpdate);
         return new ProductDto(productToUpdate);
-    }
-
-    private String saveImageFile(MultipartFile imageFile) throws IOException {
-        if (imageFile == null || imageFile.isEmpty()) {
-            return null;
-        }
-
-        Path uploadDir = Paths.get("uploads/");
-
-        String fileName = System.currentTimeMillis() % 1000000000 + ".png";
-        Path filePath = uploadDir.resolve(fileName);
-        Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return "/uploads/" + fileName;
     }
 }

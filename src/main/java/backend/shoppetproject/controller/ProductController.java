@@ -1,14 +1,13 @@
 package backend.shoppetproject.controller;
 
+import backend.shoppetproject.dto.FilterDto;
 import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
@@ -22,17 +21,10 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products/search")
-    public ResponseEntity<List<ProductDto>> searchProducts(@RequestParam String query) {
-        logger.info("вызвался метод searchProduct cо строкой = {}", query);
+    @PostMapping("/products/search")
+    public Page<ProductDto> searchProducts(@RequestBody FilterDto filter) {
+        logger.info("вызвался метод searchProducts, filter = {}", filter.toString());
 
-        return ResponseEntity.ok(productService.searchProduct(query));
-    }
-
-    @GetMapping("/products")
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        logger.info("вызвался метод getAllProducts");
-
-        return ResponseEntity.ok(productService.getAllProducts());
+        return productService.searchProducts(filter).map(ProductDto::new);
     }
 }

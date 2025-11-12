@@ -38,4 +38,3 @@ public class RegisterDto {
         this.phoneNumber = phoneNumber;
     }
 }
-
