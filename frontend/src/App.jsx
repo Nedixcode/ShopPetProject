@@ -51,7 +51,7 @@ function AppContent() {
                         path="/"
                         element={
                             <div className={"main-layout"}>
-                                <Filters />
+                                <Filters></Filters>
                                 <ProductArea />
                                 <Ads />
                             </div>
