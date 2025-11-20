@@ -1,35 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "../styles/ProductArea.css";
 import ProductCard from "../components/ProductCard";
 import Spinner from "./Spinner";
-import Filters from "./Filters";
 
-export default function ProductArea() {
+export default function ProductArea({ filters }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const loadAllProducts = async () => {
+    const fetchProducts = async () => {
         setLoading(true);
         try {
             const res = await fetch("/products/search", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    query: null,
-                    type: null,
-                    isInStock: null,
-                    minPrice: null,
-                    maxPrice: null,
-                    sortBy: "id",
-                    sortDirection: "asc",
-                    page: 0,
-                    size: 20,
-                }),
+                body: JSON.stringify(filters),
             });
 
             if (!res.ok) throw new Error(`Ошибка: ${res.status}`);
             const data = await res.json();
+
             setProducts(data.content || data);
         } catch (err) {
             setError(err.message);
@@ -38,21 +27,20 @@ export default function ProductArea() {
         }
     };
 
+    // вызывается при первом рендере и при ИЗМЕНЕНИИ фильтров
     useEffect(() => {
-        loadAllProducts();
-    }, []);
+        fetchProducts();
+    }, [filters]);
 
     if (loading) return <Spinner text="Загрузка товаров..." />;
     if (error) return <div className="error">Ошибка: {error}</div>;
 
     return (
-        <div className="product-area-wrapper">
-            <div className="product-area">
-                <div className="product-grid">
-                    {products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
-                </div>
+        <div className="product-area">
+            <div className="product-grid">
+                {products.map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                ))}
             </div>
         </div>
     );

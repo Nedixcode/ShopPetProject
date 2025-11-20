@@ -11,7 +11,7 @@ export default function Filters({ onFilter }) {
         sortBy: "id",
         sortDirection: "asc",
         page: 0,
-        size: 20,
+        size: 80,
     });
 
     const toggle = (cat) => setOpenCategory(openCategory === cat ? null : cat);
@@ -23,11 +23,11 @@ export default function Filters({ onFilter }) {
     };
 
     const handleCheckbox = (category, item) => {
-        // обновляем выбранные фильтры
         setSelectedFilters((prev) => {
             const updated = { ...prev };
 
             if (category === "Тип товара") updated.type = item;
+
             if (category === "Цена") {
                 switch (item) {
                     case "До 500 BYN":
@@ -56,28 +56,53 @@ export default function Filters({ onFilter }) {
         });
     };
 
-    const applyFilters = async () => {
-        try {
-            const res = await fetch("/products/search", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(selectedFilters),
-            });
-
-            if (!res.ok) throw new Error(`Ошибка ${res.status}`);
-            const data = await res.json();
-
-            // Передаём результат наверх (в ProductArea)
-            onFilter(data.content || data);
-        } catch (err) {
-            console.error("Ошибка при фильтрации:", err);
-            alert("Ошибка при загрузке товаров");
-        }
+    const applyFilters = () => {
+        onFilter(selectedFilters);
     };
 
     return (
         <aside className="sidebar-left filters">
             <h2>Фильтры</h2>
+
+            {/* --- Блок сортировки --- */}
+            <div className="sort-controls">
+                <h3>Сортировка</h3>
+
+                <label>
+                    Поле:
+                    <select
+                        value={selectedFilters.sortBy}
+                        onChange={(e) =>
+                            setSelectedFilters((prev) => ({
+                                ...prev,
+                                sortBy: e.target.value,
+                            }))
+                        }
+                    >
+                        <option value="id">ID</option>
+                        <option value="price">Цена</option>
+                        <option value="name">Название</option>
+                    </select>
+                </label>
+
+                <label>
+                    Направление:
+                    <select
+                        value={selectedFilters.sortDirection}
+                        onChange={(e) =>
+                            setSelectedFilters((prev) => ({
+                                ...prev,
+                                sortDirection: e.target.value,
+                            }))
+                        }
+                    >
+                        <option value="asc">По возрастанию</option>
+                        <option value="desc">По убыванию</option>
+                    </select>
+                </label>
+            </div>
+
+            {/* --- Категории фильтров --- */}
             {Object.entries(categories).map(([title, items]) => (
                 <div key={title} className={`filter-category ${openCategory === title ? "open" : ""}`}>
                     <div className="filter-title" onClick={() => toggle(title)}>

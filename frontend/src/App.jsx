@@ -1,4 +1,4 @@
-import React, {Profiler} from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
@@ -13,7 +13,6 @@ import { isTokenValid, isAdmin } from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage"
-
 function ProtectedRoute({ children, adminOnly = false }) {
     const token = localStorage.getItem("token");
 
@@ -42,6 +41,18 @@ function AppContent() {
         return <Navigate to="/admin" replace />;
     }
 
+    const [filters, setFilters] = useState({
+        query: null,
+        type: null,
+        isInStock: null,
+        minPrice: null,
+        maxPrice: null,
+        sortBy: "id",
+        sortDirection: "asc",
+        page: 0,
+        size: 80,
+    });
+
     return (
         <>
             {!hideHeader && <Header />}
@@ -51,8 +62,8 @@ function AppContent() {
                         path="/"
                         element={
                             <div className={"main-layout"}>
-                                <Filters></Filters>
-                                <ProductArea />
+                                <Filters onFilter={setFilters} />
+                                <ProductArea filters={filters}/>
                                 <Ads />
                             </div>
                         }

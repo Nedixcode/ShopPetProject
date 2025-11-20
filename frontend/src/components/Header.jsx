@@ -20,17 +20,37 @@ export default function Header() {
         }
 
         clearTimeout(timeoutRef.current);
+
         timeoutRef.current = setTimeout(async () => {
             try {
-                const res = await fetch(`/products?query=${encodeURIComponent(query)}`);
+                const res = await fetch("/products/search", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        query: query,
+                        type: null,
+                        isInStock: null,
+                        minPrice: null,
+                        maxPrice: null,
+                        sortBy: "id",
+                        sortDirection: "asc",
+                        page: 0,
+                        size: 5
+                    })
+                });
+
                 if (!res.ok) throw new Error("Ошибка при поиске");
+
                 const data = await res.json();
 
-                setSuggestions(data.slice(0, 5));
+                // data.content, если сервер возвращает Page<ProductDto>
+                const suggestionsData = data.content || data;
+                setSuggestions(suggestionsData.slice(0, 5));
                 setShowDropdown(true);
             } catch (err) {
                 console.error(err);
                 setSuggestions([]);
+                setShowDropdown(false);
             }
         }, 300);
 
