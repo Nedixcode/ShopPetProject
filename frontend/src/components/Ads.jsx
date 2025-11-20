@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/Ads.css"
 export default function Ads() {
     return (
         <aside className="sidebar-right ads">
