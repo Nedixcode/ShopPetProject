@@ -14,7 +14,7 @@ export default function ResetPasswordPage() {
         if (!email.trim()) return alert("Введите email");
         setLoading(true);
         try {
-            const res = await fetch(`/reset/request?email=${encodeURIComponent(email)}`, {
+            const res = await fetch(`/reset/request`, {
                 method: "POST",
             });
             if (res.ok) {

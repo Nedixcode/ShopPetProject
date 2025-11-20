@@ -29,7 +29,7 @@ body {
     margin: 50px auto;
     padding: 0 25px;
     display: grid;
-    grid-template-columns: 250px 1fr 250px;
+    grid-template-columns: 300px 1fr 250px;
     gap: 30px;
     animation: fadeIn 0.5s ease;
 }
@@ -47,57 +47,6 @@ body {
 .sidebar-left:hover, .sidebar-right:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 22px rgba(0,0,0,0.1);
-}
-
-.filters h2, .ads h2 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: var(--primary-dark);
-    text-align: center;
-}
-
-/* ===== РАСКРЫВАЮЩИЕСЯ ФИЛЬТРЫ ===== */
-.filter-category {
-    margin-bottom: 12px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 6px;
-}
-
-.filter-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--primary);
-    transition: color 0.3s;
-}
-
-.filter-title:hover {
-    color: var(--primary-dark);
-}
-
-.filter-options {
-    margin-top: 8px;
-    display: none;
-    padding-left: 10px;
-    animation: fadeIn 0.2s ease;
-}
-
-.filter-options label {
-    display: block;
-    margin-bottom: 8px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.filter-options input {
-    margin-right: 6px;
-    accent-color: var(--primary);
-}
-
-.filter-category.open .filter-options {
-    display: block;
 }
 
 /* AD */

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/Filters.css";
 
 export default function Filters({ onFilter }) {
     const [openCategory, setOpenCategory] = useState(null);
@@ -25,7 +26,6 @@ export default function Filters({ onFilter }) {
     const handleCheckbox = (category, item) => {
         setSelectedFilters((prev) => {
             const updated = { ...prev };
-
             if (category === "Тип товара") updated.type = item;
 
             if (category === "Цена") {
@@ -56,67 +56,56 @@ export default function Filters({ onFilter }) {
         });
     };
 
-    const applyFilters = () => {
-        onFilter(selectedFilters);
-    };
+    const applyFilters = () => onFilter(selectedFilters);
 
     return (
-        <aside className="sidebar-left filters">
-            <h2>Фильтры</h2>
-
-            {/* --- Блок сортировки --- */}
-            <div className="sort-controls">
-                <h3>Сортировка</h3>
-
-                <label>
-                    Поле:
-                    <select
-                        value={selectedFilters.sortBy}
-                        onChange={(e) =>
-                            setSelectedFilters((prev) => ({
-                                ...prev,
-                                sortBy: e.target.value,
-                            }))
-                        }
-                    >
-                        <option value="id">ID</option>
-                        <option value="price">Цена</option>
-                        <option value="name">Название</option>
-                    </select>
-                </label>
-
-                <label>
-                    Направление:
-                    <select
-                        value={selectedFilters.sortDirection}
-                        onChange={(e) =>
-                            setSelectedFilters((prev) => ({
-                                ...prev,
-                                sortDirection: e.target.value,
-                            }))
-                        }
-                    >
-                        <option value="asc">По возрастанию</option>
-                        <option value="desc">По убыванию</option>
-                    </select>
-                </label>
+        <aside className="filters-sidebar">
+            {/* --- Сортировка сверху --- */}
+            <div className="filters-section sort-section">
+                <h2>Сортировка</h2>
+                <div className="sort-controls">
+                    <label>
+                        Поле:
+                        <select
+                            value={selectedFilters.sortBy}
+                            onChange={(e) =>
+                                setSelectedFilters((prev) => ({ ...prev, sortBy: e.target.value }))
+                            }
+                        >
+                            <option value="id">ID</option>
+                            <option value="price">Цена</option>
+                            <option value="name">Название</option>
+                        </select>
+                    </label>
+                    <label>
+                        Направление:
+                        <select
+                            value={selectedFilters.sortDirection}
+                            onChange={(e) =>
+                                setSelectedFilters((prev) => ({ ...prev, sortDirection: e.target.value }))
+                            }
+                        >
+                            <option value="asc">По возрастанию</option>
+                            <option value="desc">По убыванию</option>
+                        </select>
+                    </label>
+                </div>
             </div>
 
-            {/* --- Категории фильтров --- */}
+            {/* --- Фильтры снизу --- */}
+            <h2>Фильтры</h2>
             {Object.entries(categories).map(([title, items]) => (
-                <div key={title} className={`filter-category ${openCategory === title ? "open" : ""}`}>
+                <div
+                    key={title}
+                    className={`filters-section filter-category ${openCategory === title ? "open" : ""}`}
+                >
                     <div className="filter-title" onClick={() => toggle(title)}>
-                        <span>{title}</span>
-                        <span>{openCategory === title ? "−" : "+"}</span>
+                        {title} <span className="toggle-icon">{openCategory === title ? "−" : "+"}</span>
                     </div>
                     <div className="filter-options">
                         {items.map((item, i) => (
-                            <label key={i}>
-                                <input
-                                    type="checkbox"
-                                    name={title}
-                                    onChange={() => handleCheckbox(title, item)}
-                                />{" "}
+                            <label key={i} className="filter-option">
+                                <input type="checkbox" onChange={() => handleCheckbox(title, item)} />
                                 {item}
                             </label>
                         ))}
@@ -124,7 +113,9 @@ export default function Filters({ onFilter }) {
                 </div>
             ))}
 
-            <button onClick={applyFilters}>Применить</button>
+            <button className="apply-btn" onClick={applyFilters}>
+                Применить
+            </button>
         </aside>
     );
 }

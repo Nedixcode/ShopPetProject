@@ -1,0 +1,114 @@
+.filters-sidebar {
+    background-color: var(--card-bg); /* белый фон */
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    font-family: "Inter", sans-serif;
+    position: sticky;
+    top: 40px; /* липкий сверху */
+    align-self: start; /* чтобы не растягивался */
+    max-height: none; /* не ограничиваем высоту */
+    overflow: visible; /* убираем скролл */
+}
+
+/* Заголовки */
+.filters-sidebar h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: var(--primary-dark);
+    text-align: center;
+}
+
+/* Секция фильтров и сортировки */
+.filters-section {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Сортировка */
+.sort-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.sort-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sort-controls label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.sort-controls select {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Категории фильтров */
+.filter-title {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary);
+    padding: 5px 0;
+}
+
+.filter-title:hover {
+    color: var(--primary-dark);
+}
+
+.toggle-icon {
+    font-weight: 700;
+}
+
+.filter-options {
+    margin-top: 8px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+.filter-category.open .filter-options {
+    display: flex;
+}
+
+.filter-option input {
+    margin-right: 8px;
+    accent-color: var(--primary);
+}
+
+/* Кнопка применить */
+.apply-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.apply-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Анимация раскрытия */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
