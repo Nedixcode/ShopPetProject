@@ -6,6 +6,8 @@ export default function Filters({ onFilter }) {
     const [selectedFilters, setSelectedFilters] = useState({
         query: null,
         type: null,
+        brand: null,
+        selectedPrice: null,
         isInStock: null,
         minPrice: null,
         maxPrice: null,
@@ -26,9 +28,21 @@ export default function Filters({ onFilter }) {
     const handleCheckbox = (category, item) => {
         setSelectedFilters((prev) => {
             const updated = { ...prev };
-            if (category === "Тип товара") updated.type = item;
 
+            // --- Тип товара ---
+            if (category === "Тип товара") {
+                updated.type = item;
+            }
+
+            // --- Бренд ---
+            if (category === "Бренд") {
+                updated.brand = item;
+            }
+
+            // --- Цена ---
             if (category === "Цена") {
+                updated.selectedPrice = item;
+
                 switch (item) {
                     case "До 500 BYN":
                         updated.minPrice = 0;
@@ -60,7 +74,6 @@ export default function Filters({ onFilter }) {
 
     return (
         <aside className="filters-sidebar">
-            {/* --- Сортировка сверху --- */}
             <div className="filters-section sort-section">
                 <h2>Сортировка</h2>
                 <div className="sort-controls">
@@ -72,7 +85,6 @@ export default function Filters({ onFilter }) {
                                 setSelectedFilters((prev) => ({ ...prev, sortBy: e.target.value }))
                             }
                         >
-                            <option value="id">ID</option>
                             <option value="price">Цена</option>
                             <option value="name">Название</option>
                         </select>
@@ -92,12 +104,14 @@ export default function Filters({ onFilter }) {
                 </div>
             </div>
 
-            {/* --- Фильтры снизу --- */}
+            {/* --- Фильтры --- */}
             <h2>Фильтры</h2>
             {Object.entries(categories).map(([title, items]) => (
                 <div
                     key={title}
-                    className={`filters-section filter-category ${openCategory === title ? "open" : ""}`}
+                    className={`filters-section filter-category ${
+                        openCategory === title ? "open" : ""
+                    }`}
                 >
                     <div className="filter-title" onClick={() => toggle(title)}>
                         {title} <span className="toggle-icon">{openCategory === title ? "−" : "+"}</span>
@@ -105,7 +119,15 @@ export default function Filters({ onFilter }) {
                     <div className="filter-options">
                         {items.map((item, i) => (
                             <label key={i} className="filter-option">
-                                <input type="checkbox" onChange={() => handleCheckbox(title, item)} />
+                                <input
+                                    type="checkbox"
+                                    checked={
+                                        (title === "Тип товара" && selectedFilters.type === item) ||
+                                        (title === "Бренд" && selectedFilters.brand === item) ||
+                                        (title === "Цена" && selectedFilters.selectedPrice === item)
+                                    }
+                                    onChange={() => handleCheckbox(title, item)}
+                                />
                                 {item}
                             </label>
                         ))}

@@ -19,15 +19,32 @@ export default function SearchPage() {
         setLoading(true);
         setError(null);
 
-        fetch(`/products/search?query=${encodeURIComponent(query)}`)
+        fetch("/products/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                query: query,
+                type: null,
+                isInStock: null,
+                minPrice: null,
+                maxPrice: null,
+                sortBy: "id",
+                sortDirection: "asc",
+                page: 0,
+                size: 100
+            })
+        })
             .then((res) => {
                 if (!res.ok) throw new Error("Ошибка при поиске товаров");
                 return res.json();
             })
-            .then((data) => setProducts(data))
+            .then((data) => {
+                setProducts(data.content || data);
+            })
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false));
     }, [query]);
+
 
     return (
         <main className="main-layout">

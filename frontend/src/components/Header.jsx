@@ -35,15 +35,13 @@ export default function Header() {
                         sortBy: "id",
                         sortDirection: "asc",
                         page: 0,
-                        size: 5
+                        size: 100
                     })
                 });
 
                 if (!res.ok) throw new Error("Ошибка при поиске");
 
                 const data = await res.json();
-
-                // data.content, если сервер возвращает Page<ProductDto>
                 const suggestionsData = data.content || data;
                 setSuggestions(suggestionsData.slice(0, 5));
                 setShowDropdown(true);
