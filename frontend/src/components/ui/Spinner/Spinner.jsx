@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Spinner.css";
+import "./Spinner.css";
 
 export default function Spinner({ text = "Загрузка...", size = "large" }) {
     return (

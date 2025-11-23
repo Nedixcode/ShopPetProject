@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "re
 import Header from "./components/layout/Header/Header";
 import Filters from "./components/features/Filters/Filters";
 import Footer from "./components/layout/Footer/Footer";
-import ProductArea from "./components/ProductArea";
+import ProductArea from "./components/features/ProductArea/ProductArea";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import AdminPanel from "./pages/adminPage";

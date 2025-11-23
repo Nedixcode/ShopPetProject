@@ -1,59 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchDropdown from "../SearchDropdown/SearchDropdown";
+import useSearchSuggestions from "../../../hooks/useSearchSuggestions";
 
 export default function SearchBar() {
     const [query, setQuery] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const { suggestions, loading } = useSearchSuggestions(query);
 
     const navigate = useNavigate();
-    const timeoutRef = useRef(null);
 
-    // Подсказки
-    useEffect(() => {
-        if (!query.trim()) {
-            setSuggestions([]);
-            setShowDropdown(false);
-            return;
-        }
-        clearTimeout(timeoutRef.current);
-
-        timeoutRef.current = setTimeout(async () => {
-            try {
-                const res = await fetch("/products/search", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        query,
-                        type: null,
-                        isInStock: null,
-                        minPrice: null,
-                        maxPrice: null,
-                        sortBy: "id",
-                        sortDirection: "asc",
-                        page: 0,
-                        size: 100,
-                    }),
-                });
-
-                if (!res.ok) throw new Error("Ошибка при поиске");
-
-                const data = await res.json();
-                const items = data.content || data;
-                setSuggestions(items.slice(0, 5));
-                setShowDropdown(true);
-            } catch (err) {
-                console.error(err);
-                setSuggestions([]);
-                setShowDropdown(false);
-            }
-        }, 300);
-
-        return () => clearTimeout(timeoutRef.current);
-    }, [query]);
-
-    // Сабмит поиска
     const handleSearch = (e) => {
         e.preventDefault();
         if (!query.trim()) return;
@@ -78,7 +34,7 @@ export default function SearchBar() {
             />
             <button type="submit">🔍</button>
 
-            {showDropdown && suggestions.length > 0 && (
+            {showDropdown && !loading && suggestions.length > 0 && (
                 <SearchDropdown
                     suggestions={suggestions}
                     onSelect={(item) => handleSelect(item.name)}
