@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/CloseButton.css";
+import "./CloseButton.css";
 
 export default function CloseButton({ to = "/", title = "На главную", small = false }) {
     const navigate = useNavigate();

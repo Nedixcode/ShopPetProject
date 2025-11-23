@@ -3,7 +3,7 @@ import "../styles/main.css";
 import "../styles/ProductArea.css";
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import ProductCard from "../components/ProductCard";
-import ProfileButton from "../components/ProfileButton";
+import ProfileButton from "../components/features/ProfileButton/ProfileButton";
 
 export default function AdminPanel() {
     const [isModalOpen, setIsModalOpen] = useState(false);

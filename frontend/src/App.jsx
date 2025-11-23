@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
-import Header from "./components/Header";
-import Filters from "./components/Filters";
-import Ads from "./components/Ads";
-import Footer from "./components/Footer";
+import Header from "./components/layout/Header/Header";
+import Filters from "./components/features/Filters/Filters";
+import Footer from "./components/layout/Footer/Footer";
 import ProductArea from "./components/ProductArea";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
@@ -64,7 +63,7 @@ function AppContent() {
                             <div className={"main-layout"}>
                                 <Filters onFilter={setFilters} />
                                 <ProductArea filters={filters}/>
-                                <Ads />
+                                <div></div>
                             </div>
                         }
                     />

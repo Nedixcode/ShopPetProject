@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/CustomSelect.css";
+import "./CustomSelect.css";
 
 export default function CustomSelect({ options, value, onChange }) {
     const [open, setOpen] = useState(false);

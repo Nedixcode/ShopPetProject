@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Filters.css";
+import "./Filters.css";
 
 export default function Filters({ onFilter }) {
     const [openCategory, setOpenCategory] = useState(null);

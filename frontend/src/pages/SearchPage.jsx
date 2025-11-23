@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Filters from "../components/Filters";
-import Ads from "../components/Ads";
+import Filters from "../components/features/Filters/Filters";
 import ProductCard from "../components/ProductCard";
 
 export default function SearchPage() {
@@ -11,7 +10,7 @@ export default function SearchPage() {
     const [error, setError] = useState(null);
 
     const params = new URLSearchParams(location.search);
-    const query = params.get("query") || "";
+    const query = location.state?.query || "";
 
     useEffect(() => {
         if (!query.trim()) return;
@@ -71,7 +70,6 @@ export default function SearchPage() {
                     </>
                 )}
             </div>
-            <Ads />
         </main>
     );
 }
