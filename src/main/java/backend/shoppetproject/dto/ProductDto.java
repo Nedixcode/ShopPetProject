@@ -3,6 +3,7 @@ package backend.shoppetproject.dto;
 import backend.shoppetproject.entity.ProductEntity;
 
 public class ProductDto {
+    private Long id;
     private String name;
     private String description;
     private String type;
@@ -14,6 +15,7 @@ public class ProductDto {
     }
 
     public ProductDto(ProductEntity entity) {
+        this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.type = entity.getType();
@@ -68,5 +70,13 @@ public class ProductDto {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
