@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CloseButton from "../components/ui/CloseButton/CloseButton";
+import CloseButton from "../../components/ui/CloseButton/CloseButton";
+import { StepRequestEmail } from "./Steps/StepRequestEmail";
+import { StepVerifyToken } from "./Steps/StepVerifyToken"
+import { StepNewPassword } from "./Steps/StepNewPassword";
 
 export default function ResetPasswordPage() {
     const navigate = useNavigate();
@@ -14,7 +17,7 @@ export default function ResetPasswordPage() {
         if (!email.trim()) return alert("Введите email");
         setLoading(true);
         try {
-            const res = await fetch(`/reset/request`, {
+            const res = await fetch(`/reset/request?email=${encodeURIComponent(email)}`, {
                 method: "POST",
             });
             if (res.ok) {
@@ -80,63 +83,30 @@ export default function ResetPasswordPage() {
         switch (step) {
             case 1:
                 return (
-                    <>
-                        <h2>🔐 Восстановление пароля</h2>
-                        <p className="text-muted">Введите ваш email, чтобы получить код восстановления</p>
-                        <input
-                            type="email"
-                            placeholder="Ваш email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <button
-                            onClick={handleRequestReset}
-                            disabled={loading}
-                            className={"requestButton"}
-                        >
-                            {loading ? "⏳ Отправка..." : "Отправить код"}
-                        </button>
-                    </>
+                    <StepRequestEmail
+                        email={email}
+                        setEmail={setEmail}
+                        loading={loading}
+                        onSubmit={handleRequestReset}
+                    />
                 );
             case 2:
                 return (
-                    <>
-                        <h2>📧 Подтверждение кода</h2>
-                        <p className="text-muted">Введите код, который был отправлен на вашу почту</p>
-                        <input
-                            type="text"
-                            placeholder="Код из письма"
-                            value={token}
-                            onChange={(e) => setToken(e.target.value)}
-                        />
-                        <button
-                            onClick={handleVerifyToken}
-                            disabled={loading}
-                            className={"requestButton"}
-                        >
-                            {loading ? "⏳ Проверка..." : "Подтвердить"}
-                        </button>
-                    </>
+                    <StepVerifyToken
+                        token={token}
+                        setToken={setToken}
+                        loading={loading}
+                        onSubmit={handleVerifyToken}
+                    />
                 );
             case 3:
                 return (
-                    <>
-                        <h2>🔑 Новый пароль</h2>
-                        <p className="text-muted">Введите новый надёжный пароль</p>
-                        <input
-                            type="password"
-                            placeholder="Новый пароль"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <button
-                            onClick={handleResetPassword}
-                            disabled={loading}
-                            className={"requestButton"}
-                        >
-                            {loading ? "⏳ Сохранение..." : "Сменить пароль"}
-                        </button>
-                    </>
+                    <StepNewPassword
+                        newPassword={newPassword}
+                        setNewPassword={setNewPassword}
+                        loading={loading}
+                        onSubmit={handleResetPassword}
+                    />
                 );
             default:
                 return null;
@@ -158,8 +128,10 @@ export default function ResetPasswordPage() {
                         ← Назад
                     </button>
                 )}
-                <br/>
-                <br/>
+
+                <br />
+                <br />
+
                 <div className="progress-bar">
                     <div
                         className="progress"

@@ -11,7 +11,7 @@ import AdminRegistrationPage from "./pages/AdminRegistrationPage";
 import { isTokenValid, isAdmin } from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage"
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 function ProtectedRoute({ children, adminOnly = false }) {
     const token = localStorage.getItem("token");
 
