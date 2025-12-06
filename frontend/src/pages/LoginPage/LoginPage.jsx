@@ -1,7 +1,10 @@
+// pages/LoginPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
-import CloseButton from "../components/ui/CloseButton/CloseButton";
+import { parseJwt, isTokenValid, isAdmin } from "../../utils/auth";
+import LoginCard from "../../components/auth/login/LoginCard/LoginCard";
+import LoginForm from "../../components/auth/login/LoginForm/LoginForm";
+import "./LoginPage.css"
 
 export default function LoginPage() {
     const [login, setLogin] = useState("");
@@ -17,7 +20,7 @@ export default function LoginPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     userName: login.trim(),
-                    password: password.trim()
+                    password: password.trim(),
                 }),
             });
 
@@ -57,7 +60,6 @@ export default function LoginPage() {
                 navigate("/");
                 location.reload();
             }
-
         } catch (error) {
             console.error("Ошибка при авторизации:", error);
             alert("🚨 Ошибка соединения с сервером");
@@ -66,57 +68,29 @@ export default function LoginPage() {
         }
     };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            handleLogin();
-        }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!loading) handleLogin();
     };
 
     return (
         <div className="login-page">
-            <div className="login-card">
-                <CloseButton to={"/"}/>
-                <h1>Вход в аккаунт</h1>
-                <p className="login-subtitle">Добро пожаловать 👋 Введите свои данные для входа</p>
-
-                <div className="login-form">
-                    <input
-                        type="text"
-                        placeholder="Логин"
-                        value={login}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => setLogin(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Пароль"
-                        value={password}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button
-                        className="modal-btn primary"
-                        onClick={handleLogin}
-                        onKeyDown={handleKeyDown}
-                        disabled={loading}
-                    >
-                        {loading ? "⏳ Вход..." : "Войти"}
-                    </button>
-                    <div className="register-link">
-                        Впервые на сайте?{" "}
-                        <span onClick={() => navigate("/auth/registration")}>Регистрация</span>
-                    </div>
-                    <button
-                        className="forgot-btn"
-                        onClick={() => navigate("/reset/request")}
-                    >
-                        Забыли пароль?
-                    </button>
-                </div>
-            </div>
+            <LoginCard
+                title="Вход в аккаунт"
+                subtitle="Добро пожаловать Введите свои данные для входа"
+            >
+                <LoginForm
+                    login={login}
+                    password={password}
+                    loading={loading}
+                    onLoginChange={setLogin}
+                    onPasswordChange={setPassword}
+                    onSubmit={handleSubmit}
+                    onForgot={() => navigate("/reset/request")}
+                    onRegister={() => navigate("/auth/registration")}
+                    onClose={() => navigate("/")}
+                />
+            </LoginCard>
         </div>
     );
 }

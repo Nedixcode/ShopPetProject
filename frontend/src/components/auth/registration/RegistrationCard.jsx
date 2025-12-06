@@ -1,6 +1,6 @@
 // src/components/auth/RegistrationCard.jsx
 import React from "react";
-import CloseButton from "../ui/CloseButton/CloseButton";
+import CloseButton from "../../ui/CloseButton/CloseButton";
 import RegistrationForm from "./RegistrationForm";
 
 export default function RegistrationCard({ onClose, onRegisterSuccess }) {

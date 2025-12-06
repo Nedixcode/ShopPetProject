@@ -4,12 +4,12 @@ import Header from "./components/layout/Header/Header";
 import Filters from "./components/features/Filters/Filters";
 import Footer from "./components/layout/Footer/Footer";
 import ProductArea from "./components/features/ProductArea/ProductArea";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import AdminPanel from "./pages/adminPage";
-import AdminRegistrationPage from "./pages/AdminRegistrationPage";
+import AdminRegistrationPage from "./pages/AdminRegistrationPage/AdminRegistrationPage";
 import { isTokenValid, isAdmin } from "./utils/auth";
-import ProfilePage from "./pages/ProfilePage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -63,7 +63,6 @@ function AppContent() {
                             <div className={"main-layout"}>
                                 <Filters onFilter={setFilters} />
                                 <ProductArea filters={filters}/>
-                                <div></div>
                             </div>
                         }
                     />

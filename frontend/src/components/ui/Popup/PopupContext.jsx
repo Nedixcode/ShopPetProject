@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from "react";
-import PopupMessage from "../components/PopupMessage";
+import PopupMessage from "./PopupMessage";
 
 const PopupContext = createContext();
 

@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import CloseButton from "../components/ui/CloseButton/CloseButton";
-import RegistrationCard from "../components/auth/RegistrationCard";
+import RegistrationCard from "../components/auth/registration/RegistrationCard";
 
 export default function RegistrationPage() {
     const navigate = useNavigate();

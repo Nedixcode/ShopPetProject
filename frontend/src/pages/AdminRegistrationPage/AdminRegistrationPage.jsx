@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CloseButton from "../components/ui/CloseButton/CloseButton";
+import CloseButton from "../../components/ui/CloseButton/CloseButton";
 
 export default function RegistrationPage() {
     const [form, setForm] = useState({

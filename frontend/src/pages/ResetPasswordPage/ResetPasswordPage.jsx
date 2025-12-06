@@ -4,6 +4,7 @@ import CloseButton from "../../components/ui/CloseButton/CloseButton";
 import { StepRequestEmail } from "./Steps/StepRequestEmail";
 import { StepVerifyToken } from "./Steps/StepVerifyToken"
 import { StepNewPassword } from "./Steps/StepNewPassword";
+import "./ResetPasswordPage.css"
 
 export default function ResetPasswordPage() {
     const navigate = useNavigate();

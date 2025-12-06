@@ -1,0 +1,27 @@
+.login-card {
+    background: var(--card-bg);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: var(--border-radius);
+    padding: 50px 60px;
+    width: 40%;
+    text-align: center;
+    animation: scaleIn 0.3s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.login-card:hover {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+}
+
+.login-card h1 {
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    font-size: 2rem;
+}
+
+.login-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-bottom: 30px;
+}

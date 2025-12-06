@@ -1,27 +1,34 @@
+// ProfilePage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { parseJwt, isTokenValid } from "../utils/auth";
-import CloseButton from "../components/ui/CloseButton/CloseButton";
+import { parseJwt, isTokenValid } from "../../utils/auth";
+import CloseButton from "../../components/ui/CloseButton/CloseButton";
+import ProfileAvatar from "../../components/profile/ProfileAvatar"
+import ProfileInfo from "../../components/profile/ProfileInfo";
+import "./ProfilePage.css";
 
 export default function ProfilePage() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [avatar, setAvatar] = useState(null);    // URL или base64
+    const [preview, setPreview] = useState(null);  // локальное превью
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+
         if (token && isTokenValid(token)) {
             const payload = parseJwt(token);
             setUser({
-                username: payload?.sub,
-                roles: payload?.roles?.map(r => r.authority).join(", "),
-                issuedAt: new Date(payload.iat * 1000).toLocaleString(),
-                expiresAt: new Date(payload.exp * 1000).toLocaleString(),
-                avatar: null // можно поставить дефолтное фото
+                username: payload?.sub || "Пользователь",
+                status: "Пользователь",
+                registeredAt: "01.01.2025",
+                lastLogin: "сегодня",
             });
         } else {
             navigate("/auth/login");
         }
+
         setLoading(false);
     }, [navigate]);
 
@@ -29,6 +36,22 @@ export default function ProfilePage() {
         localStorage.removeItem("token");
         alert("👋 Вы вышли из аккаунта");
         window.location.reload();
+    };
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("Пожалуйста, выберите изображение (JPG, PNG и т.д.)");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
     };
 
     if (loading || !user) {
@@ -44,14 +67,18 @@ export default function ProfilePage() {
     return (
         <div className="profile-page">
             <div className="profile-card">
-                <CloseButton to={"/"}/>
+                <CloseButton to="/" />
                 <h1>👤 Профиль пользователя</h1>
-                <div className="profile-info">
-                    <p><strong>Логин:</strong> {user.username}</p>
-                    <p><strong>Роли:</strong> {user.roles}</p>
-                    <p><strong>Вход выполнен:</strong> {user.issuedAt}</p>
-                    <p><strong>Токен истекает:</strong> {user.expiresAt}</p>
+
+                <div className="profile-content">
+                    <ProfileAvatar
+                        src={preview || avatar || "/images/avatar-placeholder.png"}
+                        onChange={handleAvatarChange}
+                    />
+
+                    <ProfileInfo user={user} />
                 </div>
+
                 <div className="profile-actions">
                     <button className="modal-btn primary" onClick={handleLogout}>
                         🚪 Выйти из аккаунта

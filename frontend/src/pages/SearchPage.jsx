@@ -49,10 +49,6 @@ export default function SearchPage() {
         <main className="main-layout">
             <Filters />
             <div className="product-area">
-                <h1 className="page-title">
-                    Результаты поиска по запросу: <span>“{query}”</span>
-                </h1>
-                <br />
                 {loading && <div className="loading">Загрузка...</div>}
                 {error && <div className="error">{error}</div>}
 
