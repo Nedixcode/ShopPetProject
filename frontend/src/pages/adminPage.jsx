@@ -13,17 +13,16 @@ export default function AdminPanel() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmDeleteModal, setConfirmDeleteModal] = useState({ isOpen: false, product: null });
-    const [form, setForm] = useState({
-        name: "",
-        description: "",
-        type: "",
-        price: "",
-        isInStock: true,
-    });
+    // const [form, setForm] = useState({
+    //     name: "",
+    //     description: "",
+    //     type: "",
+    //     price: "",
+    //     isInStock: true,
+    // });
 
     const searchTimeoutRef = useRef(null);
 
-    // Проверка токена и загрузка товаров
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!isTokenValid(token) || !isAdmin(token)) {
@@ -36,7 +35,6 @@ export default function AdminPanel() {
         loadProducts();
     }, []);
 
-    // Функция загрузки товаров
     const loadProducts = async () => {
         setLoading(true);
         try {
@@ -55,6 +53,7 @@ export default function AdminPanel() {
                     size: 100,
                 }),
             });
+
             if (!res.ok) throw new Error(`Ошибка ${res.status}`);
             const data = await res.json();
             setProducts(data.content || []);
@@ -67,7 +66,6 @@ export default function AdminPanel() {
         }
     };
 
-    // Поиск товаров с debounce
     const performSearch = async (query) => {
         setLoading(true);
         try {
@@ -105,7 +103,6 @@ export default function AdminPanel() {
         searchTimeoutRef.current = setTimeout(() => performSearch(value), 150);
     };
 
-    // Удаление товара
     const handleDelete = async (productId) => {
         const token = localStorage.getItem("token");
         try {
@@ -113,6 +110,7 @@ export default function AdminPanel() {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
+
             if (res.ok) {
                 setProducts((prev) => prev.filter((p) => p.id !== productId));
                 alert("✅ Товар удалён!");
@@ -172,15 +170,17 @@ export default function AdminPanel() {
                         <p>Товары не найдены</p>
                     ) : (
                         <div className="product-grid">
-                            {products.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    isAdmin={true}
-                                    onEdit={() => console.log("Редактировать", product)}
-                                    onDelete={() => handleDelete(product.id)}
-                                />
-                            ))}
+                            {products.map((product) => {
+                                return (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                        isAdmin={true}
+                                        onEdit={() => console.log("Редактировать", product)}
+                                        onDelete={() => handleDelete(product.id)}
+                                    />
+                                );
+                            })}
                         </div>
                     )}
                 </section>

@@ -7,10 +7,8 @@ export default function PopupMessage({ message, type = "info", onClose }) {
     useEffect(() => {
         if (message) {
             setVisible(true);
-            // запуск анимации появления
             const timer = setTimeout(() => {
                 setVisible(false);
-                // задержка перед onClose, чтобы дать анимации исчезнуть
                 setTimeout(onClose, 300);
             }, 3000);
             return () => clearTimeout(timer);
