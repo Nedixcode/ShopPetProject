@@ -5,6 +5,8 @@ import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import ProductCard from "../components/ProductCard";
 import ProfileButton from "../components/features/ProfileButton/ProfileButton";
 import Spinner from "../components/ui/Spinner/Spinner";
+import "../components/modals/DeleteModal/ModalDelete.css"
+import ConfirmDeleteModal from "../components/modals/DeleteModal/ConfirmDeleteModal";
 
 export default function AdminPanel() {
     const [user, setUser] = useState(null);
@@ -12,16 +14,26 @@ export default function AdminPanel() {
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [confirmDeleteModal, setConfirmDeleteModal] = useState({ isOpen: false, product: null });
-    // const [form, setForm] = useState({
-    //     name: "",
-    //     description: "",
-    //     type: "",
-    //     price: "",
-    //     isInStock: true,
-    // });
+    const [confirmDeleteModal, setConfirmDeleteModal] = useState({
+        isOpen: false,
+        product: null,
+    });
 
     const searchTimeoutRef = useRef(null);
+    const confirmDeleteBtnRef = useRef(null);
+
+    const openDeleteConfirm = (product) => {
+        setConfirmDeleteModal({ isOpen: true, product });
+    };
+
+    const closeDeleteConfirm = () => {
+        setConfirmDeleteModal({ isOpen: false, product: null });
+    };
+
+    const confirmDelete = async () => {
+        if (!confirmDeleteModal.product) return;
+        await handleDelete(confirmDeleteModal.product.id);
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -34,6 +46,13 @@ export default function AdminPanel() {
         setUser(payload.sub);
         loadProducts();
     }, []);
+
+    // Фокус на кнопку "Удалить" при открытии
+    useEffect(() => {
+        if (confirmDeleteModal.isOpen) {
+            setTimeout(() => confirmDeleteBtnRef.current?.focus(), 0);
+        }
+    }, [confirmDeleteModal.isOpen]);
 
     const loadProducts = async () => {
         setLoading(true);
@@ -131,6 +150,9 @@ export default function AdminPanel() {
         window.location.href = "/auth/login";
     };
 
+    const dialogTitleId = "confirm-delete-title";
+    const dialogDescId = "confirm-delete-desc";
+
     return (
         <div className="admin-layout">
             <header className="admin-header">
@@ -170,21 +192,26 @@ export default function AdminPanel() {
                         <p>Товары не найдены</p>
                     ) : (
                         <div className="product-grid">
-                            {products.map((product) => {
-                                return (
-                                    <ProductCard
-                                        key={product.id}
-                                        product={product}
-                                        isAdmin={true}
-                                        onEdit={() => console.log("Редактировать", product)}
-                                        onDelete={() => handleDelete(product.id)}
-                                    />
-                                );
-                            })}
+                            {products.map((product) => (
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                    isAdmin={true}
+                                    onEdit={() => console.log("Редактировать", product)}
+                                    onDelete={() => openDeleteConfirm(product)}
+                                />
+                            ))}
                         </div>
                     )}
                 </section>
             </div>
+            <ConfirmDeleteModal
+                isOpen={confirmDeleteModal.isOpen}
+                product={confirmDeleteModal.product}
+                loading={loading}
+                onCancel={closeDeleteConfirm}
+                onConfirm={confirmDelete}
+            />
         </div>
     );
 }
