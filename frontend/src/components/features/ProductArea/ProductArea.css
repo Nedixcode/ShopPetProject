@@ -27,10 +27,9 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Фото стало чуть больше */
 .product-image {
     width: 100%;
-    height: 160px; /* было 140px */
+    height: 160px;
     object-fit: cover;
 }
 
@@ -46,10 +45,10 @@
 }
 
 .product-info {
-    padding: 12px; /* чуть больше, чтобы сбалансировать пропорции */
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* распределяем текст и футер по высоте */
+    justify-content: space-between;
     flex-grow: 1;
     text-align: left;
 }
@@ -67,7 +66,7 @@
     color: #666;
     line-height: 1.3;
     margin-bottom: 8px;
-    flex-grow: 1; /* позволяет описанию занимать доступное место */
+    flex-grow: 1;
 }
 
 .product-footer {

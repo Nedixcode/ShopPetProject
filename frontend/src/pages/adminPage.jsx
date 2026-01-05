@@ -7,6 +7,7 @@ import ProfileButton from "../components/features/ProfileButton/ProfileButton";
 import Spinner from "../components/ui/Spinner/Spinner";
 import "../components/modals/DeleteModal/ModalDelete.css"
 import ConfirmDeleteModal from "../components/modals/DeleteModal/ConfirmDeleteModal";
+import AddProductModal from "../components/modals/AddProductModal/AddProductModal";
 
 export default function AdminPanel() {
     const [user, setUser] = useState(null);
@@ -211,6 +212,14 @@ export default function AdminPanel() {
                 loading={loading}
                 onCancel={closeDeleteConfirm}
                 onConfirm={confirmDelete}
+            />
+            <AddProductModal
+                isOpen={isModalOpen}
+                loading={loading}
+                onClose={() => setIsModalOpen(false)}
+                onCreated={(createdProduct) => {
+                    setProducts((prev) => [createdProduct, ...prev]);
+                }}
             />
         </div>
     );
