@@ -89,16 +89,17 @@
     margin: 0;
     background: none;
     border: none;
-    color: var(--primary-dark);
+    color: var(--primary);
     font-size: 0.95rem;
     cursor: pointer;
+    font-weight: 700;
     text-decoration: underline;
     text-underline-offset: 3px;
     transition: color 0.15s ease;
 }
 
 .login-form .forgot-btn:hover {
-    color: var(--primary);
+    color: var(--primary-dark);
 }
 
 .register-link span {
@@ -107,6 +108,7 @@
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 3px;
+    transition: color 0.15s ease;
 }
 .register-link span:hover {
     color: var(--primary);

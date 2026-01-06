@@ -28,18 +28,12 @@ export default function Filters({ onFilter }) {
     const handleCheckbox = (category, item) => {
         setSelectedFilters((prev) => {
             const updated = { ...prev };
-
-            // --- Тип товара ---
             if (category === "Тип товара") {
                 updated.type = item;
             }
-
-            // --- Бренд ---
             if (category === "Бренд") {
                 updated.brand = item;
             }
-
-            // --- Цена ---
             if (category === "Цена") {
                 updated.selectedPrice = item;
 

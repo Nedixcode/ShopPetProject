@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import "../styles/main.css";
 import "../components/features/ProductArea/ProductArea.css";
-import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
+import "../components/modals/DeleteModal/ModalDelete.css"
 import ProductCard from "../components/ProductCard";
 import ProfileButton from "../components/features/ProfileButton/ProfileButton";
 import Spinner from "../components/ui/Spinner/Spinner";
-import "../components/modals/DeleteModal/ModalDelete.css"
 import ConfirmDeleteModal from "../components/modals/DeleteModal/ConfirmDeleteModal";
-import AddProductModal from "../components/modals/AddProductModal/AddProductModal";
+import ProductModal from "../components/modals/ProductModal/ProductModal";
 
 export default function AdminPanel() {
     const [user, setUser] = useState(null);
@@ -19,6 +19,8 @@ export default function AdminPanel() {
         isOpen: false,
         product: null,
     });
+    const [editModal, setEditModal] = useState({ isOpen: false, product: null });
+    const openEdit = (product) => setEditModal({ isOpen: true, product });
 
     const searchTimeoutRef = useRef(null);
     const confirmDeleteBtnRef = useRef(null);
@@ -48,7 +50,6 @@ export default function AdminPanel() {
         loadProducts();
     }, []);
 
-    // Фокус на кнопку "Удалить" при открытии
     useEffect(() => {
         if (confirmDeleteModal.isOpen) {
             setTimeout(() => confirmDeleteBtnRef.current?.focus(), 0);
@@ -151,9 +152,6 @@ export default function AdminPanel() {
         window.location.href = "/auth/login";
     };
 
-    const dialogTitleId = "confirm-delete-title";
-    const dialogDescId = "confirm-delete-desc";
-
     return (
         <div className="admin-layout">
             <header className="admin-header">
@@ -198,7 +196,7 @@ export default function AdminPanel() {
                                     key={product.id}
                                     product={product}
                                     isAdmin={true}
-                                    onEdit={() => console.log("Редактировать", product)}
+                                    onEdit={() => setEditModal({ isOpen: true, product })}
                                     onDelete={() => openDeleteConfirm(product)}
                                 />
                             ))}
@@ -213,13 +211,21 @@ export default function AdminPanel() {
                 onCancel={closeDeleteConfirm}
                 onConfirm={confirmDelete}
             />
-            <AddProductModal
+            <ProductModal
                 isOpen={isModalOpen}
+                mode="create"
                 loading={loading}
                 onClose={() => setIsModalOpen(false)}
-                onCreated={(createdProduct) => {
-                    setProducts((prev) => [createdProduct, ...prev]);
-                }}
+                onCreated={(createdProduct) => setProducts((prev) => [createdProduct, ...prev])}
+            />
+            <ProductModal
+                isOpen={editModal.isOpen}
+                mode="edit"
+                product={editModal.product}
+                onClose={() => setEditModal({ isOpen: false, product: null })}
+                onUpdated={(updated) =>
+                    setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
+                }
             />
         </div>
     );

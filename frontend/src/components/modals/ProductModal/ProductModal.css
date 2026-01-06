@@ -35,7 +35,7 @@
 
 .field input:focus,
 .field textarea:focus {
-    border-color: rgba(249, 115, 22, 0.55); /* близко к --primary */
+    border-color: rgba(249, 115, 22, 0.55);
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.18);
 }
 
@@ -64,7 +64,7 @@
 
 .image-box img {
     width: 100%;
-    max-height: 220px;
+    max-height: 200px;
     object-fit: cover;
     display: block;
 }

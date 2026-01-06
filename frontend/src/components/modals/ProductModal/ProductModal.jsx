@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "../DeleteModal/ModalDelete.css";
-import "./AddProductModal.css";
+import "./ProductModal.css"
 import CloseButton from "../../ui/CloseButton/CloseButton";
 
 const EMPTY = {
@@ -11,16 +10,19 @@ const EMPTY = {
     inStock: true,
 };
 
-export default function AddProductModal({
-                                            isOpen,
-                                            loading = false,
-                                            onClose,
-                                            onCreated, // (createdProduct) => void
-                                        }) {
+export default function ProductModal({
+                                         isOpen,
+                                         mode = "create",          // "create" | "edit"
+                                         product = null,           // обязателен для mode="edit"
+                                         loading = false,
+                                         onClose,
+                                         onCreated,                // (createdProduct) => void
+                                         onUpdated,                // (updatedProduct) => void
+                                     }) {
     const [form, setForm] = useState(EMPTY);
     const [imageFile, setImageFile] = useState(null);
+    const [saving, setSaving] = useState(false);
 
-    // preview
     const previewUrl = useMemo(() => {
         if (!imageFile) return null;
         return URL.createObjectURL(imageFile);
@@ -32,14 +34,34 @@ export default function AddProductModal({
         };
     }, [previewUrl]);
 
+    // Инициализация формы при открытии / смене режима / смене товара
     useEffect(() => {
-        if (isOpen) {
+        if (!isOpen) return;
+
+        if (mode === "edit") {
+            if (!product) {
+                setForm(EMPTY);
+                setImageFile(null);
+                return;
+            }
+
+            setForm({
+                name: product.name ?? "",
+                description: product.description ?? "",
+                price: product.price ?? "",
+                type: product.type ?? "",
+                inStock: product.isInStock ?? product.inStock ?? true,
+            });
+            setImageFile(null);
+        } else {
             setForm(EMPTY);
             setImageFile(null);
         }
-    }, [isOpen]);
+    }, [isOpen, mode, product]);
 
     if (!isOpen) return null;
+
+    const disabled = loading || saving;
 
     const setField = (key) => (e) => {
         const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -52,7 +74,11 @@ export default function AddProductModal({
         e.preventDefault();
 
         if (!form.name.trim()) return alert("Введите название товара");
-        if (!form.price || Number.isNaN(Number(form.price))) return alert("Введите цену");
+        if (form.price === "" || Number.isNaN(Number(form.price))) return alert("Введите цену");
+
+        if (mode === "edit" && !product?.id) {
+            return alert("Не выбран товар для редактирования");
+        }
 
         const token = localStorage.getItem("token");
 
@@ -65,31 +91,54 @@ export default function AddProductModal({
         };
 
         const fd = new FormData();
-        fd.append("product", JSON.stringify(productDto));
+        // Важно для @RequestPart("product") ProductDto: JSON как application/json Blob [web:722]
+        fd.append("product", new Blob([JSON.stringify(productDto)], { type: "application/json" }));
         if (imageFile) fd.append("image", imageFile);
 
-        const res = await fetch("admin/product", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: fd,
-        });
+        const url =
+            mode === "edit" ? `/admin/product/${product.id}` : "/admin/product";
 
-        if (!res.ok) {
-            const text = await res.text().catch(() => "");
-            throw new Error(`Ошибка ${res.status}. ${text}`);
+        const method = mode === "edit" ? "PUT" : "POST";
+
+        setSaving(true);
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: fd,
+            });
+
+            if (!res.ok) {
+                const text = await res.text().catch(() => "");
+                throw new Error(`Ошибка ${res.status}. ${text}`);
+            }
+
+            const saved = await res.json();
+
+            if (mode === "edit") onUpdated?.(saved);
+            else onCreated?.(saved);
+
+            onClose?.();
+        } catch (err) {
+            console.error(err);
+            alert(mode === "edit" ? "❌ Не удалось обновить товар" : "❌ Не удалось добавить товар");
+        } finally {
+            setSaving(false);
         }
-
-        const created = await res.json();
-        onCreated?.(created);
-        onClose?.();
     };
+
+    const title = mode === "edit" ? "Редактировать товар" : "Добавить товар";
+    const submitText = saving
+        ? (mode === "edit" ? "Сохранение..." : "Добавление...")
+        : (mode === "edit" ? "Сохранить" : "Добавить");
 
     return (
         <div className="modal-backdrop" onClick={onClose}>
             <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-                <h3>Добавить товар</h3>
+                <CloseButton to={"/"} />
+                <h3>{title}</h3>
 
                 <form className="add-product-form" onSubmit={submit}>
                     <label className="field">
@@ -138,12 +187,16 @@ export default function AddProductModal({
                     </div>
 
                     <label className="field inline">
-                        <input type="checkbox" checked={form.inStock} onChange={setField("inStock")} />
+                        <input
+                            type="checkbox"
+                            checked={form.inStock}
+                            onChange={setField("inStock")}
+                        />
                         <span>В наличии</span>
                     </label>
 
                     <label className="field">
-                        <span>Фото (необязательно)</span>
+                        <span>{mode === "edit" ? "Новое фото (необязательно)" : "Фото (необязательно)"}</span>
                         <input
                             type="file"
                             accept="image/*"
@@ -156,7 +209,7 @@ export default function AddProductModal({
                             {previewUrl ? <img src={previewUrl} alt="Preview" /> : null}
                             <div className="image-meta">
                                 <div className="image-name" title={imageFile.name}>{imageFile.name}</div>
-                                <button type="button" className="link-btn" onClick={removeImage}>
+                                <button type="button" className="link-btn" onClick={removeImage} disabled={disabled}>
                                     Убрать фото
                                 </button>
                             </div>
@@ -164,11 +217,11 @@ export default function AddProductModal({
                     )}
 
                     <div className="modal-actions">
-                        <button type="button" className="admin-top-btn" onClick={onClose} disabled={loading}>
+                        <button type="button" className="admin-top-btn" onClick={onClose} disabled={disabled}>
                             Отмена
                         </button>
-                        <button type="submit" className="admin-top-btn" disabled={loading}>
-                            Добавить
+                        <button type="submit" className="admin-top-btn" disabled={disabled}>
+                            {submitText}
                         </button>
                     </div>
                 </form>

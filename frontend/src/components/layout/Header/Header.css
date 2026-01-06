@@ -51,8 +51,6 @@ header {
     transition: background 0.3s;
 }
 
-.search-box button:hover { background: #2b3ea6; }
-
 .header-actions {
     display: flex;
     align-items: center;

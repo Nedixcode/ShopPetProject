@@ -1,15 +1,12 @@
 .login-card {
     background: linear-gradient(180deg, #fff, rgba(255,255,255,0.96));
     position: relative;
-
     border: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
     border-radius: var(--border-radius);
-
     padding: 44px 52px;
-    width: min(560px, 92vw); /* вместо 40% */
+    width: min(560px, 92vw);
     text-align: center;
-
     animation: scaleIn 0.25s ease;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -34,7 +31,6 @@
     line-height: 1.5;
 }
 
-/* мобилка */
 @media (max-width: 480px) {
     .login-card { padding: 26px 18px; }
     .login-card h1 { font-size: 24px; }

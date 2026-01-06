@@ -1,15 +1,14 @@
 :root {
-    --primary: #f97316; /* Апельсиново-оранжевый */
-    --primary-dark: #c2410c;
-    --background: #fff7ed; /* Тёплый кремовый */
-    --text: #3f3f46; /* Нейтрально-тёмный */
-    --footer-bg: #1c1917;
-    --footer-text: #d6d3d1;
+    --primary: #dc530b;
+    --primary-dark: #9a3412;
+    --background: #f1e1d9;
+    --text: #2f2f35;
+    --footer-bg: #141210;
+    --footer-text: #e7e5e4;
     --card-bg: #ffffff;
     --border-radius: 16px;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
-
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
@@ -29,7 +28,7 @@ body {
     margin: 50px auto;
     padding: 0 25px;
     display: grid;
-    grid-template-columns: 300px 1fr 250px;
+    grid-template-columns: 280px 1000px 250px;
     gap: 30px;
     animation: fadeIn 0.5s ease;
 }
@@ -146,17 +145,7 @@ body {
     background: #e9ecef;
 }
 
-.forgot-btn {
-    display: block;
-    background: none;
-    border: none;
-    color: var(--primary);
-    cursor: pointer;
-    margin: 12px auto 0;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    transition: color 0.2s;
-}
+
 
 .forgot-btn:hover {
     color: var(--primary-dark);
