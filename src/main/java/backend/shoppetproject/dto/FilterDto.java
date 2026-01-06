@@ -82,4 +82,19 @@ public class FilterDto {
     public void setSize(int size) {
         this.size = size;
     }
+
+    @Override
+    public String toString() {
+        return "FilterDto{" +
+                "query='" + query + '\'' +
+                ", type='" + type + '\'' +
+                ", isInStock=" + isInStock +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", sortBy='" + sortBy + '\'' +
+                ", sortDirection='" + sortDirection + '\'' +
+                ", page=" + page +
+                ", size=" + size +
+                '}';
+    }
 }
