@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
-import "../styles/main.css";
+import "../styles/Admin.css";
 import "../components/features/ProductArea/ProductArea.css";
-import "../components/modals/DeleteModal/ModalDelete.css"
 import ProductCard from "../components/ProductCard";
 import ProfileButton from "../components/features/ProfileButton/ProfileButton";
 import Spinner from "../components/ui/Spinner/Spinner";
@@ -154,29 +153,24 @@ export default function AdminPanel() {
 
     return (
         <div className="admin-layout">
-            <header className="admin-header">
-                <div className="admin-header-left">
-                    <h1>Панель администратора</h1>
-                </div>
-                <div className="admin-header-right">
-                    <ProfileButton />
-                    <button className="admin-top-btn">Настройки</button>
-                    <button className="admin-top-btn logout" onClick={handleLogout}>
-                        Выйти
-                    </button>
-                </div>
-            </header>
+            <aside className="admin-sidebar">
+                <div className="admin-sidebar-brand">Панель администратора</div>
+                <nav className="admin-nav">
+                    <button className="admin-nav-item is-active">Товары</button>
+                    <button className="admin-nav-item">Заказы</button>
+                    <button className="admin-nav-item">Клиенты</button>
+                    <button className="admin-nav-item">Фильтры</button>
+                    <button className="admin-nav-item">Настройки</button>
+                </nav>
 
-            <div className="admin-main">
-                <aside className="admin-sidebar">
-                    <h2>Меню</h2>
-                    <button className="sidebar-btn primary" onClick={() => setIsModalOpen(true)}>
-                        ➕ Добавить товар
-                    </button>
-                    <button className="sidebar-btn">🧾 Заказы</button>
-                </aside>
+                <div className="admin-sidebar-footer">
+                    <button className="admin-nav-item logout" onClick={handleLogout}>Выйти</button>
+                </div>
+            </aside>
 
-                <section className="admin-content">
+            <main className="admin-main">
+                {/* Верхняя панель контента */}
+                <div className="admin-topbar">
                     <input
                         type="text"
                         className="admin-search-input"
@@ -184,6 +178,20 @@ export default function AdminPanel() {
                         value={searchQuery}
                         onChange={handleSearchChange}
                     />
+
+                    <div className="admin-topbar-actions">
+                        <ProfileButton /> {/* это и будет “переход в ЛК” */}
+                    </div>
+                </div>
+
+                {/* Большой блок товаров */}
+                <section className="admin-content">
+                    <div className="admin-content-head">
+                        <h2>Товары</h2>
+                        <button className="admin-top-btn primary" onClick={() => setIsModalOpen(true)}>
+                            + Добавить товар
+                        </button>
+                    </div>
 
                     {loading ? (
                         <Spinner text="Загрузка товаров..." />
@@ -203,7 +211,7 @@ export default function AdminPanel() {
                         </div>
                     )}
                 </section>
-            </div>
+            </main>
             <ConfirmDeleteModal
                 isOpen={confirmDeleteModal.isOpen}
                 product={confirmDeleteModal.product}
