@@ -1,11 +1,11 @@
 .filters-sidebar {
-    background-color: var(--card-bg);
+    background-color: var(--card-bg); /* белый фон */
     padding: 20px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     font-family: "Inter", sans-serif;
     position: sticky;
-    top: 40px;
+    top: 40px; /* липкий сверху */
     align-self: start; /* чтобы не растягивался */
     max-height: none; /* не ограничиваем высоту */
     overflow: visible; /* убираем скролл */
