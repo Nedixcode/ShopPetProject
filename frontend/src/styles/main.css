@@ -30,11 +30,11 @@ body {
 
 .main-layout {
     flex: 1;
-    max-width: 1400px;
-    margin: 50px auto;
+    max-width: 1900px;
+    margin: 30px auto;
     padding: 0 25px;
     display: grid;
-    grid-template-columns: 280px 1000px 250px;
+    grid-template-columns: 300px 1150px 1px;
     gap: 30px;
     animation: fadeIn 0.5s ease;
 }

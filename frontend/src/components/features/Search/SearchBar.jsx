@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchDropdown from "../SearchDropdown/SearchDropdown";
 import useSearchSuggestions from "../../../hooks/useSearchSuggestions";
@@ -22,6 +22,11 @@ export default function SearchBar() {
         setShowDropdown(false);
     };
 
+    useEffect(() => {
+        if (query.trim() && suggestions.length > 0) setShowDropdown(true);
+        if (!query.trim()) setShowDropdown(false);
+    }, [query, suggestions]);
+
     return (
         <form className="search-box" onSubmit={handleSearch}>
             <input
@@ -30,7 +35,7 @@ export default function SearchBar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => query && setShowDropdown(true)}
-                onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 0)}
             />
             <button type="submit">🔍</button>
 
