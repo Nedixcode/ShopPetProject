@@ -29,6 +29,9 @@ public class ProductEntity {
     @Column(name = "number_of_sales")
     private Integer numberOfSales = 0;
 
+    @Column(name = "popularity")
+    private Integer popularity = 0;
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -121,5 +124,13 @@ public class ProductEntity {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Integer getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Integer popularity) {
+        this.popularity = popularity;
     }
 }

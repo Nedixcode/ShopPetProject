@@ -12,42 +12,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
 
-    public final ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     public Page<ProductEntity> searchProducts(FilterDto filter) {
+        boolean hasQuery = filter.getQuery() != null && !filter.getQuery().isBlank();
+        boolean hasSort = filter.getSortBy() != null;
+        boolean emptyFilter = isEmptyFilter(filter);
 
-        if (isEmptyFilter(filter)) {
-            Sort sort = Sort.by(Sort.Direction.fromString(filter.getSortDirection()), filter.getSortBy());
-            Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);
+        Sort sort = Sort.unsorted();
 
-            return productRepository.findAll(pageable);
-        }
+        if (emptyFilter || (!hasQuery && !hasSort)) {
+            sort = Sort.by(Sort.Direction.DESC, "popularity");
 
-        if (filter.getSortBy() == null) {
-            Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize());
+        } else if (!hasQuery) {
+            sort = Sort.by(
+                    Sort.Direction.fromString(filter.getSortDirection()),
+                    filter.getSortBy()
+            );
 
-            return productRepository.searchProductsByAutoSort(
-                    filter.getQuery(),
-                    filter.getType(),
-                    filter.getIsInStock(),
-                    filter.getMinPrice(),
-                    filter.getMaxPrice(),
-                    pageable
+        } else if (hasSort) {
+            sort = Sort.by(
+                    Sort.Direction.fromString(filter.getSortDirection()),
+                    filter.getSortBy()
             );
         }
 
-        Sort sort = Sort.by(
-                Sort.Direction.fromString(filter.getSortDirection()),
-                filter.getSortBy()
-        );
-
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);
-
-        return productRepository.searchProductsByCustomSort(
+        return productRepository.searchProducts(
                 filter.getQuery(),
                 filter.getType(),
                 filter.getIsInStock(),
@@ -62,6 +57,8 @@ public class ProductService {
                 filter.getType() == null &&
                 filter.getIsInStock() == null &&
                 filter.getMinPrice() == null &&
-                filter.getMaxPrice() == null;
+                filter.getMaxPrice() == null &&
+                filter.getSortBy() == null &&
+                filter.getSortDirection() == null;
     }
 }
