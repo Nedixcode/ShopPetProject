@@ -39,11 +39,6 @@ export default function AdminPanel() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!isTokenValid(token) || !isAdmin(token)) {
-            localStorage.removeItem("token");
-            window.location.href = "/auth/login";
-            return;
-        }
         const payload = parseJwt(token);
         setUser(payload.sub);
         loadProducts();

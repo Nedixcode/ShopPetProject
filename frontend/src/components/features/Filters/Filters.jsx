@@ -7,11 +7,14 @@ export default function Filters({ onFilter }) {
     const [selectedFilters, setSelectedFilters] = useState({
         query: null,
         type: null,
-        brand: null,
-        selectedPrice: null,
-        isInStock: null,
+
+        // brand удалён
+
+        // selectedPrice удалён (вместо него minPrice/maxPrice)
         minPrice: null,
         maxPrice: null,
+
+        isInStock: null,
         sortBy: "id",
         sortDirection: "asc",
         page: 0,
@@ -21,7 +24,9 @@ export default function Filters({ onFilter }) {
     const categories = useMemo(
         () => ({
             "Тип товара": ["Электроника", "Бытовая техника", "Книги", "Одежда", "Дом", "Игрушки", "Мебель"],
-            "Бренд": ["Apple", "Samsung", "Xiaomi", "Asus", "HP", "Lenovo"],
+
+            // "Бренд" удалён
+
             "Цена": ["До 500 BYN", "500–1000 BYN", "1000–2000 BYN", "Выше 2000 BYN"],
             "Наличие": ["В наличии", "Нет в наличии"],
         }),
@@ -46,8 +51,8 @@ export default function Filters({ onFilter }) {
     const selectedCount = useMemo(() => {
         let c = 0;
         if (selectedFilters.type) c++;
-        if (selectedFilters.brand) c++;
-        if (selectedFilters.selectedPrice) c++;
+        // brand удалён
+        if (selectedFilters.minPrice !== null || selectedFilters.maxPrice !== null) c++;
         if (selectedFilters.isInStock !== null) c++;
         return c;
     }, [selectedFilters]);
@@ -57,17 +62,23 @@ export default function Filters({ onFilter }) {
     const handleSingleSelect = (category, item) => {
         setSelectedFilters((prev) => {
             const updated = { ...prev };
-            if (category === "Тип товара") updated.type = prev.type === item ? null : item;
-            if (category === "Бренд") updated.brand = prev.brand === item ? null : item;
-            if (category === "Цена") {
-                const next = prev.selectedPrice === item ? null : item;
-                updated.selectedPrice = next;
 
-                if (!next) {
+            if (category === "Тип товара") updated.type = prev.type === item ? null : item;
+
+            if (category === "Цена") {
+                // В state и отправку кладём только minPrice/maxPrice
+                // Если повторно кликнули тот же диапазон — сбрасываем
+                const isSameRange =
+                    (item === "До 500 BYN" && prev.minPrice === 0 && prev.maxPrice === 500) ||
+                    (item === "500–1000 BYN" && prev.minPrice === 500 && prev.maxPrice === 1000) ||
+                    (item === "1000–2000 BYN" && prev.minPrice === 1000 && prev.maxPrice === 2000) ||
+                    (item === "Выше 2000 BYN" && prev.minPrice === 2000 && prev.maxPrice === null);
+
+                if (isSameRange) {
                     updated.minPrice = null;
                     updated.maxPrice = null;
                 } else {
-                    switch (next) {
+                    switch (item) {
                         case "До 500 BYN":
                             updated.minPrice = 0;
                             updated.maxPrice = 500;
@@ -114,11 +125,10 @@ export default function Filters({ onFilter }) {
         const next = {
             ...selectedFilters,
             type: null,
-            brand: null,
-            selectedPrice: null,
-            isInStock: null,
+            // brand удалён
             minPrice: null,
             maxPrice: null,
+            isInStock: null,
             sortBy: "id",
             sortDirection: "asc",
             page: 0,
@@ -127,11 +137,9 @@ export default function Filters({ onFilter }) {
         setSelectedFilters((prev) => ({
             ...prev,
             type: null,
-            brand: null,
-            selectedPrice: null,
-            isInStock: null,
             minPrice: null,
             maxPrice: null,
+            isInStock: null,
             sortBy: "id",
             sortDirection: "asc",
             page: 0,
@@ -146,6 +154,18 @@ export default function Filters({ onFilter }) {
 
     const sortDirLabel =
         sortMenus["Направление"].find((x) => x.value === selectedFilters.sortDirection)?.label || "По возрастанию";
+
+    // Текстовое значение цены для отображения (вместо selectedPrice)
+    const priceLabel = useMemo(() => {
+        const { minPrice, maxPrice } = selectedFilters;
+        if (minPrice === null && maxPrice === null) return null;
+        if (minPrice === 0 && maxPrice === 500) return "До 500 BYN";
+        if (minPrice === 500 && maxPrice === 1000) return "500–1000 BYN";
+        if (minPrice === 1000 && maxPrice === 2000) return "1000–2000 BYN";
+        if (minPrice === 2000 && maxPrice === null) return "Выше 2000 BYN";
+        // если диапазоны станут произвольными
+        return `${minPrice ?? 0}–${maxPrice ?? "∞"} BYN`;
+    }, [selectedFilters]);
 
     return (
         <aside className="filtersSidebar" aria-label="Фильтры и сортировка">
@@ -187,7 +207,10 @@ export default function Filters({ onFilter }) {
 
                                 <div id={panelId} className="accPanel" role="region" aria-label={title}>
                                     {sortMenus[title].map((opt) => (
-                                        <label key={opt.value} className={`option ${selectedFilters.sortBy === opt.value ? "checked" : ""}`}>
+                                        <label
+                                            key={opt.value}
+                                            className={`option ${selectedFilters.sortBy === opt.value ? "checked" : ""}`}
+                                        >
                                             <input
                                                 type="checkbox"
                                                 checked={selectedFilters.sortBy === opt.value}
@@ -255,17 +278,15 @@ export default function Filters({ onFilter }) {
                         const value =
                             title === "Тип товара"
                                 ? selectedFilters.type
-                                : title === "Бренд"
-                                    ? selectedFilters.brand
-                                    : title === "Цена"
-                                        ? selectedFilters.selectedPrice
-                                        : title === "Наличие"
-                                            ? selectedFilters.isInStock === null
-                                                ? null
-                                                : selectedFilters.isInStock
-                                                    ? "В наличии"
-                                                    : "Нет в наличии"
-                                            : null;
+                                : title === "Цена"
+                                    ? priceLabel
+                                    : title === "Наличие"
+                                        ? selectedFilters.isInStock === null
+                                            ? null
+                                            : selectedFilters.isInStock
+                                                ? "В наличии"
+                                                : "Нет в наличии"
+                                        : null;
 
                         return (
                             <div key={title} className={`accItem ${isOpen ? "open" : ""}`}>
