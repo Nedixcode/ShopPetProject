@@ -10,11 +10,9 @@ export default function SearchPage() {
     const [error, setError] = useState(null);
 
     const params = new URLSearchParams(location.search);
-    const query = location.state?.query || "";
+    const query = location.state?.query || null;
 
     useEffect(() => {
-        if (!query.trim()) return;
-
         setLoading(true);
         setError(null);
 

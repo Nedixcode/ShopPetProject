@@ -1,41 +1,37 @@
-// ProfilePage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { parseJwt, isTokenValid } from "../../utils/auth";
+import {isAdmin, parseJwt} from "../../utils/auth";
+
 import CloseButton from "../../components/ui/CloseButton/CloseButton";
-import ProfileAvatar from "../../components/profile/ProfileAvatar"
+import ProfileAvatar from "../../components/profile/ProfileAvatar";
 import ProfileInfo from "../../components/profile/ProfileInfo";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [avatar, setAvatar] = useState(null);    // URL или base64
-    const [preview, setPreview] = useState(null);  // локальное превью
+    const [avatar, setAvatar] = useState(null);
+    const [preview, setPreview] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        const payload = parseJwt(token);
 
-        if (token && isTokenValid(token)) {
-            const payload = parseJwt(token);
-            setUser({
-                username: payload?.sub || "Пользователь",
-                status: "Пользователь",
-                registeredAt: "01.01.2025",
-                lastLogin: "сегодня",
-            });
-        } else {
-            navigate("/auth/login");
-        }
+        setUser({
+            username: payload?.sub || "Пользователь",
+            status: isAdmin(token) ? "Администатор" : "Пользователь",
+            registeredAt: "01.01.2025",
+            lastLogin: "сегодня",
+        });
 
         setLoading(false);
-    }, [navigate]);
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        alert("👋 Вы вышли из аккаунта");
-        window.location.reload();
+        navigate("/auth/login", { replace: true });
     };
 
     const handleAvatarChange = (e) => {
@@ -48,9 +44,7 @@ export default function ProfilePage() {
         }
 
         const reader = new FileReader();
-        reader.onload = () => {
-            setPreview(reader.result);
-        };
+        reader.onload = () => setPreview(reader.result);
         reader.readAsDataURL(file);
     };
 

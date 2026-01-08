@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function useSearchSuggestions(query, delay = 300) {
+export default function useSearchSuggestions(query, delay = 200) {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const timeoutRef = useRef(null);
@@ -27,7 +27,7 @@ export default function useSearchSuggestions(query, delay = 300) {
                         sortBy: "id",
                         sortDirection: "asc",
                         page: 0,
-                        size: 100,
+                        size: 80,
                     }),
                 });
 

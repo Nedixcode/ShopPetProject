@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchDropdown from "../SearchDropdown/SearchDropdown";
 import useSearchSuggestions from "../../../hooks/useSearchSuggestions";
@@ -6,13 +6,16 @@ import useSearchSuggestions from "../../../hooks/useSearchSuggestions";
 export default function SearchBar() {
     const [query, setQuery] = useState("");
     const [showDropdown, setShowDropdown] = useState(false);
-    const { suggestions, loading } = useSearchSuggestions(query);
-
+    const {suggestions, loading} = useSearchSuggestions(query);
     const navigate = useNavigate();
+    const formRef = useRef(null);
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (!query.trim()) return;
+    const handleSearch = (event) => {
+        event.preventDefault();
+        if (!query.trim()){
+            navigate("/", { state: null });
+            return;
+        }
         navigate("/search", { state: { query } });
         setShowDropdown(false);
     };
@@ -20,6 +23,7 @@ export default function SearchBar() {
     const handleSelect = (name) => {
         setQuery(name);
         setShowDropdown(false);
+        formRef.current?.requestSubmit();
     };
 
     useEffect(() => {
@@ -28,16 +32,16 @@ export default function SearchBar() {
     }, [query, suggestions]);
 
     return (
-        <form className="search-box" onSubmit={handleSearch}>
+        <form ref={formRef} className="search-box" onSubmit={handleSearch}>
             <input
                 type="text"
                 placeholder="Поиск товаров..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => query && setShowDropdown(true)}
-                onBlur={() => setTimeout(() => setShowDropdown(false), 0)}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
             />
-            <button type="submit">🔍</button>
+            <button>🔍</button>
 
             {showDropdown && !loading && suggestions.length > 0 && (
                 <SearchDropdown

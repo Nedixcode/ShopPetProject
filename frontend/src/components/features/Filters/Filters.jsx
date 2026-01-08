@@ -3,14 +3,18 @@ import "./Filters.css";
 
 export default function Filters({ onFilter }) {
     const [openCategory, setOpenCategory] = useState(null);
+
     const [selectedFilters, setSelectedFilters] = useState({
         query: null,
         type: null,
-        brand: null,
-        selectedPrice: null,
-        isInStock: null,
+
+        // brand удалён
+
+        // selectedPrice удалён (вместо него minPrice/maxPrice)
         minPrice: null,
         maxPrice: null,
+
+        isInStock: null,
         sortBy: "id",
         sortDirection: "asc",
         page: 0,
@@ -20,9 +24,26 @@ export default function Filters({ onFilter }) {
     const categories = useMemo(
         () => ({
             "Тип товара": ["Электроника", "Бытовая техника", "Книги", "Одежда", "Дом", "Игрушки", "Мебель"],
-            "Бренд": ["Apple", "Samsung", "Xiaomi", "Asus", "HP", "Lenovo"],
+
+            // "Бренд" удалён
+
             "Цена": ["До 500 BYN", "500–1000 BYN", "1000–2000 BYN", "Выше 2000 BYN"],
             "Наличие": ["В наличии", "Нет в наличии"],
+        }),
+        []
+    );
+
+    const sortMenus = useMemo(
+        () => ({
+            "Поле сортировки": [
+                { label: "По умолчанию", value: "id" },
+                { label: "Цена", value: "price" },
+                { label: "Название", value: "name" },
+            ],
+            "Направление": [
+                { label: "По возрастанию", value: "asc" },
+                { label: "По убыванию", value: "desc" },
+            ],
         }),
         []
     );
@@ -30,8 +51,8 @@ export default function Filters({ onFilter }) {
     const selectedCount = useMemo(() => {
         let c = 0;
         if (selectedFilters.type) c++;
-        if (selectedFilters.brand) c++;
-        if (selectedFilters.selectedPrice) c++;
+        // brand удалён
+        if (selectedFilters.minPrice !== null || selectedFilters.maxPrice !== null) c++;
         if (selectedFilters.isInStock !== null) c++;
         return c;
     }, [selectedFilters]);
@@ -44,17 +65,20 @@ export default function Filters({ onFilter }) {
 
             if (category === "Тип товара") updated.type = prev.type === item ? null : item;
 
-            if (category === "Бренд") updated.brand = prev.brand === item ? null : item;
-
             if (category === "Цена") {
-                const next = prev.selectedPrice === item ? null : item;
-                updated.selectedPrice = next;
+                // В state и отправку кладём только minPrice/maxPrice
+                // Если повторно кликнули тот же диапазон — сбрасываем
+                const isSameRange =
+                    (item === "До 500 BYN" && prev.minPrice === 0 && prev.maxPrice === 500) ||
+                    (item === "500–1000 BYN" && prev.minPrice === 500 && prev.maxPrice === 1000) ||
+                    (item === "1000–2000 BYN" && prev.minPrice === 1000 && prev.maxPrice === 2000) ||
+                    (item === "Выше 2000 BYN" && prev.minPrice === 2000 && prev.maxPrice === null);
 
-                if (!next) {
+                if (isSameRange) {
                     updated.minPrice = null;
                     updated.maxPrice = null;
                 } else {
-                    switch (next) {
+                    switch (item) {
                         case "До 500 BYN":
                             updated.minPrice = 0;
                             updated.maxPrice = 500;
@@ -87,35 +111,61 @@ export default function Filters({ onFilter }) {
         });
     };
 
+    const handleSortPick = (menuTitle, value) => {
+        setSelectedFilters((prev) => {
+            if (menuTitle === "Поле сортировки") return { ...prev, sortBy: value };
+            if (menuTitle === "Направление") return { ...prev, sortDirection: value };
+            return prev;
+        });
+    };
+
     const applyFilters = () => onFilter?.(selectedFilters);
 
     const resetFilters = () => {
+        const next = {
+            ...selectedFilters,
+            type: null,
+            // brand удалён
+            minPrice: null,
+            maxPrice: null,
+            isInStock: null,
+            sortBy: "id",
+            sortDirection: "asc",
+            page: 0,
+        };
+
         setSelectedFilters((prev) => ({
             ...prev,
             type: null,
-            brand: null,
-            selectedPrice: null,
-            isInStock: null,
             minPrice: null,
             maxPrice: null,
+            isInStock: null,
             sortBy: "id",
             sortDirection: "asc",
             page: 0,
             size: prev.size ?? 80,
         }));
-        onFilter?.({
-            ...selectedFilters,
-            type: null,
-            brand: null,
-            selectedPrice: null,
-            isInStock: null,
-            minPrice: null,
-            maxPrice: null,
-            sortBy: "id",
-            sortDirection: "asc",
-            page: 0,
-        });
+
+        onFilter?.(next);
     };
+
+    const sortByLabel =
+        sortMenus["Поле сортировки"].find((x) => x.value === selectedFilters.sortBy)?.label || "По умолчанию";
+
+    const sortDirLabel =
+        sortMenus["Направление"].find((x) => x.value === selectedFilters.sortDirection)?.label || "По возрастанию";
+
+    // Текстовое значение цены для отображения (вместо selectedPrice)
+    const priceLabel = useMemo(() => {
+        const { minPrice, maxPrice } = selectedFilters;
+        if (minPrice === null && maxPrice === null) return null;
+        if (minPrice === 0 && maxPrice === 500) return "До 500 BYN";
+        if (minPrice === 500 && maxPrice === 1000) return "500–1000 BYN";
+        if (minPrice === 1000 && maxPrice === 2000) return "1000–2000 BYN";
+        if (minPrice === 2000 && maxPrice === null) return "Выше 2000 BYN";
+        // если диапазоны станут произвольными
+        return `${minPrice ?? 0}–${maxPrice ?? "∞"} BYN`;
+    }, [selectedFilters]);
 
     return (
         <aside className="filtersSidebar" aria-label="Фильтры и сортировка">
@@ -128,39 +178,95 @@ export default function Filters({ onFilter }) {
                     <div className="filtersBadge muted">Нет фильтров</div>
                 )}
             </div>
+
             <div className="divider" />
+
             <div className="filtersCardSection">
                 <div className="sectionTitle">Сортировка</div>
 
-                <div className="field">
-                    <label className="label" htmlFor="sortBy">Поле</label>
-                    <select
-                        id="sortBy"
-                        className="control"
-                        value={selectedFilters.sortBy}
-                        onChange={(e) => setSelectedFilters((prev) => ({ ...prev, sortBy: e.target.value }))}
-                    >
-                        <option value="id">По умолчанию</option>
-                        <option value="price">Цена</option>
-                        <option value="name">Название</option>
-                    </select>
-                </div>
+                <div className="accordion">
+                    {/* Поле сортировки */}
+                    {(() => {
+                        const title = "Поле сортировки";
+                        const isOpen = openCategory === title;
+                        const panelId = "panel-sortBy";
 
-                <div className="field">
-                    <label className="label" htmlFor="sortDir">Направление</label>
-                    <select
-                        id="sortDir"
-                        className="control"
-                        value={selectedFilters.sortDirection}
-                        onChange={(e) => setSelectedFilters((prev) => ({ ...prev, sortDirection: e.target.value }))}
-                    >
-                        <option value="asc">По возрастанию</option>
-                        <option value="desc">По убыванию</option>
-                    </select>
+                        return (
+                            <div className={`accItem ${isOpen ? "open" : ""}`}>
+                                <button
+                                    type="button"
+                                    className="accTrigger"
+                                    onClick={() => toggle(title)}
+                                    aria-expanded={isOpen}
+                                    aria-controls={panelId}
+                                >
+                                    <span className="accTitle">{title}</span>
+                                    <span className="accValue">{sortByLabel}</span>
+                                    <span className="chevron" aria-hidden="true" />
+                                </button>
+
+                                <div id={panelId} className="accPanel" role="region" aria-label={title}>
+                                    {sortMenus[title].map((opt) => (
+                                        <label
+                                            key={opt.value}
+                                            className={`option ${selectedFilters.sortBy === opt.value ? "checked" : ""}`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedFilters.sortBy === opt.value}
+                                                onChange={() => handleSortPick(title, opt.value)}
+                                            />
+                                            <span>{opt.label}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })()}
+
+                    {/* Направление */}
+                    {(() => {
+                        const title = "Направление";
+                        const isOpen = openCategory === title;
+                        const panelId = "panel-sortDir";
+
+                        return (
+                            <div className={`accItem ${isOpen ? "open" : ""}`}>
+                                <button
+                                    type="button"
+                                    className="accTrigger"
+                                    onClick={() => toggle(title)}
+                                    aria-expanded={isOpen}
+                                    aria-controls={panelId}
+                                >
+                                    <span className="accTitle">{title}</span>
+                                    <span className="accValue">{sortDirLabel}</span>
+                                    <span className="chevron" aria-hidden="true" />
+                                </button>
+
+                                <div id={panelId} className="accPanel" role="region" aria-label={title}>
+                                    {sortMenus[title].map((opt) => (
+                                        <label
+                                            key={opt.value}
+                                            className={`option ${selectedFilters.sortDirection === opt.value ? "checked" : ""}`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedFilters.sortDirection === opt.value}
+                                                onChange={() => handleSortPick(title, opt.value)}
+                                            />
+                                            <span>{opt.label}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })()}
                 </div>
             </div>
 
             <div className="divider" />
+
             <div className="filtersCardSection">
                 <div className="sectionTitle">Параметры</div>
 
@@ -170,14 +276,17 @@ export default function Filters({ onFilter }) {
                         const panelId = `panel-${title.replace(/\s/g, "-")}`;
 
                         const value =
-                            title === "Тип товара" ? selectedFilters.type :
-                            title === "Бренд" ? selectedFilters.brand :
-                            title === "Цена" ? selectedFilters.selectedPrice :
-                            title === "Наличие"
-                                            ? (selectedFilters.isInStock === null
-                                                ? null
-                                                : selectedFilters.isInStock ? "В наличии" : "Нет в наличии")
-                                            : null;
+                            title === "Тип товара"
+                                ? selectedFilters.type
+                                : title === "Цена"
+                                    ? priceLabel
+                                    : title === "Наличие"
+                                        ? selectedFilters.isInStock === null
+                                            ? null
+                                            : selectedFilters.isInStock
+                                                ? "В наличии"
+                                                : "Нет в наличии"
+                                        : null;
 
                         return (
                             <div key={title} className={`accItem ${isOpen ? "open" : ""}`}>
@@ -193,12 +302,7 @@ export default function Filters({ onFilter }) {
                                     <span className="chevron" aria-hidden="true" />
                                 </button>
 
-                                <div
-                                    id={panelId}
-                                    className="accPanel"
-                                    role="region"
-                                    aria-label={title}
-                                >
+                                <div id={panelId} className="accPanel" role="region" aria-label={title}>
                                     {items.map((item) => {
                                         const checked = value === item;
 

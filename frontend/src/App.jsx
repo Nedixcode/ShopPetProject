@@ -12,18 +12,17 @@ import { isTokenValid, isAdmin } from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
-function ProtectedRoute({ children, adminOnly = false }) {
+import BasketPage from "./pages/BasketPage";
+
+function ProtectedRoute({ children, adminOnly = false, userOnly = false }) {
     const token = localStorage.getItem("token");
 
-    if (!isTokenValid(token)) {
+    if (!isTokenValid(token)){
         localStorage.removeItem("token");
         return <Navigate to="/auth/login" replace />;
     }
-
-    if (adminOnly && !isAdmin(token)) {
-        return <Navigate to="/" replace />;
-    }
-
+    if (adminOnly && !isAdmin(token)) return <Navigate to="/" replace />;
+    if (userOnly && isAdmin(token)) return <Navigate to="/" replace />;
     return children;
 }
 
@@ -66,11 +65,14 @@ function AppContent() {
                             </div>
                         }
                     />
-                    <Route path="/auth/login" element={<LoginPage />} />
-                    <Route path="/auth/registration" element={<RegistrationPage />} />
-                    <Route path="/auth/registration/admin" element={<AdminRegistrationPage />} />
-                    <Route path="/profile" element={<ProfilePage/>} />
-                    <Route path="/search" element={<SearchPage />} />
+                    <Route
+                        path="/user/basket"
+                        element={
+                            <ProtectedRoute userOnly>
+                                <BasketPage />
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route
                         path="/admin"
                         element={
@@ -79,6 +81,19 @@ function AppContent() {
                             </ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/profile"
+                        element={
+                            <ProtectedRoute>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route path="/auth/login" element={<LoginPage />} />
+                    <Route path="/auth/registration" element={<RegistrationPage />} />
+                    <Route path="/auth/registration/admin" element={<AdminRegistrationPage />} />
+                    <Route path="/search" element={<SearchPage />} />
                     <Route path="/reset/request" element={<ResetPasswordPage />} />
                 </Routes>
             </main>
