@@ -1,0 +1,213 @@
+.basket-card{
+    display: grid;
+    grid-template-columns: 44px 108px 1fr;
+    gap: 14px;
+    align-items: start;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: 14px;
+    cursor: pointer;
+    transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.basket-card:hover{
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+
+.basket-card:focus-visible{
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+}
+
+.basket-card.is-selected{
+    border-color: rgba(220,83,11,.35);
+    background: rgba(220,83,11,.06);
+    box-shadow: 0 10px 28px rgba(220, 83, 11, 0.14);
+}
+
+.basket-check{
+    display: flex;
+    align-items: flex-start;
+    padding-top: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.basket-check input{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.basket-check-ui{
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(0,0,0,.03);
+    position: relative;
+}
+
+.basket-check input:focus-visible + .basket-check-ui{
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.basket-check input:checked + .basket-check-ui{
+    border-color: var(--primary);
+    background: rgba(220, 83, 11, .10);
+}
+
+.basket-check input:checked + .basket-check-ui::after{
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: 2px solid var(--primary);
+    border-left: 0;
+    border-top: 0;
+    transform: rotate(45deg);
+}
+
+.basket-media{
+    width: 108px;
+    height: 108px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+
+.basket-media img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.basket-title-row{
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.basket-title{
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+.basket-price{
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.basket-desc{
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.basket-controls{
+    margin-top: 12px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.basket-qty{
+    display: grid;
+    gap: 6px;
+}
+
+.basket-qty-label{
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* Stepper */
+.basket-stepper{
+    display: grid;
+    grid-template-columns: 40px 54px 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    background: rgba(255,255,255,.75);
+    box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+
+.basket-stepper-btn{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text);
+    transition: background .12s ease, color .12s ease;
+}
+
+.basket-stepper-btn:hover{
+    background: rgba(0,0,0,.04);
+}
+
+.basket-stepper-btn:disabled{
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.basket-stepper-btn:focus-visible{
+    outline: 3px solid var(--ring);
+    outline-offset: -3px;
+}
+
+.basket-stepper-value{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--text);
+    border-left: 1px solid rgba(47,47,53,.10);
+    border-right: 1px solid rgba(47,47,53,.10);
+}
+
+.basket-line-total{
+    display: grid;
+    gap: 4px;
+    text-align: right;
+}
+
+.basket-muted{
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.basket-line-total-value{
+    font-weight: 700;
+    color: var(--text);
+}
+
+@media (max-width: 720px){
+    .basket-card{
+        grid-template-columns: 44px 92px 1fr;
+    }
+    .basket-media{
+        width: 92px;
+        height: 92px;
+    }
+}

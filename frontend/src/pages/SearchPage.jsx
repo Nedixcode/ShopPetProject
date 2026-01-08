@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Filters from "../components/features/Filters/Filters";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/ui/ProductCard/ProductCard";
 
 export default function SearchPage() {
     const location = useLocation();

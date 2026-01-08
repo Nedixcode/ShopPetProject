@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
-export default function ProductCard({ product, isAdmin = false, onEdit, onDelete }) {
+export default function ProductCard({
+                                        product,
+                                        isAdmin = false,
+                                        onEdit,
+                                        onDelete,
+                                        onAddToBasket,
+                                    }) {
+    const [adding, setAdding] = useState(false);
+
+    const handleAdd = async() => {
+        if(!onAddToBasket) return;
+        try{
+            setAdding(true);
+            await onAddToBasket(product.id);
+        }
+        finally{
+            setAdding(false);
+        }
+    }
     return (
         <div className="product-card">
             {product.imageUrl ? (
@@ -42,7 +60,11 @@ export default function ProductCard({ product, isAdmin = false, onEdit, onDelete
                             </button>
                         </div>
                     ) : (
-                        <button className="product-button">В корзину</button>
+                        <button
+                            className="product-button"
+                            onClick={handleAdd}
+                            disabled={adding}
+                        >В корзину</button>
                     )}
                 </div>
             </div>

@@ -1,0 +1,221 @@
+.basket-page{
+    background: var(--background);
+    color: var(--text);
+}
+
+.basket-shell{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: calc(var(--pad) + 6px) var(--pad) 36px;
+}
+
+.basket-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.basket-h1{
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+}
+
+.basket-sub{
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.basket-toolbar{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.basket-btn{
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.65);
+    color: var(--text);
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.basket-btn:hover{
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.basket-btn:focus-visible{
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.basket-btn.danger{
+    border-color: rgba(220,83,11,.35);
+    background: rgba(220,83,11,.08);
+    color: var(--primary-dark);
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.basket-btn:disabled{
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.basket-grid{
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    align-items: start;
+}
+
+.basket-list{
+    display: grid;
+    gap: 12px;
+}
+
+.basket-summary{
+    position: sticky;
+    top: 16px;
+}
+
+.basket-summary-card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: 16px;
+}
+
+.basket-summary-title{
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.basket-summary-row{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(47,47,53,.12);
+}
+
+.basket-summary-divider{
+    height: 1px;
+    background: rgba(47,47,53,.12);
+    margin: 12px 0;
+}
+
+.basket-cta{
+    width: 100%;
+    height: 44px;
+    border-radius: 14px;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 18px rgba(220,83,11,.25);
+}
+
+.basket-cta:hover{
+    background: var(--primary-dark);
+}
+
+.basket-cta:disabled{
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.basket-note{
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+@media (max-width: 980px){
+    .basket-grid{
+        grid-template-columns: 1fr;
+    }
+    .basket-summary{
+        position: static;
+    }
+}
+
+.basket-head-left{ display: grid; gap: 6px; }
+
+.basket-title-line{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.basket-badge{
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.7);
+    color: var(--muted);
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.basket-badge.is-accent{
+    border-color: rgba(220,83,11,.35);
+    background: rgba(220,83,11,.10);
+    color: var(--primary-dark);
+}
+
+.basket-empty{
+    padding: 26px 0 6px;
+}
+
+.basket-empty-card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: 22px;
+}
+
+.basket-empty-title{
+    margin: 0;
+    font-size: 18px;
+}
+
+.basket-empty-sub{
+    margin: 8px 0 14px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.basket-empty-link{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 14px;
+    background: var(--primary);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+}
+.basket-empty-link:hover{ background: var(--primary-dark); }
+
