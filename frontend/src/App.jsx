@@ -12,7 +12,7 @@ import { isTokenValid, isAdmin } from "./utils/auth";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
-import BasketPage from "./pages/BasketPage";
+import BasketPage from "./pages/BasketPage/BasketPage"
 
 function ProtectedRoute({ children, adminOnly = false, userOnly = false }) {
     const token = localStorage.getItem("token");

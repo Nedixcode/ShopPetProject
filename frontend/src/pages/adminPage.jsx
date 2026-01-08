@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { parseJwt, isTokenValid, isAdmin } from "../utils/auth";
 import "../styles/Admin.css";
 import "../components/features/ProductArea/ProductArea.css";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/ui/ProductCard/ProductCard";
 import ProfileButton from "../components/features/ProfileButton/ProfileButton";
 import Spinner from "../components/ui/Spinner/Spinner";
 import ConfirmDeleteModal from "../components/modals/DeleteModal/ConfirmDeleteModal";
@@ -164,7 +164,6 @@ export default function AdminPanel() {
             </aside>
 
             <main className="admin-main">
-                {/* Верхняя панель контента */}
                 <div className="admin-topbar">
                     <input
                         type="text"
@@ -175,11 +174,9 @@ export default function AdminPanel() {
                     />
 
                     <div className="admin-topbar-actions">
-                        <ProfileButton /> {/* это и будет “переход в ЛК” */}
+                        <ProfileButton />
                     </div>
                 </div>
-
-                {/* Большой блок товаров */}
                 <section className="admin-content">
                     <div className="admin-content-head">
                         <h2>Товары</h2>
