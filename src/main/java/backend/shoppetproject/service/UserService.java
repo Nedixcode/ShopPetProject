@@ -75,27 +75,29 @@ public class UserService {
     }
 
     @Transactional
-    public BasketItemDto deleteProductFromBasket(Long productId, Principal principal) {
-        ProductEntity product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
-
+    public List<BasketItemDto> deleteProductsFromBasket(List<Long> productIds, Principal principal) {
         UserEntity user = userRepository.findByUserName(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
 
         BasketEntity basket = basketRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
-        BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
-                .orElseThrow(() -> new EntityNotFoundException("Товар не найден в корзине"));
+        return productIds.stream().map(productId -> {
+            ProductEntity product = productRepository.findById(productId)
+                    .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
-        if (basketItem.getQuantity() > 1) {
-            basketItem.setQuantity(basketItem.getQuantity() - 1);
-            basketItemRepository.save(basketItem);
-        } else {
-            basketItemRepository.delete(basketItem);
-        }
+            BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
+                    .orElseThrow(() -> new EntityNotFoundException("Товар не найден в корзине"));
 
-        return new BasketItemDto(basketItem);
+            if (basketItem.getQuantity() > 1) {
+                basketItem.setQuantity(basketItem.getQuantity() - 1);
+                basketItemRepository.save(basketItem);
+            } else {
+                basketItemRepository.delete(basketItem);
+            }
+
+            return new BasketItemDto(basketItem);
+        }).toList();
     }
 
     public List<ProductDto> getProductsInFavorites(Principal principal) {

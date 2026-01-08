@@ -1,22 +1,21 @@
 package backend.shoppetproject.dto;
 
 import backend.shoppetproject.entity.BasketItemEntity;
-import backend.shoppetproject.entity.ProductEntity;
 
 public class BasketItemDto {
-    private ProductEntity product;
+    private ProductDto product;
     private int quantity;
 
     public BasketItemDto(BasketItemEntity basketItem) {
-        this.product = basketItem.getProduct();
+        this.product = new ProductDto(basketItem.getProduct());
         this.quantity = basketItem.getQuantity();
     }
 
-    public ProductEntity getProduct() {
+    public ProductDto getProduct() {
         return product;
     }
 
-    public void setProduct(ProductEntity product) {
+    public void setProduct(ProductDto product) {
         this.product = product;
     }
 

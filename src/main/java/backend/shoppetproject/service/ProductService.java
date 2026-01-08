@@ -21,18 +21,11 @@ public class ProductService {
     public Page<ProductEntity> searchProducts(FilterDto filter) {
         boolean hasQuery = filter.getQuery() != null && !filter.getQuery().isBlank();
         boolean hasSort = filter.getSortBy() != null;
-        boolean emptyFilter = isEmptyFilter(filter);
 
         Sort sort = Sort.unsorted();
 
-        if (emptyFilter || (!hasQuery && !hasSort)) {
+        if (!hasQuery && !hasSort) {
             sort = Sort.by(Sort.Direction.DESC, "popularity");
-
-        } else if (!hasQuery) {
-            sort = Sort.by(
-                    Sort.Direction.fromString(filter.getSortDirection()),
-                    filter.getSortBy()
-            );
 
         } else if (hasSort) {
             sort = Sort.by(
@@ -42,6 +35,7 @@ public class ProductService {
         }
 
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);
+
         return productRepository.searchProducts(
                 filter.getQuery(),
                 filter.getType(),
@@ -50,15 +44,5 @@ public class ProductService {
                 filter.getMaxPrice(),
                 pageable
         );
-    }
-
-    public boolean isEmptyFilter(FilterDto filter) {
-        return (filter.getQuery() == null || filter.getQuery().isBlank()) &&
-                filter.getType() == null &&
-                filter.getIsInStock() == null &&
-                filter.getMinPrice() == null &&
-                filter.getMaxPrice() == null &&
-                filter.getSortBy() == null &&
-                filter.getSortDirection() == null;
     }
 }

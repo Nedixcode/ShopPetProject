@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -37,23 +38,24 @@ public class UserController {
         return ResponseEntity.ok(userService.addProductToBasket(id, principal));
     }
 
-    @DeleteMapping("/basket/{id}")
-    public ResponseEntity<BasketItemDto> deleteProductFromBasket(@PathVariable Long id, Principal principal) {
-        logger.info("вызвался метод deleteProductFromBasket, id товара = {}, userName = {}",
-                id, principal.getName());
+    @DeleteMapping("/basket")
+    public ResponseEntity<List<BasketItemDto>> deleteProductsFromBasket(@RequestBody List<Long> ids,
+                                                                        Principal principal) {
+        logger.info("вызвался метод deleteProductsFromBasket, ids товаров = {}, userName = {}",
+                ids, principal.getName());
 
-        return ResponseEntity.ok(userService.deleteProductFromBasket(id, principal));
+        return ResponseEntity.ok(userService.deleteProductsFromBasket(ids, principal));
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<List<ProductDto>> getProductsInFavorites(Principal principal){
+    public ResponseEntity<List<ProductDto>> getProductsInFavorites(Principal principal) {
         logger.info("вызвался метод getProductsInFavorites, userName = {}", principal.getName());
 
         return ResponseEntity.ok(userService.getProductsInFavorites(principal));
     }
 
     @PostMapping("/favorites/{id}")
-    public ResponseEntity<ProductDto> addProductToFavorites(@PathVariable Long id, Principal principal){
+    public ResponseEntity<ProductDto> addProductToFavorites(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод addProductToFavorites, id товара = {}, userName = {}",
                 id, principal.getName());
 
@@ -61,7 +63,7 @@ public class UserController {
     }
 
     @DeleteMapping("/favorites/{id}")
-    public ResponseEntity<ProductDto> deleteProductFromFavorites(@PathVariable Long id, Principal principal){
+    public ResponseEntity<ProductDto> deleteProductFromFavorites(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод deleteProductFromFavorites, id товара = {}, userName = {}",
                 id, principal.getName());
 
