@@ -102,7 +102,7 @@ public class ProductEntity {
         this.isInStock = isInStock;
     }
 
-    public int getNumberOfSales() {
+    public Integer getNumberOfSales() {
         return numberOfSales;
     }
 
