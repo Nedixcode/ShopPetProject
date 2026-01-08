@@ -82,22 +82,20 @@ public class UserService {
         BasketEntity basket = basketRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
-        return productIds.stream().map(productId -> {
+        productIds.forEach(productId -> {
             ProductEntity product = productRepository.findById(productId)
                     .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
             BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
                     .orElseThrow(() -> new EntityNotFoundException("Товар не найден в корзине"));
 
-            if (basketItem.getQuantity() > 1) {
-                basketItem.setQuantity(basketItem.getQuantity() - 1);
-                basketItemRepository.save(basketItem);
-            } else {
-                basketItemRepository.delete(basketItem);
-            }
+            basketItemRepository.delete(basketItem);
+        });
 
-            return new BasketItemDto(basketItem);
-        }).toList();
+        return basketItemRepository.findByBasket(basket)
+                .stream()
+                .map(BasketItemDto::new)
+                .toList();
     }
 
     public List<ProductDto> getProductsInFavorites(Principal principal) {
