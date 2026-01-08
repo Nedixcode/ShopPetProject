@@ -22,7 +22,7 @@ public class ProductService {
         boolean hasQuery = filter.getQuery() != null && !filter.getQuery().isBlank();
         boolean hasSort = filter.getSortBy() != null;
 
-        Sort sort = Sort.unsorted();
+        Sort sort;
 
         if (!hasQuery && !hasSort) {
             sort = Sort.by(Sort.Direction.DESC, "popularity");
@@ -32,6 +32,9 @@ public class ProductService {
                     Sort.Direction.fromString(filter.getSortDirection()),
                     filter.getSortBy()
             );
+
+        } else {
+            sort = Sort.by(Sort.Direction.DESC, "popularity");
         }
 
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);

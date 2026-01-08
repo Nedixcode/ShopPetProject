@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Query(value = """
             SELECT *
             FROM products
-            WHERE (:query IS NULL OR word_similarity(name, :query) > 0.3 OR word_similarity(description, :query) > 0.3)
+            WHERE (:query IS NULL OR name % :query OR description % :query)
             AND (:type IS NULL OR type = :type)
             AND (:isInStock IS NULL OR is_in_stock = :isInStock)
             AND (:minPrice IS NULL OR price >= :minPrice)
@@ -23,7 +23,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             countQuery = """
             SELECT COUNT(*)
             FROM products
-            WHERE (:query IS NULL OR word_similarity(name, :query) > 0.3 OR word_similarity(description, :query) > 0.3)
+            WHERE (:query IS NULL OR name % :query OR description % :query)
             AND (:type IS NULL OR type = :type)
             AND (:isInStock IS NULL OR is_in_stock = :isInStock)
             AND (:minPrice IS NULL OR price >= :minPrice)
