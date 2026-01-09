@@ -10,11 +10,9 @@ public class BasketItemEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "basket_id")
     private BasketEntity basket;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
     private ProductEntity product;
 
     @Column(name = "quantity")

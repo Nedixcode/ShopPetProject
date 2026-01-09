@@ -32,4 +32,3 @@ public class RoleEntity {
         this.name = name;
     }
 }
-

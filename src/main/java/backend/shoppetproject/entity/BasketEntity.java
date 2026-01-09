@@ -12,7 +12,6 @@ public class BasketEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)

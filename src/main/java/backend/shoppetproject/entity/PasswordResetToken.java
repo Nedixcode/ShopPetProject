@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "password_reset_token")
 public class PasswordResetToken {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "token")
