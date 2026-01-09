@@ -4,10 +4,12 @@ import backend.shoppetproject.entity.BasketEntity;
 import backend.shoppetproject.entity.BasketItemEntity;
 import backend.shoppetproject.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface BasketItemRepository extends JpaRepository<BasketItemEntity, Long> {
 
     List<BasketItemEntity> findByBasket(BasketEntity basket);

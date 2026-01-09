@@ -34,7 +34,7 @@ public class UserEntity {
     )
     private Set<ProductEntity> favoriteProducts = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

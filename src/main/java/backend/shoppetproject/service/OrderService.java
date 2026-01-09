@@ -56,6 +56,12 @@ public class OrderService {
         basket.getBasketItems().clear();
         basketRepository.save(basket);
 
-        return new OrderDto(order);
+        return new OrderDto(savedOrder);
+    }
+
+    public List<OrderDto> getOrders(Principal principal) {
+        List<OrderEntity> orders = orderRepository.findByUser_UserName(principal.getName());
+
+        return orders.stream().map(OrderDto::new).toList();
     }
 }

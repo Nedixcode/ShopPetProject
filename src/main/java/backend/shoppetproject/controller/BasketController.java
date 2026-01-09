@@ -4,6 +4,7 @@ import backend.shoppetproject.dto.BasketItemDto;
 import backend.shoppetproject.service.BasketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
@@ -33,7 +34,7 @@ public class BasketController {
         logger.info("вызвался метод addProductToBasket, id товара = {}, userName = {}",
                 id, principal.getName());
 
-        return ResponseEntity.ok(basketService.addProductToBasket(id, principal));
+        return ResponseEntity.status(HttpStatus.CREATED).body(basketService.addProductToBasket(id, principal));
     }
 
     @DeleteMapping("/basket")

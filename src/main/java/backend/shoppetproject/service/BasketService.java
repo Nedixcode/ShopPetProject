@@ -7,7 +7,6 @@ import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.repository.BasketItemRepository;
 import backend.shoppetproject.repository.BasketRepository;
 import backend.shoppetproject.repository.ProductRepository;
-import backend.shoppetproject.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +59,6 @@ public class BasketService {
                     return newBasketItem;
                 });
 
-        basketItem.setQuantity(basketItem.getQuantity() + 1);
         basketItemRepository.save(basketItem);
 
         return new BasketItemDto(basketItem);

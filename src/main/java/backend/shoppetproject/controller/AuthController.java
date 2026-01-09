@@ -6,6 +6,7 @@ import backend.shoppetproject.dto.RegisterDto;
 import backend.shoppetproject.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class AuthController {
         logger.info("вызвался метод registration, userName = {}", request.getUserName());
 
         authService.registerUser(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/registration/admin")
@@ -44,6 +45,6 @@ public class AuthController {
         logger.info("вызвался метод registrationAdmin, userName = {}", request.getUserName());
 
         authService.registerAdmin(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
