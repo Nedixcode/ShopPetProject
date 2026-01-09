@@ -1,41 +1,36 @@
 package backend.shoppetproject.service;
 
 import backend.shoppetproject.dto.BasketItemDto;
-import backend.shoppetproject.dto.ProductDto;
-import backend.shoppetproject.entity.*;
-import backend.shoppetproject.repository.*;
+import backend.shoppetproject.entity.BasketEntity;
+import backend.shoppetproject.entity.BasketItemEntity;
+import backend.shoppetproject.entity.ProductEntity;
+import backend.shoppetproject.repository.BasketItemRepository;
+import backend.shoppetproject.repository.BasketRepository;
+import backend.shoppetproject.repository.ProductRepository;
+import backend.shoppetproject.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.security.Principal;
 import java.util.List;
-import java.util.Set;
 
 @Service
-public class UserService {
+public class BasketService {
 
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final BasketRepository basketRepository;
     private final BasketItemRepository basketItemRepository;
 
-    public UserService(ProductRepository productRepository,
-                       UserRepository userRepository,
+    public BasketService(ProductRepository productRepository,
                        BasketRepository basketRepository,
                        BasketItemRepository basketItemRepository) {
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
         this.basketRepository = basketRepository;
         this.basketItemRepository = basketItemRepository;
     }
 
     public List<BasketItemDto> getProductsInBasket(Principal principal) {
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("пользователь не найден"));
-
-        BasketEntity basket = basketRepository.findByUserId(user.getId())
+        BasketEntity basket = basketRepository.findByUser_UserName(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
         List<BasketItemEntity> basketItemList = basketItemRepository.findByBasket(basket);
@@ -52,10 +47,7 @@ public class UserService {
         ProductEntity product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-
-        BasketEntity basket = basketRepository.findByUserId(user.getId())
+        BasketEntity basket = basketRepository.findByUser_UserName(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
         BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
@@ -76,10 +68,7 @@ public class UserService {
 
     @Transactional
     public List<BasketItemDto> deleteProductsFromBasket(List<Long> productIds, Principal principal) {
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-
-        BasketEntity basket = basketRepository.findByUserId(user.getId())
+        BasketEntity basket = basketRepository.findByUser_UserName(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
 
         productIds.forEach(productId -> {
@@ -96,42 +85,5 @@ public class UserService {
                 .stream()
                 .map(BasketItemDto::new)
                 .toList();
-    }
-
-    public List<ProductDto> getProductsInFavorites(Principal principal) {
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("пользователь не найден"));
-
-        Set<ProductEntity> productSet = user.getFavoriteProducts();
-
-        return productSet.stream().map(ProductDto::new).toList();
-    }
-
-    @Transactional
-    public ProductDto addProductToFavorites(Long productId, Principal principal) {
-        ProductEntity product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
-
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-
-        user.getFavoriteProducts().add(product);
-        userRepository.save(user);
-
-        return new ProductDto(product);
-    }
-
-    @Transactional
-    public ProductDto deleteProductFromFavorites(Long productId, Principal principal) {
-        ProductEntity product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
-
-        UserEntity user = userRepository.findByUserName(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-
-        user.getFavoriteProducts().remove(product);
-        userRepository.save(user);
-
-        return new ProductDto(product);
     }
 }

@@ -16,7 +16,7 @@ public class BasketItemEntity {
     private ProductEntity product;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 
 
     public BasketItemEntity() {}
@@ -45,7 +45,7 @@ public class BasketItemEntity {
         this.product = product;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 

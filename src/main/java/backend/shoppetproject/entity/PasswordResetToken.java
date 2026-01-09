@@ -56,4 +56,3 @@ public class PasswordResetToken {
         this.user = user;
     }
 }
-

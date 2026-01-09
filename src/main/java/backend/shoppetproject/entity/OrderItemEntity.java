@@ -10,7 +10,7 @@ public class OrderItemEntity {
     private Long id;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "price_at_purchase")
     private Integer priceAtPurchase;
@@ -33,7 +33,7 @@ public class OrderItemEntity {
         this.id = id;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 

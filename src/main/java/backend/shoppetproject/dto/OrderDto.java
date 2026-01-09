@@ -1,49 +1,27 @@
-package backend.shoppetproject.entity;
+package backend.shoppetproject.dto;
 
+import backend.shoppetproject.entity.OrderEntity;
 import backend.shoppetproject.enums.OrderStatus;
 import backend.shoppetproject.enums.PaymentStatus;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "orders")
-public class OrderEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "created_at")
+public class OrderDto {
     private LocalDateTime createdAt;
-
-    @Column(name = "estimated_delivery_time")
     private LocalDateTime estimatedDeliveryTime;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status")
     private PaymentStatus paymentStatus;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "order_status")
     private OrderStatus orderStatus;
+    private List<OrderItemDto> orderItems;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItemEntity> orderItems;
-
-    @ManyToOne
-    private UserEntity user;
-
-
-    public OrderEntity() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public OrderDto(OrderEntity order) {
+        this.createdAt = order.getCreatedAt();
+        this.estimatedDeliveryTime = order.getEstimatedDeliveryTime();
+        this.paymentStatus = order.getPaymentStatus();
+        this.orderStatus = order.getOrderStatus();
+        this.orderItems = order.getOrderItems()
+                .stream()
+                .map(OrderItemDto::new)
+                .toList();
     }
 
     public LocalDateTime getCreatedAt() {
@@ -78,19 +56,11 @@ public class OrderEntity {
         this.orderStatus = orderStatus;
     }
 
-    public List<OrderItemEntity> getOrderItems() {
+    public List<OrderItemDto> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(List<OrderItemEntity> orderItems) {
+    public void setOrderItems(List<OrderItemDto> orderItems) {
         this.orderItems = orderItems;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
     }
 }
