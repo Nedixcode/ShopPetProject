@@ -36,7 +36,6 @@ export default function RegistrationPage() {
                 <h1>Регистрация</h1>
                 <br />
                 <p className="login-subtitle">Создайте аккаунт, чтобы оформить заказы и следить за доставкой 📦</p>
-
                 <div className="login-form">
                     <input type="text" name="login" placeholder="Логин" value={form.login} onChange={handleChange} />
                     <input type="password" name="password" placeholder="Пароль" value={form.password} onChange={handleChange} />
