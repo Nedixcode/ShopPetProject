@@ -9,6 +9,7 @@ public class ProductDto {
     private String type;
     private Integer price;
     private Boolean isInStock;
+    private Boolean isFavorite;
     private String imageUrl;
 
     public ProductDto() {
@@ -22,6 +23,18 @@ public class ProductDto {
         this.price = entity.getPrice();
         this.isInStock = entity.getIsInStock();
         this.imageUrl = entity.getImageUrl();
+    }
+
+    public ProductDto(ProductEntity entity,
+                      Boolean isFavorite) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.description = entity.getDescription();
+        this.type = entity.getType();
+        this.price = entity.getPrice();
+        this.isInStock = entity.getIsInStock();
+        this.imageUrl = entity.getImageUrl();
+        this.isFavorite = isFavorite;
     }
 
     public Boolean getIsInStock() {
@@ -78,5 +91,13 @@ public class ProductDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 }

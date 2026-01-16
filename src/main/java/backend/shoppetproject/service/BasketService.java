@@ -84,4 +84,7 @@ public class BasketService {
                 .map(BasketItemDto::new)
                 .toList();
     }
+
+//    public BasketItemDto increaseCountOfProduct() {
+//    }
 }

@@ -45,4 +45,12 @@ public class BasketController {
 
         return ResponseEntity.ok(basketService.deleteProductsFromBasket(ids, principal));
     }
+
+//    @PutMapping("/basket/{id}")
+//    public ResponseEntity<BasketItemDto> increaseCountOfProduct(@PathVariable Long id, Principal principal) {
+//        logger.info("вызвался метод increaseCountOfProduct, id товара = {}. userName = {}",
+//                id, principal.getName());
+//
+//        return ResponseEntity.ok(basketService.increaseCountOfProduct());
+//    }
 }

@@ -6,9 +6,8 @@ import backend.shoppetproject.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import java.security.Principal;
 
 @RestController
 public class ProductController {
@@ -22,9 +21,10 @@ public class ProductController {
     }
 
     @PostMapping("/products/search")
-    public Page<ProductDto> searchProducts(@RequestBody FilterDto filter) {
+    public Page<ProductDto> searchProducts(@RequestBody FilterDto filter, Principal principal) {
         logger.info("вызвался метод searchProducts, filter = {}", filter.toString());
 
-        return productService.searchProducts(filter).map(ProductDto::new);
+        String username = principal != null ? principal.getName() : null;
+        return productService.searchProducts(filter, username);
     }
 }
