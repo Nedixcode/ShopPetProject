@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { User, LogIn } from "lucide-react"; // [web:72][web:73]
 import { parseJwt, isTokenValid } from "../../../utils/auth";
 import "../../layout/Header/Header.css";
 
@@ -24,17 +25,15 @@ export default function ProfileButton() {
         return <div className="spinner" title="Проверка входа..." />;
     }
 
-    return (
-        <>
-            {username ? (
-                <Link to="/profile" className="auth-btn">
-                    {username}
-                </Link>
-            ) : (
-                <Link to="/auth/login" className="auth-btn">
-                    Войти
-                </Link>
-            )}
-        </>
+    return username ? (
+        <Link to="/profile" className="auth-btn" title="Профиль">
+            <User size={18} />
+            <span>{username}</span>
+        </Link>
+    ) : (
+        <Link to="/auth/login" className="auth-btn" title="Войти">
+            <LogIn size={18} />
+            <span>Войти</span>
+        </Link>
     );
 }

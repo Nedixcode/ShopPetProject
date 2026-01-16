@@ -24,6 +24,7 @@ header {
     cursor: pointer;
 }
 
+/* Search */
 .search-box {
     display: flex;
     flex: 1;
@@ -33,40 +34,119 @@ header {
 
 .search-box input {
     flex: 1;
-    padding: 9px 12px;
+    padding: 10px 12px;
     border: none;
-    border-radius: 8px 0 0 8px;
+    border-radius: 12px 0 0 12px;
     outline: none;
-    background: white;
+    background: rgba(255,255,255,0.95);
     font-size: 0.95rem;
 }
 
 .search-box button {
     background: var(--primary-dark);
     border: none;
-    padding: 9px 14px;
+    padding: 10px 14px;
     color: white;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 12px 12px 0;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.2s ease, transform 0.08s ease;
 }
 
+.search-box button:hover { background: rgba(0,0,0,0.2); }
+.search-box button:active { transform: translateY(1px); }
+
+/* Actions */
 .header-actions {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.auth-btn, .cart-btn {
-    background: white;
-    color: var(--primary-dark);
-    border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
+/* ЕДИНЫЙ СТИЛЬ для кнопок/линков справа */
+.auth-btn,
+.cart-btn,
+.fav-btn {
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.92);
+    color: #111827;
+
     font-weight: 600;
-    transition: background 0.3s, transform 0.1s;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+
+    cursor: pointer;
     text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+    transition: transform .08s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 
-.auth-btn:hover, .cart-btn:hover { background: #e9ecef; transform: scale(1.03);}
+.auth-btn:hover,
+.cart-btn:hover,
+.fav-btn:hover {
+    background: rgba(255,255,255,1);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.16);
+}
+
+.auth-btn:active,
+.cart-btn:active,
+.fav-btn:active {
+    transform: translateY(1px);
+}
+
+.auth-btn:focus-visible,
+.cart-btn:focus-visible,
+.fav-btn:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.65);
+    outline-offset: 2px;
+}
+
+.cart-btn:disabled,
+.fav-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Кнопка-иконка (сердечко): квадратная */
+.fav-btn{
+    width: 42px;
+    padding: 0;
+}
+
+/* Иконки внутри кнопок (lucide svg) */
+.auth-btn svg,
+.cart-btn svg,
+.fav-btn svg {
+    flex: 0 0 auto;
+}
+
+/* Активное избранное */
+.fav-btn.active svg {
+    color: #e11d48;
+}
+
+/* (если где-то остался старый spinner) */
+.spinner{
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.35);
+    border-top-color: rgba(255,255,255,0.9);
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin{
+    to { transform: rotate(360deg); }
+}

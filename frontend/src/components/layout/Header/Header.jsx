@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SearchBar from "../../features/Search/SearchBar";
-import CustomSelect from "../../ui/CustomSelect/CustomSelect";
 import ProfileButton from "../../features/ProfileButton/ProfileButton";
 import "../../features/SearchDropdown/SearchDropdown.css";
+import FavoriteButton from "../../features/FavoriteButton/FavoriteButton"
+import { ShoppingCart } from "lucide-react";
 import { parseJwt, isTokenValid, isAdmin } from "../../../utils/auth";
 
 export default function Header() {
@@ -27,17 +28,16 @@ export default function Header() {
                 <div className="logo" onClick={() => navigate("/")}>
                     🛍 Ctrl+Alt+Buy
                 </div>
-
                 <SearchBar />
-
                 <div className="header-actions">
-                    <CustomSelect
-                        options={["Минск", "Могилев", "Гродно", "Брест", "Витебск", "Гомель"]}
-                        value={city}
-                        onChange={setCity}
-                    />
                     <ProfileButton />
-                    <button className="cart-btn" onClick={handleBasket}>🛒 Корзина</button>
+                    <FavoriteButton onClick={() => console.log("go favorites")} />
+                    <button
+                        className="cart-btn"
+                        onClick={handleBasket}
+                    >
+                        <ShoppingCart size={18} />
+                    </button>
                 </div>
             </div>
         </header>

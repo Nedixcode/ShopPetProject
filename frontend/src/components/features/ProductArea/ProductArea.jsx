@@ -8,7 +8,7 @@ import { isTokenValid, isAdmin } from "../../../utils/auth";
 export default function ProductArea({ filters }) {
     const { products, loading, error } = useProducts(filters);
 
-    const handleAddToBasket = async(productId) => {
+    const handleAddToBasket = async( productId) => {
         const token = localStorage.getItem("token");
         if(!isTokenValid(token) || isAdmin(token)){
             alert("Корзина доступна только для пользователей");
@@ -29,7 +29,12 @@ export default function ProductArea({ filters }) {
         <div className="product-area">
             <div className="product-grid">
                 {products.map((p) => (
-                    <ProductCard key={p.id} product={p} onAddToBasket={handleAddToBasket}/>
+                    <ProductCard
+                        key={p.id}
+                        product={p}
+                        onAddToBasket={handleAddToBasket}
+                        // onToggleFavorite={handleAddToFavourite}
+                    />
                 ))}
             </div>
         </div>
