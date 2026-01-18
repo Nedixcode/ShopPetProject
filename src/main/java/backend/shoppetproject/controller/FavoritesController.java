@@ -38,7 +38,7 @@ public class FavoritesController {
     }
 
     @DeleteMapping("/favorites/{id}")
-    public ResponseEntity<ProductDto> deleteProductFromFavorites(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<List<ProductDto>> deleteProductFromFavorites(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод deleteProductFromFavorites, id товара = {}, userName = {}",
                 id, principal.getName());
 

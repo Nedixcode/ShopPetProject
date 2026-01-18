@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class FavoritesService {
     private final UserRepository userRepository;
 
     public FavoritesService(ProductRepository productRepository,
-                         UserRepository userRepository) {
+                            UserRepository userRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
@@ -51,7 +52,7 @@ public class FavoritesService {
     }
 
     @Transactional
-    public ProductDto deleteProductFromFavorites(Long productId, Principal principal) {
+    public List<ProductDto> deleteProductFromFavorites(Long productId, Principal principal) {
         ProductEntity product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
@@ -61,6 +62,6 @@ public class FavoritesService {
         user.getFavoriteProducts().remove(product);
         userRepository.save(user);
 
-        return new ProductDto(product);
+        return user.getFavoriteProducts().stream().map((ProductDto::new)).toList();
     }
 }
