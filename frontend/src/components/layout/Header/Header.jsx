@@ -9,7 +9,6 @@ import { ShoppingCart } from "lucide-react";
 import { parseJwt, isTokenValid, isAdmin } from "../../../utils/auth";
 
 export default function Header() {
-    const [city, setCity] = useState("Минск");
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
 
@@ -22,6 +21,16 @@ export default function Header() {
         console.log('Успешных вход');
         navigate('/user/basket');
     }
+
+    const handleFavorite = () => {
+        if(!isTokenValid(token) || isAdmin(token)){
+            alert("Избранное доступно только для пользователей");
+            navigate('/');
+            return;
+        }
+        navigate('/user/favorites')
+    }
+
     return (
         <header>
             <div className="header-container">
@@ -31,7 +40,7 @@ export default function Header() {
                 <SearchBar />
                 <div className="header-actions">
                     <ProfileButton />
-                    <FavoriteButton onClick={() => console.log("go favorites")} />
+                    <FavoriteButton onClick={handleFavorite} />
                     <button
                         className="cart-btn"
                         onClick={handleBasket}

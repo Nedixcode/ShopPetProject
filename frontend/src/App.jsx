@@ -13,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import BasketPage from "./pages/BasketPage/BasketPage"
+import FavoritePage from "./pages/FavoritePage/FavoritePage"
 
 function ProtectedRoute({ children, adminOnly = false, userOnly = false }) {
     const token = localStorage.getItem("token");
@@ -70,6 +71,14 @@ function AppContent() {
                         element={
                             <ProtectedRoute userOnly>
                                 <BasketPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/user/favorites"
+                        element={
+                            <ProtectedRoute userOnly>
+                                <FavoritePage></FavoritePage>
                             </ProtectedRoute>
                         }
                     />
