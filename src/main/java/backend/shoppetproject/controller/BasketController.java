@@ -46,11 +46,19 @@ public class BasketController {
         return ResponseEntity.ok(basketService.deleteProductsFromBasket(ids, principal));
     }
 
-//    @PutMapping("/basket/{id}")
-//    public ResponseEntity<BasketItemDto> increaseCountOfProduct(@PathVariable Long id, Principal principal) {
-//        logger.info("вызвался метод increaseCountOfProduct, id товара = {}. userName = {}",
-//                id, principal.getName());
-//
-//        return ResponseEntity.ok(basketService.increaseCountOfProduct());
-//    }
+    @PutMapping("/basket/{id}/increase")
+    public ResponseEntity<BasketItemDto> increaseCountOfProduct(@PathVariable Long id, Principal principal) {
+        logger.info("вызвался метод increaseCountOfProduct, id товара = {}. userName = {}",
+                id, principal.getName());
+
+        return ResponseEntity.ok(basketService.increaseCountOfProduct(id, principal));
+    }
+
+    @PutMapping("/basket/{id}/decrease")
+    public ResponseEntity<BasketItemDto> decreaseCountOfProduct(@PathVariable Long id, Principal principal) {
+        logger.info("вызвался метод decreaseCountOfProduct, id товара = {}. userName = {}",
+                id, principal.getName());
+
+        return ResponseEntity.ok(basketService.decreaseCountOfProduct(id, principal));
+    }
 }

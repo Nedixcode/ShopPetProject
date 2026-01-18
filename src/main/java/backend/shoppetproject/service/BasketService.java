@@ -21,8 +21,8 @@ public class BasketService {
     private final BasketItemRepository basketItemRepository;
 
     public BasketService(ProductRepository productRepository,
-                       BasketRepository basketRepository,
-                       BasketItemRepository basketItemRepository) {
+                         BasketRepository basketRepository,
+                         BasketItemRepository basketItemRepository) {
         this.productRepository = productRepository;
         this.basketRepository = basketRepository;
         this.basketItemRepository = basketItemRepository;
@@ -85,6 +85,25 @@ public class BasketService {
                 .toList();
     }
 
-//    public BasketItemDto increaseCountOfProduct() {
-//    }
+    public BasketItemDto increaseCountOfProduct(Long productId, Principal principal) {
+        BasketItemEntity basketItem = basketItemRepository
+                .findByBasket_User_UserNameAndProduct_Id(principal.getName(), productId)
+                .orElseThrow(() -> new EntityNotFoundException("Ошибка при поиске корзины"));
+
+        basketItem.setQuantity(basketItem.getQuantity() + 1);
+        basketItemRepository.save(basketItem);
+
+        return new BasketItemDto(basketItem);
+    }
+
+    public BasketItemDto decreaseCountOfProduct(Long productId, Principal principal) {
+        BasketItemEntity basketItem = basketItemRepository
+                .findByBasket_User_UserNameAndProduct_Id(principal.getName(), productId)
+                .orElseThrow(() -> new EntityNotFoundException("Ошибка при поиске корзины"));
+
+        basketItem.setQuantity(basketItem.getQuantity() - 1);
+        basketItemRepository.save(basketItem);
+
+        return new BasketItemDto(basketItem);
+    }
 }
