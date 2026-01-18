@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Trash2, Heart } from "lucide-react";
-import { getFavorites } from "../../api/FavoritesApi";
+import { getFavorites, deleteFavorites } from "../../api/FavoritesApi";
 import "./FavoritePage.css";
 
 export default function FavoritePage() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         let cancelled = false;
@@ -16,7 +17,7 @@ export default function FavoritePage() {
                 setLoading(true);
                 setError(null);
 
-                const data = await getFavorites(); // ожидается List<ProductDto>
+                const data = await getFavorites(token);
                 if (!cancelled) setItems(Array.isArray(data) ? data : []);
             } catch (e) {
                 if (!cancelled) setError(e);
@@ -24,9 +25,7 @@ export default function FavoritePage() {
                 if (!cancelled) setLoading(false);
             }
         }
-
         load();
-
         return () => {
             cancelled = true;
         };
@@ -37,9 +36,14 @@ export default function FavoritePage() {
         [items]
     );
 
-    const handleRemove = (id) => {
-        // Тут лучше дернуть API (DELETE /favorites/{id}) и потом обновить список.
-        setItems((prev) => prev.filter((p) => p.id !== id));
+    const handleRemove = async (productId) => {
+        const response = await deleteFavorites(token, productId);
+        if(!response.ok){
+            alert(`Ошибка. Статус ${response.status}`);
+            return;
+        }
+
+        alert("Удалено успешно")
     };
 
     if (loading) {
@@ -121,8 +125,8 @@ export default function FavoritePage() {
                                     <div className="fav-card__noImage">Нет изображения</div>
                                 )}
 
-                                <span className={`fav-badge ${p.inStock ? "ok" : "no"}`}>
-                  {p.inStock ? "В наличии" : "Нет в наличии"}
+                                <span className={`fav-badge ${p.isInStock  ? "ok" : "no"}`}>
+                  {p.isInStock  ? "В наличии" : "Нет в наличии"}
                 </span>
                             </div>
 
@@ -159,7 +163,7 @@ export default function FavoritePage() {
                                     <button
                                         type="button"
                                         className="fav-primaryBtn"
-                                        disabled={!p.inStock}
+                                        disabled={!p.isInStock }
                                         onClick={() => console.log("add to basket", p.id)}
                                     >
                                         В корзину

@@ -1,4 +1,5 @@
 import React from "react";
+import { Minus, Plus } from "lucide-react";
 import "./BasketCard.css";
 
 export default function BasketCard({
@@ -19,6 +20,8 @@ export default function BasketCard({
     };
 
     const toggle = () => onToggleSelect(item.id);
+
+    const inStock = item.inStock ?? item.available ?? true; // если поля нет — считаем что в наличии
 
     return (
         <article
@@ -44,6 +47,9 @@ export default function BasketCard({
 
             <div className="basket-media" aria-hidden="true">
                 <img src={item.imageUrl} alt={item.name} loading="lazy" />
+                <span className={`basket-stock ${inStock ? "ok" : "no"}`}>
+          {inStock ? "В наличии" : "Нет в наличии"}
+        </span>
             </div>
 
             <div className="basket-main">
@@ -65,8 +71,9 @@ export default function BasketCard({
                                 onClick={dec}
                                 disabled={Number(quantity) <= 1}
                                 aria-label="Уменьшить количество"
+                                title="Уменьшить"
                             >
-                                −
+                                <Minus size={16} />
                             </button>
 
                             <div className="basket-stepper-value" aria-label={`Количество: ${quantity}`}>
@@ -78,8 +85,10 @@ export default function BasketCard({
                                 type="button"
                                 onClick={inc}
                                 aria-label="Увеличить количество"
+                                title="Увеличить"
+                                disabled={!inStock}
                             >
-                                +
+                                <Plus size={16} />
                             </button>
                         </div>
                     </div>

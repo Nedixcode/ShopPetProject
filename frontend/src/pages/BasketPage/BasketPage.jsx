@@ -1,5 +1,5 @@
 import React from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, ShoppingCart } from "lucide-react"; // [web:2][web:68]
 import BasketCard from "../../components/ui/BasketCard/BasketCard";
 import { useBasket } from "../../hooks/useBasket";
 import "./BasketPage.css";
@@ -27,27 +27,46 @@ export default function BasketPage() {
     return (
         <div className="basket-page">
             <div className="basket-shell">
-                <header className="basket-header">
-                    <div className="basket-head-left">
-                        <div className="basket-title-line">
-                            <h1 className="basket-h1">Корзина</h1>
-                            <span className="basket-badge">{items.length} шт.</span>
-                            <span className={`basket-badge ${selectedCount ? "is-accent" : ""}`}>
-                Выбрано: {selectedCount}
-              </span>
-                        </div>
+                <header className="basket-hero">
+                    <div className="basket-hero__left">
+                        <h1 className="basket-title">
+                            <ShoppingCart size={22} />
+                            Корзина
+                        </h1>
                         <p className="basket-sub">
                             Нажмите на карточку, чтобы выбрать товар. Количество меняется кнопками +/−.
                         </p>
+                    </div>
+
+                    <div className="basket-hero__right">
+                        <div className="basket-chip">
+                            Товаров: <b>{items.length}</b>
+                        </div>
+                        <div className={`basket-chip ${selectedCount ? "is-accent" : ""}`}>
+                            Выбрано: <b>{selectedCount}</b>
+                        </div>
+                        <div className="basket-chip">
+                            Сумма: <b>{subtotal.toFixed(2)} BYN</b>
+                        </div>
+                        <div className={`basket-chip ${selectedCount ? "is-accent" : ""}`}>
+                            Выбрано на: <b>{selectedSubtotal.toFixed(2)} BYN</b>
+                        </div>
                     </div>
 
                     <div className="basket-toolbar">
                         <button className="basket-btn" onClick={selectAll} type="button" disabled={isEmpty}>
                             Выбрать все
                         </button>
-                        <button className="basket-btn" onClick={clearSelection} type="button" disabled={selectedCount === 0}>
+
+                        <button
+                            className="basket-btn"
+                            onClick={clearSelection}
+                            type="button"
+                            disabled={selectedCount === 0}
+                        >
                             Снять выбор
                         </button>
+
                         <button
                             className="basket-btn danger"
                             type="button"
@@ -65,8 +84,12 @@ export default function BasketPage() {
                     <div className="basket-empty">
                         <div className="basket-empty-card">
                             <h2 className="basket-empty-title">Корзина пуста</h2>
-                            <p className="basket-empty-sub">Добавьте товары на главной странице, чтобы они появились здесь.</p>
-                            <a className="basket-empty-link" href="/">Перейти к товарам</a>
+                            <p className="basket-empty-sub">
+                                Добавьте товары на главной странице, чтобы они появились здесь.
+                            </p>
+                            <a className="basket-empty-link" href="/">
+                                Перейти к товарам
+                            </a>
                         </div>
                     </div>
                 ) : (
