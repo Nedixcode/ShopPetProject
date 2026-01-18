@@ -3,12 +3,13 @@ import ProductCard from "../../ui/ProductCard/ProductCard";
 import Spinner from "../../ui/Spinner/Spinner";
 import useProducts from "../../../hooks/useProducts";
 import { addProductToBasket } from "../../../api/BasketApi"
+import { addProductToFavorite } from "../../../api/FavoritesApi"
 import { isTokenValid, isAdmin } from "../../../utils/auth";
 
 export default function ProductArea({ filters }) {
     const { products, loading, error } = useProducts(filters);
 
-    const handleAddToBasket = async( productId) => {
+    const handleAddToBasket = async (productId) => {
         const token = localStorage.getItem("token");
         if(!isTokenValid(token) || isAdmin(token)){
             alert("Корзина доступна только для пользователей");
@@ -22,6 +23,21 @@ export default function ProductArea({ filters }) {
         alert("Товар добавлен в корзину");
     }
 
+    const handleAddToFavourite = async (productId) => {
+        const token = localStorage.getItem("token");
+        if(!isTokenValid(token) || isAdmin(token)){
+            alert("Избранное доступно только для пользователей");
+            return;
+        }
+
+        const response = await addProductToFavorite(productId, token);
+        if(!response.ok){
+            alert(`Код ошибки: ${response.status}`);
+            return;
+        }
+        alert("Успех");
+    }
+
     if (loading) return <Spinner text="Загрузка товаров..." />;
     if (error) return <div className="error">{error}</div>;
 
@@ -33,7 +49,7 @@ export default function ProductArea({ filters }) {
                         key={p.id}
                         product={p}
                         onAddToBasket={handleAddToBasket}
-                        // onToggleFavorite={handleAddToFavourite}
+                        onToggleFavorite={handleAddToFavourite}
                     />
                 ))}
             </div>
