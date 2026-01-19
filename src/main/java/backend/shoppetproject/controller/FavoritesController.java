@@ -11,7 +11,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/favorites")
 public class FavoritesController {
 
     private static final Logger logger = LoggerFactory.getLogger(FavoritesController.class);
@@ -22,14 +22,14 @@ public class FavoritesController {
         this.favoritesService = favoritesService;
     }
 
-    @GetMapping("/favorites")
+    @GetMapping()
     public ResponseEntity<List<ProductDto>> getProductsInFavorites(Principal principal) {
         logger.info("вызвался метод getProductsInFavorites, userName = {}", principal.getName());
 
         return ResponseEntity.ok(favoritesService.getProductsInFavorites(principal));
     }
 
-    @PostMapping("/favorites/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<ProductDto> addProductToFavorites(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод addProductToFavorites, id товара = {}, userName = {}",
                 id, principal.getName());
@@ -37,7 +37,7 @@ public class FavoritesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(favoritesService.addProductToFavorites(id, principal));
     }
 
-    @DeleteMapping("/favorites/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<List<ProductDto>> deleteProductFromFavorites(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод deleteProductFromFavorites, id товара = {}, userName = {}",
                 id, principal.getName());

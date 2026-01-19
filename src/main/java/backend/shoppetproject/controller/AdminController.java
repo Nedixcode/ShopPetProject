@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/product")
 public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -23,7 +23,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PostMapping(value = "/product", consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<ProductDto> createProduct(
             @RequestPart("product") String productJson,
             @RequestPart(value = "image", required = false) MultipartFile imageFile
@@ -38,14 +38,14 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long id) {
         logger.info("вызвался метод deleteProduct, id = {}", id);
 
         return ResponseEntity.ok(adminService.deleteProduct(id));
     }
 
-    @PutMapping(value = "/product/{id}", consumes = {"multipart/form-data"})
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable Long id,
             @RequestPart("product") ProductDto productDto,

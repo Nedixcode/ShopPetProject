@@ -17,7 +17,9 @@ public class PasswordResetService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public PasswordResetService(PasswordResetTokenRepository tokenRepo, UserRepository userRepo, PasswordEncoder passwordEncoder) {
+    public PasswordResetService(PasswordResetTokenRepository tokenRepo,
+                                UserRepository userRepo,
+                                PasswordEncoder passwordEncoder) {
         this.tokenRepo = tokenRepo;
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;

@@ -11,7 +11,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/basket")
 public class BasketController {
 
     private static final Logger logger = LoggerFactory.getLogger(BasketController.class);
@@ -22,14 +22,14 @@ public class BasketController {
         this.basketService = basketService;
     }
 
-    @GetMapping("/basket/products")
+    @GetMapping("/products")
     public ResponseEntity<List<BasketItemDto>> getProductsInBasket(Principal principal) {
         logger.info("вызвался метод getProductsInBasket, userName = {}", principal.getName());
 
         return ResponseEntity.ok(basketService.getProductsInBasket(principal));
     }
 
-    @PostMapping("/basket/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<BasketItemDto> addProductToBasket(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод addProductToBasket, id товара = {}, userName = {}",
                 id, principal.getName());
@@ -37,7 +37,7 @@ public class BasketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(basketService.addProductToBasket(id, principal));
     }
 
-    @DeleteMapping("/basket")
+    @DeleteMapping()
     public ResponseEntity<List<BasketItemDto>> deleteProductsFromBasket(@RequestBody List<Long> ids,
                                                                         Principal principal) {
         logger.info("вызвался метод deleteProductsFromBasket, ids товаров = {}, userName = {}",
@@ -46,7 +46,7 @@ public class BasketController {
         return ResponseEntity.ok(basketService.deleteProductsFromBasket(ids, principal));
     }
 
-    @PutMapping("/basket/{id}/increase")
+    @PutMapping("/{id}/increase")
     public ResponseEntity<BasketItemDto> increaseCountOfProduct(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод increaseCountOfProduct, id товара = {}. userName = {}",
                 id, principal.getName());
@@ -54,7 +54,7 @@ public class BasketController {
         return ResponseEntity.ok(basketService.increaseCountOfProduct(id, principal));
     }
 
-    @PutMapping("/basket/{id}/decrease")
+    @PutMapping("/{id}/decrease")
     public ResponseEntity<BasketItemDto> decreaseCountOfProduct(@PathVariable Long id, Principal principal) {
         logger.info("вызвался метод decreaseCountOfProduct, id товара = {}. userName = {}",
                 id, principal.getName());

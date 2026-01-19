@@ -1,24 +1,28 @@
 package backend.shoppetproject.service;
 
 import backend.shoppetproject.dto.OrderDto;
-import backend.shoppetproject.entity.*;
+import backend.shoppetproject.entity.BasketEntity;
+import backend.shoppetproject.entity.BasketItemEntity;
+import backend.shoppetproject.entity.OrderEntity;
+import backend.shoppetproject.entity.OrderItemEntity;
 import backend.shoppetproject.enums.OrderStatus;
 import backend.shoppetproject.enums.PaymentStatus;
-import backend.shoppetproject.repository.*;
-import jakarta.persistence.*;
+import backend.shoppetproject.repository.BasketRepository;
+import backend.shoppetproject.repository.OrderRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class OrderService {
+public class UserOrderService {
 
     private final BasketRepository basketRepository;
     private final OrderRepository orderRepository;
 
-    public OrderService(BasketRepository basketRepository, OrderRepository orderRepository) {
+    public UserOrderService(BasketRepository basketRepository, OrderRepository orderRepository) {
         this.basketRepository = basketRepository;
         this.orderRepository = orderRepository;
     }
@@ -63,5 +67,23 @@ public class OrderService {
         List<OrderEntity> orders = orderRepository.findByUser_UserName(principal.getName());
 
         return orders.stream().map(OrderDto::new).toList();
+    }
+
+    @Transactional
+    public OrderDto cancelOrder(Long orderId) {
+        OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Заказ не найден"));
+
+        if (order.getOrderStatus() == OrderStatus.DELIVERED) {
+            throw new IllegalStateException("Нельзя отменить доставленный заказ");
+        }
+
+        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+            throw new IllegalStateException("Заказ уже отменён");
+        }
+
+        order.setOrderStatus(OrderStatus.CANCELLED);
+
+        return new OrderDto(order);
     }
 }

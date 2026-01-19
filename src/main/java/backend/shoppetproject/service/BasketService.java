@@ -74,7 +74,7 @@ public class BasketService {
                     .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
             BasketItemEntity basketItem = basketItemRepository.findByBasketAndProduct(basket, product)
-                    .orElseThrow(() -> new EntityNotFoundException("Товар не найден в корзине"));
+                    .orElseThrow(() -> new EntityNotFoundException("Элемент корзины не найден"));
 
             basketItemRepository.delete(basketItem);
         });
@@ -88,7 +88,7 @@ public class BasketService {
     public BasketItemDto increaseCountOfProduct(Long productId, Principal principal) {
         BasketItemEntity basketItem = basketItemRepository
                 .findByBasket_User_UserNameAndProduct_Id(principal.getName(), productId)
-                .orElseThrow(() -> new EntityNotFoundException("Ошибка при поиске корзины"));
+                .orElseThrow(() -> new EntityNotFoundException("Ошибка при поиске элемента корзины"));
 
         basketItem.setQuantity(basketItem.getQuantity() + 1);
         basketItemRepository.save(basketItem);
@@ -99,7 +99,7 @@ public class BasketService {
     public BasketItemDto decreaseCountOfProduct(Long productId, Principal principal) {
         BasketItemEntity basketItem = basketItemRepository
                 .findByBasket_User_UserNameAndProduct_Id(principal.getName(), productId)
-                .orElseThrow(() -> new EntityNotFoundException("Ошибка при поиске корзины"));
+                .orElseThrow(() -> new EntityNotFoundException("Ошибка при поиске элемента корзины"));
 
         basketItem.setQuantity(basketItem.getQuantity() - 1);
         basketItemRepository.save(basketItem);
