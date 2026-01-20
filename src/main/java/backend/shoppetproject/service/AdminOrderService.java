@@ -1,12 +1,17 @@
 package backend.shoppetproject.service;
 
 import backend.shoppetproject.dto.OrderDto;
+import backend.shoppetproject.dto.OrderFilterDto;
 import backend.shoppetproject.entity.*;
 import backend.shoppetproject.enums.OrderStatus;
 import backend.shoppetproject.repository.*;
 import jakarta.persistence.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 public class AdminOrderService {
@@ -43,5 +48,28 @@ public class AdminOrderService {
         order.setOrderStatus(OrderStatus.DELIVERED);
 
         return new OrderDto(order);
+    }
+
+    public Page<OrderDto> searchOrders(OrderFilterDto filter) {
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime fromDate;
+
+        if (filter.getDays() != null && filter.getDays() > 0) {
+            fromDate = now.minusDays(filter.getDays());
+        } else {
+            fromDate = LocalDateTime.MIN;
+        }
+
+        Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize());
+
+        return orderRepository.searchOrders(
+                filter.getOrderStatus(),
+                filter.getPaymentStatus(),
+                filter.getUserName(),
+                fromDate,
+                now,
+                pageable
+        ).map(OrderDto::new);
     }
 }

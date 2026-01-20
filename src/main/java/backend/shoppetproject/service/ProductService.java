@@ -1,6 +1,6 @@
 package backend.shoppetproject.service;
 
-import backend.shoppetproject.dto.FilterDto;
+import backend.shoppetproject.dto.ProductFilterDto;
 import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.ProductEntity;
 import backend.shoppetproject.entity.UserEntity;
@@ -27,7 +27,7 @@ public class ProductService {
         this.userRepository = userRepository;
     }
 
-    public Page<ProductDto> searchProducts(FilterDto filter, String username) {
+    public Page<ProductDto> searchProducts(ProductFilterDto filter, String username) {
         boolean hasQuery = filter.getQuery() != null && !filter.getQuery().isBlank();
         boolean hasSort = filter.getSortBy() != null;
 

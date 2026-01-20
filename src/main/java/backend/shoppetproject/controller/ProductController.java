@@ -1,6 +1,6 @@
 package backend.shoppetproject.controller;
 
-import backend.shoppetproject.dto.FilterDto;
+import backend.shoppetproject.dto.ProductFilterDto;
 import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.service.ProductService;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class ProductController {
     }
 
     @PostMapping("/products/search")
-    public Page<ProductDto> searchProducts(@RequestBody FilterDto filter, Principal principal) {
+    public Page<ProductDto> searchProducts(@RequestBody ProductFilterDto filter, Principal principal) {
         logger.info("вызвался метод searchProducts, filter = {}", filter.toString());
 
         String username = principal != null ? principal.getName() : null;

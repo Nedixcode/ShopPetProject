@@ -31,7 +31,7 @@ public class UserOrderController {
 
     @GetMapping()
     public ResponseEntity<List<OrderDto>> getOrders(Principal principal) {
-        logger.info("Вызвался метод getOrders, userName = {}", principal.getName());
+        logger.info("Вызвался метод searchOrders, userName = {}", principal.getName());
 
         return ResponseEntity.ok().body(userOrderService.getOrders(principal));
     }

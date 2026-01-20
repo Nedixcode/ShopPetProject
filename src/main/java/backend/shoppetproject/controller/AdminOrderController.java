@@ -1,9 +1,11 @@
 package backend.shoppetproject.controller;
 
 import backend.shoppetproject.dto.OrderDto;
+import backend.shoppetproject.dto.OrderFilterDto;
 import backend.shoppetproject.service.AdminOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +33,12 @@ public class AdminOrderController {
         logger.info("вызвался метод setDelivered, id товара = {}", id);
 
         return ResponseEntity.ok(adminOrderService.setOrderDelivered(id));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<OrderDto>> searchOrders(@RequestBody OrderFilterDto filter) {
+        logger.info("вызвался метод searchOrders, filter = {}", filter.toString());
+
+        return ResponseEntity.ok(adminOrderService.searchOrders(filter));
     }
 }

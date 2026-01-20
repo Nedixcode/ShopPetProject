@@ -1,6 +1,6 @@
 package backend.shoppetproject.dto;
 
-public class FilterDto {
+public class ProductFilterDto {
     private String query;
     private String type;
     private Boolean isInStock;
