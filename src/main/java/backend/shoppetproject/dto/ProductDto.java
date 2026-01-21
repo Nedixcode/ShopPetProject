@@ -1,12 +1,13 @@
 package backend.shoppetproject.dto;
 
 import backend.shoppetproject.entity.ProductEntity;
+import backend.shoppetproject.enums.ProductType;
 
 public class ProductDto {
     private Long id;
     private String name;
     private String description;
-    private String type;
+    private ProductType type;
     private Integer price;
     private Boolean isInStock;
     private Boolean isFavorite;
@@ -69,11 +70,11 @@ public class ProductDto {
         this.description = description;
     }
 
-    public String getType() {
+    public ProductType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ProductType type) {
         this.type = type;
     }
 

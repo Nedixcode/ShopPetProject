@@ -1,7 +1,7 @@
 package backend.shoppetproject.service;
 
 import backend.shoppetproject.dto.OrderDto;
-import backend.shoppetproject.dto.OrderFilterDto;
+import backend.shoppetproject.dto.OrderFilter;
 import backend.shoppetproject.entity.*;
 import backend.shoppetproject.enums.OrderStatus;
 import backend.shoppetproject.repository.*;
@@ -50,7 +50,7 @@ public class AdminOrderService {
         return new OrderDto(order);
     }
 
-    public Page<OrderDto> searchOrders(OrderFilterDto filter) {
+    public Page<OrderDto> searchOrders(OrderFilter filter) {
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime fromDate;

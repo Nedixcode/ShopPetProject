@@ -1,8 +1,10 @@
 package backend.shoppetproject.dto;
 
-public class ProductFilterDto {
+import backend.shoppetproject.enums.ProductType;
+
+public class ProductFilter {
     private String query;
-    private String type;
+    private ProductType type;
     private Boolean isInStock;
     private Integer minPrice;
     private Integer maxPrice;
@@ -19,11 +21,11 @@ public class ProductFilterDto {
         this.query = query;
     }
 
-    public String getType() {
+    public ProductType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ProductType type) {
         this.type = type;
     }
 

@@ -1,8 +1,8 @@
 package backend.shoppetproject.service;
 
-import backend.shoppetproject.dto.AuthRequestDto;
-import backend.shoppetproject.dto.AuthResponseDto;
-import backend.shoppetproject.dto.RegisterDto;
+import backend.shoppetproject.dto.AuthRequest;
+import backend.shoppetproject.dto.AuthResponse;
+import backend.shoppetproject.dto.Register;
 import backend.shoppetproject.entity.BasketEntity;
 import backend.shoppetproject.entity.RoleEntity;
 import backend.shoppetproject.entity.UserEntity;
@@ -46,7 +46,7 @@ public class AuthService {
         this.basketRepository = basketRepository;
     }
 
-    public AuthResponseDto login(AuthRequestDto request) {
+    public AuthResponse login(AuthRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword())
         );
@@ -54,18 +54,18 @@ public class AuthService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String token = jwtUtil.generateToken(userDetails);
 
-        return new AuthResponseDto(token);
+        return new AuthResponse(token);
     }
 
-    public void registerUser(RegisterDto request) {
+    public void registerUser(Register request) {
         register(request, "USER");
     }
 
-    public void registerAdmin(RegisterDto request) {
+    public void registerAdmin(Register request) {
         register(request, "ADMIN");
     }
 
-    private void register(RegisterDto request, String roleName) {
+    private void register(Register request, String roleName) {
         if (userRepository.findByUserName(request.getUserName()).isPresent()) {
             throw new EntityExistsException("Пользователь уже существует");
         }
@@ -76,7 +76,7 @@ public class AuthService {
         createUserToRegister(request, role);
     }
 
-    public void createUserToRegister(RegisterDto request, RoleEntity role) {
+    public void createUserToRegister(Register request, RoleEntity role) {
         UserEntity user = new UserEntity();
         user.setUserName(request.getUserName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));

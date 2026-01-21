@@ -1,6 +1,6 @@
 package backend.shoppetproject.dto;
 
-public class PasswordResetDto {
+public class PasswordReset {
     private String token;
     private String newPassword;
 

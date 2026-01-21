@@ -1,7 +1,7 @@
 package backend.shoppetproject.controller;
 
 import backend.shoppetproject.dto.OrderDto;
-import backend.shoppetproject.dto.OrderFilterDto;
+import backend.shoppetproject.dto.OrderFilter;
 import backend.shoppetproject.service.AdminOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class AdminOrderController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Page<OrderDto>> searchOrders(@RequestBody OrderFilterDto filter) {
+    public ResponseEntity<Page<OrderDto>> searchOrders(@RequestBody OrderFilter filter) {
         logger.info("вызвался метод searchOrders, filter = {}", filter.toString());
 
         return ResponseEntity.ok(adminOrderService.searchOrders(filter));

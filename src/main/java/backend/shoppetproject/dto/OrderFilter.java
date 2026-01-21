@@ -1,6 +1,6 @@
 package backend.shoppetproject.dto;
 
-public class OrderFilterDto {
+public class OrderFilter {
     private String orderStatus;
     private String paymentStatus;
     private String userName;
@@ -58,7 +58,7 @@ public class OrderFilterDto {
 
     @Override
     public String toString() {
-        return "OrderFilterDto{" +
+        return "OrderFilter{" +
                 "orderStatus='" + orderStatus + '\'' +
                 ", paymentStatus='" + paymentStatus + '\'' +
                 ", userName='" + userName + '\'' +

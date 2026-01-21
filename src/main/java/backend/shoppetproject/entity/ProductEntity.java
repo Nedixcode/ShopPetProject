@@ -1,5 +1,6 @@
 package backend.shoppetproject.entity;
 
+import backend.shoppetproject.enums.ProductType;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -16,8 +17,9 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private String type;
+    private ProductType type;
 
     @Column(name = "price")
     private Integer price;
@@ -43,7 +45,7 @@ public class ProductEntity {
 
     public ProductEntity(String name,
                          String description,
-                         String type,
+                         ProductType type,
                          Integer price,
                          Boolean isInStock) {
         this.name = name;
@@ -77,11 +79,11 @@ public class ProductEntity {
         this.description = description;
     }
 
-    public String getType() {
+    public ProductType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ProductType type) {
         this.type = type;
     }
 

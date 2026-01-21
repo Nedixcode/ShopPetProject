@@ -1,9 +1,9 @@
 package backend.shoppetproject.dto;
 
-public class AuthResponseDto {
+public class AuthResponse {
     private String token;
 
-    public AuthResponseDto(String token) {
+    public AuthResponse(String token) {
         this.token = token;
     }
 

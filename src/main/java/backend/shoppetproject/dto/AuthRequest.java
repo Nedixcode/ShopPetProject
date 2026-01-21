@@ -1,6 +1,6 @@
 package backend.shoppetproject.dto;
 
-public class AuthRequestDto {
+public class AuthRequest {
     private String userName;
     private String password;
 

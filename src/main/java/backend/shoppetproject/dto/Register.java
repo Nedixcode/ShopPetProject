@@ -1,6 +1,6 @@
 package backend.shoppetproject.dto;
 
-public class RegisterDto {
+public class Register {
     private String userName;
     private String password;
     private String email;
