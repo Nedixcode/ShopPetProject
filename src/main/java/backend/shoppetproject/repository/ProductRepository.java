@@ -12,22 +12,24 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     @Query(value = """
-            SELECT *
-            FROM products
-            WHERE (:query IS NULL OR name % :query OR description % :query)
-            AND (:type IS NULL OR type = :type)
-            AND (:isInStock IS NULL OR is_in_stock = :isInStock)
-            AND (:minPrice IS NULL OR price >= :minPrice)
-            AND (:maxPrice IS NULL OR price <= :maxPrice)
+            SELECT p.*
+            FROM products p
+            JOIN product_types t ON p.product_type_id = t.id
+            WHERE (:query IS NULL OR p.name % :query OR p.description % :query)
+            AND (:type IS NULL OR t.name = :type)
+            AND (:isInStock IS NULL OR p.is_in_stock = :isInStock)
+            AND (:minPrice IS NULL OR p.price >= :minPrice)
+            AND (:maxPrice IS NULL OR p.price <= :maxPrice)
             """,
             countQuery = """
             SELECT COUNT(*)
-            FROM products
-            WHERE (:query IS NULL OR name % :query OR description % :query)
-            AND (:type IS NULL OR type = :type)
-            AND (:isInStock IS NULL OR is_in_stock = :isInStock)
-            AND (:minPrice IS NULL OR price >= :minPrice)
-            AND (:maxPrice IS NULL OR price <= :maxPrice)
+            FROM products p
+            JOIN product_types t ON p.product_type_id = t.id
+            WHERE (:query IS NULL OR p.name % :query OR p.description % :query)
+            AND (:type IS NULL OR t.name = :type)
+            AND (:isInStock IS NULL OR p.is_in_stock = :isInStock)
+            AND (:minPrice IS NULL OR p.price >= :minPrice)
+            AND (:maxPrice IS NULL OR p.price <= :maxPrice)
             """,
             nativeQuery = true)
     Page<ProductEntity> searchProducts(

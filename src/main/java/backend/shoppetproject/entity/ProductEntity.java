@@ -1,6 +1,5 @@
 package backend.shoppetproject.entity;
 
-import backend.shoppetproject.enums.ProductType;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -16,10 +15,6 @@ public class ProductEntity {
 
     @Column(name = "description")
     private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    private ProductType type;
 
     @Column(name = "price")
     private Integer price;
@@ -39,18 +34,21 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product")
     private List<BasketItemEntity> basketItems;
 
+    @ManyToOne
+    private ProductTypeEntity productType;
+
 
     public ProductEntity() {
     }
 
     public ProductEntity(String name,
                          String description,
-                         ProductType type,
+                         ProductTypeEntity productType,
                          Integer price,
                          Boolean isInStock) {
         this.name = name;
         this.description = description;
-        this.type = type;
+        this.productType = productType;
         this.price = price;
         this.isInStock = isInStock;
     }
@@ -77,14 +75,6 @@ public class ProductEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public ProductType getType() {
-        return type;
-    }
-
-    public void setType(ProductType type) {
-        this.type = type;
     }
 
     public Integer getPrice() {
@@ -133,5 +123,13 @@ public class ProductEntity {
 
     public void setPopularity(Integer popularity) {
         this.popularity = popularity;
+    }
+
+    public ProductTypeEntity getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductTypeEntity productType) {
+        this.productType = productType;
     }
 }

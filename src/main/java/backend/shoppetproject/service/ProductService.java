@@ -53,7 +53,7 @@ public class ProductService {
 
         Page<ProductEntity> page = productRepository.searchProducts(
                 filter.getQuery(),
-                filter.getType() != null ? filter.getType().name() : null,
+                filter.getType(),
                 filter.getIsInStock(),
                 filter.getMinPrice(),
                 filter.getMaxPrice(),
@@ -84,12 +84,10 @@ public class ProductService {
         PhotoPart photoPart = new PhotoPart();
         List<SimilarProduct> similarProducts = new ArrayList<>();
 
-        ProductPage productPage = new ProductPage(photoPart,
+        return new ProductPage(photoPart,
                 infoPart,
                 buyPart,
                 feedbackPart,
                 similarProducts);
-
-        return productPage;
     }
 }

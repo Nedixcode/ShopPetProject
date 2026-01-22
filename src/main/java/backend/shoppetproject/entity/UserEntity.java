@@ -1,6 +1,8 @@
 package backend.shoppetproject.entity;
 
+import backend.shoppetproject.enums.Role;
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +25,10 @@ public class UserEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @OneToOne(mappedBy = "user")
     private BasketEntity basket;
 
@@ -33,14 +39,6 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private Set<ProductEntity> favoriteProducts = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<RoleEntity> roles = new HashSet<>();
 
 
     public UserEntity() {
@@ -94,19 +92,19 @@ public class UserEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<RoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<RoleEntity> roles) {
-        this.roles = roles;
-    }
-
     public Set<ProductEntity> getFavoriteProducts() {
         return favoriteProducts;
     }
 
     public void setFavoriteProducts(Set<ProductEntity> favoriteProducts) {
         this.favoriteProducts = favoriteProducts;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

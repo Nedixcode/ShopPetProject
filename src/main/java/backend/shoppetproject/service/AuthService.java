@@ -4,43 +4,36 @@ import backend.shoppetproject.dto.AuthRequest;
 import backend.shoppetproject.dto.AuthResponse;
 import backend.shoppetproject.dto.Register;
 import backend.shoppetproject.entity.BasketEntity;
-import backend.shoppetproject.entity.RoleEntity;
 import backend.shoppetproject.entity.UserEntity;
+import backend.shoppetproject.enums.Role;
 import backend.shoppetproject.repository.BasketRepository;
-import backend.shoppetproject.repository.RoleRepository;
 import backend.shoppetproject.repository.UserRepository;
 import backend.shoppetproject.security.JwtUtil;
 import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Set;
 
 @Service
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final BasketRepository basketRepository;
 
     public AuthService(PasswordEncoder passwordEncoder,
                        UserRepository userRepository,
-                       RoleRepository roleRepository,
                        AuthenticationManager authenticationManager,
                        JwtUtil jwtUtil,
                        BasketRepository basketRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.basketRepository = basketRepository;
@@ -58,31 +51,28 @@ public class AuthService {
     }
 
     public void registerUser(Register request) {
-        register(request, "USER");
+        register(request, Role.USER);
     }
 
     public void registerAdmin(Register request) {
-        register(request, "ADMIN");
+        register(request, Role.ADMIN);
     }
 
-    private void register(Register request, String roleName) {
+    private void register(Register request, Role role) {
         if (userRepository.findByUserName(request.getUserName()).isPresent()) {
             throw new EntityExistsException("Пользователь уже существует");
         }
 
-        RoleEntity role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new EntityNotFoundException("Роль " + roleName + " не найдена"));
-
         createUserToRegister(request, role);
     }
 
-    public void createUserToRegister(Register request, RoleEntity role) {
+    public void createUserToRegister(Register request, Role role) {
         UserEntity user = new UserEntity();
         user.setUserName(request.getUserName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setRoles(Set.of(role));
+        user.setRole(role);
 
         userRepository.save(user);
 

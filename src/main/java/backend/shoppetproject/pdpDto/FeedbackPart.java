@@ -7,7 +7,6 @@ public class FeedbackPart {
     private Integer totalReviews;
     private List<Review> reviews;
 
-
     public Double getRating() {
         return rating;
     }

@@ -3,32 +3,36 @@ package backend.shoppetproject.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "roles")
-public class RoleEntity {
+@Table(name = "product_types")
+public class ProductTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", unique = true)
     private String name;
 
 
-    public RoleEntity() {
+    public ProductTypeEntity() {
     }
 
-    public Long getId() {
-        return id;
+    public ProductTypeEntity(String name) {
+        this.name = name;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

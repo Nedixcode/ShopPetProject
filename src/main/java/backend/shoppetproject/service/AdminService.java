@@ -2,30 +2,38 @@ package backend.shoppetproject.service;
 
 import backend.shoppetproject.dto.ProductDto;
 import backend.shoppetproject.entity.ProductEntity;
+import backend.shoppetproject.entity.ProductTypeEntity;
 import backend.shoppetproject.repository.ProductRepository;
+import backend.shoppetproject.repository.ProductTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class AdminService {
 
     private final ProductRepository productRepository;
     private final ImageService imageService;
+    private final ProductTypeRepository productTypeRepository;
 
-    public AdminService(ProductRepository productRepository, ImageService imageService) {
+    public AdminService(ProductRepository productRepository, ImageService imageService, ProductTypeRepository productTypeRepository) {
         this.productRepository = productRepository;
         this.imageService = imageService;
+        this.productTypeRepository = productTypeRepository;
     }
 
     public ProductDto createProduct(ProductDto productDto, MultipartFile imageFile) throws IOException {
         String imageUrl = imageService.saveImage(imageFile);
 
+        ProductTypeEntity type = productTypeRepository.findByName(productDto.getType())
+                .orElseThrow(() -> new EntityNotFoundException("Тип товара не найден"));
+
         ProductEntity productToCreate = new ProductEntity(
                 productDto.getName(),
                 productDto.getDescription(),
-                productDto.getType(),
+                type,
                 productDto.getPrice(),
                 productDto.getIsInStock()
         );
@@ -34,6 +42,28 @@ public class AdminService {
         productRepository.save(productToCreate);
 
         return new ProductDto(productToCreate);
+    }
+
+    public ProductDto updateProduct(Long id, ProductDto productDto, MultipartFile imageFile) throws IOException {
+        ProductEntity productToUpdate = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
+
+        ProductTypeEntity type = productTypeRepository.findByName(productDto.getType())
+                .orElseThrow(() -> new EntityNotFoundException("Тип товара не найден"));
+
+        productToUpdate.setName(productDto.getName());
+        productToUpdate.setDescription(productDto.getDescription());
+        productToUpdate.setProductType(type);
+        productToUpdate.setPrice(productDto.getPrice());
+        productToUpdate.setIsInStock(productDto.getIsInStock());
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imageUrl = imageService.saveImage(imageFile);
+            productToUpdate.setImageUrl(imageUrl);
+        }
+
+        productRepository.save(productToUpdate);
+        return new ProductDto(productToUpdate);
     }
 
     public ProductDto deleteProduct(Long id) {
@@ -46,22 +76,16 @@ public class AdminService {
         return new ProductDto(productToDelete);
     }
 
-    public ProductDto updateProduct(Long id, ProductDto productDto, MultipartFile imageFile) throws IOException {
-        ProductEntity productToUpdate = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Такой товар не найден"));
+    public List<String> getProductTypes() {
+        List<ProductTypeEntity> productTypes = productTypeRepository.findAll();
 
-        productToUpdate.setName(productDto.getName());
-        productToUpdate.setDescription(productDto.getDescription());
-        productToUpdate.setType(productDto.getType());
-        productToUpdate.setPrice(productDto.getPrice());
-        productToUpdate.setIsInStock(productDto.getIsInStock());
+        return productTypes.stream().map(ProductTypeEntity::getName).toList();
+    }
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imageUrl = imageService.saveImage(imageFile);
-            productToUpdate.setImageUrl(imageUrl);
-        }
+    public String addProductType(String productType) {
+        ProductTypeEntity productTypeToAdd = new ProductTypeEntity(productType);
+        productTypeRepository.save(productTypeToAdd);
 
-        productRepository.save(productToUpdate);
-        return new ProductDto(productToUpdate);
+        return productTypeToAdd.getName();
     }
 }
