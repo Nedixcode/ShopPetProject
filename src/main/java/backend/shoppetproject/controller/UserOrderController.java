@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -37,9 +38,10 @@ public class UserOrderController {
     }
 
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long id) {
-        logger.info("вызвался cancelOrder, id товара = {}", id);
+    public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long id,
+                                                Principal principal) throws IllegalAccessException {
+        logger.info("вызвался cancelOrder, id товара = {}, userName = {}", id, principal.getName());
 
-        return ResponseEntity.ok(userOrderService.cancelOrder(id));
+        return ResponseEntity.ok(userOrderService.cancelOrder(id, principal));
     }
 }

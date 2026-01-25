@@ -2,7 +2,12 @@ package backend.shoppetproject.pdpDto;
 
 public class BuyPart {
     private Integer price;
-    private boolean isFavorite; // если пользователь авторизован
+    private Boolean isFavorite;
+
+    public BuyPart(Integer price, Boolean isFavorite) {
+        this.price = price;
+        this.isFavorite = isFavorite;
+    }
 
     public Integer getPrice() {
         return price;

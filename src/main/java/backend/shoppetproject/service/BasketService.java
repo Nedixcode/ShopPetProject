@@ -85,6 +85,7 @@ public class BasketService {
                 .toList();
     }
 
+    @Transactional
     public BasketItemDto increaseCountOfProduct(Long productId, Principal principal) {
         BasketItemEntity basketItem = basketItemRepository
                 .findByBasket_User_UserNameAndProduct_Id(principal.getName(), productId)
@@ -96,6 +97,7 @@ public class BasketService {
         return new BasketItemDto(basketItem);
     }
 
+    @Transactional
     public BasketItemDto decreaseCountOfProduct(Long productId, Principal principal) {
         BasketItemEntity basketItem = basketItemRepository
                 .findByBasket_User_UserNameAndProduct_Id(principal.getName(), productId)

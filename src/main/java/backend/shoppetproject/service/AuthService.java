@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 
 @Service
@@ -58,7 +60,7 @@ public class AuthService {
         register(request, Role.ADMIN);
     }
 
-    private void register(Register request, Role role) {
+    public void register(Register request, Role role) {
         if (userRepository.findByUserName(request.getUserName()).isPresent()) {
             throw new EntityExistsException("Пользователь уже существует");
         }

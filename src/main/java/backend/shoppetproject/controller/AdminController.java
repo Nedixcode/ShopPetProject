@@ -72,4 +72,11 @@ public class AdminController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addProductType(productType));
     }
+
+    @DeleteMapping("/types/{productType}")
+    public ResponseEntity<String> deleteProductType(@PathVariable String productType) {
+        logger.info("вызвался метод deleteProduct, productType = {}", productType);
+
+        return ResponseEntity.ok(adminService.deleteProductType(productType));
+    }
 }

@@ -2,15 +2,20 @@ package backend.shoppetproject.pdpDto;
 
 public class InfoPart {
     private String name;
-    private Double rating;
     private String description;
     private Boolean isInStock;
+
+    public InfoPart(String name, String description, Boolean isInStock) {
+        this.name = name;
+        this.description = description;
+        this.isInStock = isInStock;
+    }
 
     public Boolean getIsInStock() {
         return isInStock;
     }
 
-    public void setIsINStock(Boolean isInStock) {
+    public void setIsInStock(Boolean isInStock) {
         this.isInStock = isInStock;
     }
 
@@ -20,14 +25,6 @@ public class InfoPart {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
     }
 
     public String getDescription() {

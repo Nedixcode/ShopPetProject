@@ -12,6 +12,7 @@ import backend.shoppetproject.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +28,7 @@ public class UserOrderService {
         this.orderRepository = orderRepository;
     }
 
+    @Transactional
     public OrderDto createOrder(Principal principal) {
         BasketEntity basket = basketRepository.findByUser_UserName(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Корзина не найдена"));
@@ -63,19 +65,17 @@ public class UserOrderService {
         return new OrderDto(savedOrder);
     }
 
-    public List<OrderDto> getOrders(Principal principal) {
-        List<OrderEntity> orders = orderRepository.findByUser_UserName(principal.getName());
-
-        return orders.stream().map(OrderDto::new).toList();
-    }
-
     @Transactional
-    public OrderDto cancelOrder(Long orderId) {
+    public OrderDto cancelOrder(Long orderId, Principal principal) throws IllegalAccessException {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Заказ не найден"));
 
         if (order.getOrderStatus() == OrderStatus.DELIVERED) {
             throw new IllegalStateException("Нельзя отменить доставленный заказ");
+        }
+
+        if (!order.getUser().getUserName().equals(principal.getName())) {
+            throw new IllegalAccessException("Нельзя отменять чужие заказы");
         }
 
         if (order.getOrderStatus() == OrderStatus.CANCELLED) {
@@ -85,5 +85,11 @@ public class UserOrderService {
         order.setOrderStatus(OrderStatus.CANCELLED);
 
         return new OrderDto(order);
+    }
+
+    public List<OrderDto> getOrders(Principal principal) {
+        List<OrderEntity> orders = orderRepository.findByUser_UserName(principal.getName());
+
+        return orders.stream().map(OrderDto::new).toList();
     }
 }

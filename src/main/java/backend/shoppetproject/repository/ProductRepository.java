@@ -1,12 +1,15 @@
 package backend.shoppetproject.repository;
 
 import backend.shoppetproject.entity.ProductEntity;
+import backend.shoppetproject.entity.ProductTypeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
@@ -40,4 +43,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             @Param("maxPrice") Integer maxPrice,
             Pageable pageable
     );
+
+    @Query("""
+            SELECT p FROM ProductEntity p
+            WHERE p.productType = :type
+            AND p.id <> :productId
+            ORDER BY p.popularity DESC
+    """)
+    List<ProductEntity> findSimilarProducts(ProductTypeEntity type, Long productId, Pageable pageable);
 }

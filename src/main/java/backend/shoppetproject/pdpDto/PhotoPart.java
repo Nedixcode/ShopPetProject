@@ -1,24 +1,17 @@
 package backend.shoppetproject.pdpDto;
 
-import java.util.List;
-
 public class PhotoPart {
-    private String mainImage;
-    private List<String> gallery;
+    private String mainPhotoUrl;
 
-    public String getMainImage() {
-        return mainImage;
+    public PhotoPart(String mainPhotoUrl) {
+        this.mainPhotoUrl = mainPhotoUrl;
     }
 
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
+    public String getMainPhotoUrl() {
+        return mainPhotoUrl;
     }
 
-    public List<String> getGallery() {
-        return gallery;
-    }
-
-    public void setGallery(List<String> gallery) {
-        this.gallery = gallery;
+    public void setMainPhotoUrl(String mainPhotoUrl) {
+        this.mainPhotoUrl = mainPhotoUrl;
     }
 }

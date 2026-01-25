@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 
 @RequestMapping("/products")
@@ -31,7 +32,10 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductPage getProductPage(@PathVariable Long id) {
-        return productService.getProductPage(id);
+    public ProductPage getProductPage(@PathVariable Long id, Principal principal) {
+        logger.info("вызвался метод getProductPage, id продукта = {}", id);
+
+        String username = principal != null ? principal.getName() : null;
+        return productService.getProductPage(id, username);
     }
 }

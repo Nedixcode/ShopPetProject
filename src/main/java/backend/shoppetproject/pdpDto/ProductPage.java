@@ -1,5 +1,7 @@
 package backend.shoppetproject.pdpDto;
 
+import backend.shoppetproject.dto.ProductDto;
+
 import java.util.List;
 
 public class ProductPage {
@@ -7,13 +9,13 @@ public class ProductPage {
     private InfoPart infoPart;
     private BuyPart buyPart;
     private FeedbackPart feedbackPart;
-    private List<SimilarProduct> similarProducts;
+    private List<ProductDto> similarProducts;
 
     public ProductPage(PhotoPart photoPart,
                        InfoPart infoPart,
                        BuyPart buyPart,
                        FeedbackPart feedbackPart,
-                       List<SimilarProduct> similarProducts) {
+                       List<ProductDto> similarProducts) {
         this.photoPart = photoPart;
         this.infoPart = infoPart;
         this.buyPart = buyPart;
@@ -53,11 +55,11 @@ public class ProductPage {
         this.feedbackPart = feedbackPart;
     }
 
-    public List<SimilarProduct> getSimilarProducts() {
+    public List<ProductDto> getSimilarProducts() {
         return similarProducts;
     }
 
-    public void setSimilarProducts(List<SimilarProduct> similarProducts) {
+    public void setSimilarProducts(List<ProductDto> similarProducts) {
         this.similarProducts = similarProducts;
     }
 }

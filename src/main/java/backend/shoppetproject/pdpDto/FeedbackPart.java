@@ -3,16 +3,22 @@ package backend.shoppetproject.pdpDto;
 import java.util.List;
 
 public class FeedbackPart {
-    private Double rating;
+    private Double averageRating;
     private Integer totalReviews;
-    private List<Review> reviews;
+    private List<ReviewDto> reviews;
 
-    public Double getRating() {
-        return rating;
+    public FeedbackPart(Double averageRating, Integer totalReviews, List<ReviewDto> reviews) {
+        this.averageRating = averageRating;
+        this.totalReviews = totalReviews;
+        this.reviews = reviews;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
     }
 
     public Integer getTotalReviews() {
@@ -23,11 +29,11 @@ public class FeedbackPart {
         this.totalReviews = totalReviews;
     }
 
-    public List<Review> getReviews() {
+    public List<ReviewDto> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(List<ReviewDto> reviews) {
         this.reviews = reviews;
     }
 }

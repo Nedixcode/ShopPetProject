@@ -1,11 +1,17 @@
 package backend.shoppetproject.pdpDto;
 
-import java.util.List;
+import backend.shoppetproject.entity.ReviewEntity;
 
-public class Review {
+public class ReviewDto {
     private String username;
     private Integer rating;
     private String comment;
+
+    public ReviewDto(ReviewEntity reviewEntity) {
+        this.username = reviewEntity.getUser().getUserName();
+        this.rating = reviewEntity.getRating();
+        this.comment = reviewEntity.getComment();
+    }
 
     public String getUsername() {
         return username;
